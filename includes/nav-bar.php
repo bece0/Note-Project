@@ -63,7 +63,7 @@
 
             <?php if($OGRETMEN) {?>
             <li class="nav-item">
-                <a class="nav-link" href="create_course.php">Ders Oluştur</a>
+                <a class="nav-link" href="create_course.php" data-toggle="modal" data-target="#myModal">Ders Oluştur</a>
             </li>
             <?php } ?>
         <?php } ?>
@@ -102,6 +102,83 @@
         </ul>
     </div>
 </nav>
+
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Ders Oluştur</h4>
+        </div>
+        <div class="modal-body">
+
+        <form class="form" action="action/create_course_action.php" method="POST" enctype="multipart/form-data"
+            style="margin-top:15px;">
+            <div class="form-group">
+                <!-- <label class="col-form-label">Ders Adı</label> -->
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-pen-nib"></i></span>
+                    </div>
+                    <input id="etkinlik_adi" name="etkinlik_adi" placeholder="Ders Adı" class="form-control" required
+                        type="text">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <!-- <label class="col-form-label">Bölüm Adı</label> -->
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-pen-nib"></i></span>
+                    </div>
+                    <input id="bolum_adi" name="bolum_adi" placeholder="Bölüm Adı" class="form-control" required
+                        type="text">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <!-- <label class=" control-label">Kontenjan</label> -->
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-thumbtack"></i></span>
+                    </div>
+                    <input id="kontenjan" name="kontenjan" placeholder="Kontenjan" class="form-control" required="true" value=""
+                        type="number">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <!-- <label class="col-form-label">Sınıf</label> -->
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                    </div>
+                    <input id="sinif" name="sinif" placeholder="Sınıf" class="form-control" required
+                        type="text">
+                </div>
+            </div>
+    
+            <div class="form-group">
+                <!-- <label class="control-label">Konu</label> -->
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-pen"></i></span>
+                    </div>
+                    <textarea rows="2" id="aciklama" name="aciklama" placeholder="Ders Konu"
+                        class="form-control" required="true"></textarea>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn btn-success" style="float:right;">Oluştur</button>
+        </form>
+    </div>
+
+      </div>
+      
+    </div>
+  </div>
 
 <?php  
   $type = "info";
