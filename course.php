@@ -25,6 +25,7 @@ include 'includes/head.php';
 
     $event_creator = KullaniciBilgileriniGetirById($course["duzenleyen_id"]);
     //var_dump($course)
+    $kullanici_detail = KullaniciBilgileriniGetirById($kullanici_id);
     ?>
 
     <?php echo "<title>" . $course["isim"] . "</title>" ?>
@@ -53,6 +54,11 @@ include 'includes/head.php';
                                     echo nl2br($aciklama); 
                                     ?>
                                 </p>
+                                <?php if($OGRETMEN){ ?> 
+                                    <a class="btn btn-info c-header-action" href="edit_course.php?course=<?php echo $course["id"]; ?>">
+                                                <i class="fa fa-edit"></i>&nbsp;Düzenle
+                                            </a>
+                                <?php } ?>            
                            </div>
                     </div>
         
@@ -65,14 +71,17 @@ include 'includes/head.php';
              <div> 
                   <ul class="nav nav-tabs" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link active" data-toggle="tab" href="#genel">Genel</a>
+                                <a class="nav-link active" data-toggle="tab" href="#genel">Genel Akış</a>
                             </li>
                             <li class="nav-item">
-                             <a class="nav-link" data-toggle="tab" href="#duyurular">Duyurular</a>
+                             <a class="nav-link" data-toggle="tab" href="#calismalar">Sınıf Çalışmaları</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#ödevler">Ödevler</a>
-                            </li>
+                            <?php if($OGRETMEN){ ?> 
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-toggle="tab" href="#notlar">Notlar</a>
+                                        </li>
+                            <?php } ?>
+                                    
                             <li class="nav-item">
                                 <a class="nav-link" data-toggle="tab" href="#yorum">Yorumlar</a>
                             </li>
@@ -85,30 +94,33 @@ include 'includes/head.php';
                             <div id="genel" class="container tab-pane active" style="  margin-top: auto;"><br>
                                  <h5><b>Genel Akış</b></h5>
                                   <div class="detay"> 
-                                     <!-- AKIŞ --> 
+                                  <div class="alert alert-warning" role="alert">
+                                         Bu derste etkinlik yok .
+                                    </div>
+                                     
                                   </div>
 
                             </div>
-                            <div id="duyurular" class="container tab-pane fade" style="  margin-top: auto;"><br>
+                            <div id="calismalar" class="container tab-pane fade" style="  margin-top: auto;"><br>
 
-                                 <h5><b>Duyurular</b></h5>
+                                 <h5><b>Sınıf Çalışmaları</b></h5>
                                   <div class="detay">
                                                     
-                                     <!-- DUYURULAR -->
+                                     <!-- calismalar -->
                                      <div class="alert alert-warning" role="alert">
-                                        Bu derste duyuru yok.
+                                        Bu derste ödev yok.
                                     </div>
                                          
                                   </div>
 
                             </div>
-                            <div id="ödevler" class="container tab-pane fade" style="  margin-top: auto;"><br>
-                                 <h5><b>Ödevler</b></h5>
+                            <div id="notlar" class="container tab-pane fade" style="  margin-top: auto;"><br>
+                                 <h5><b>Notlar</b></h5>
                                   <div class="detay">
                                                     
-                                     <!-- Ödevler -->
+                                     <!-- Notlar -->
                                      <div class="alert alert-warning" role="alert">
-                                        Bu derste Ödev yok.
+                                        Bu derste notlandırılmış ödev yok.
                                     </div>
                                          
                                   </div>
