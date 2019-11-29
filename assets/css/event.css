@@ -1,0 +1,111 @@
+.e-adi{
+    font-size: 32px;
+    cursor: pointer;
+    font-weight: 600;
+    line-height: 1.1;
+  }
+  .detay {
+    border-radius: 8px;
+    background: #fff;
+    background-clip: padding-box;
+    background-size: cover;
+
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-bottom: 10px;
+    margin-top: 8px;
+  }
+  .detay-item{
+    margin-bottom: 10px;
+  }
+  .etkinlik-resim{
+
+    height: 100%;
+    width:  100%;
+}
+  
+  .aciklama{
+    padding-top: 25px;
+  }
+  .aciklama p{
+    line-height: 1.8;
+    color: #2e3e48;
+    font-feature-settings: "liga","kern";
+    font-size: 16px;
+    font-weight: 400;
+
+  }
+
+  .edit-button{
+    margin-bottom: 3px;
+    padding: .275rem .55rem;
+  }
+
+  .paylas{
+    margin:5px;
+    color: #1E0A3C;
+    line-height: 1.4rem;
+    font-size: 1rem;
+    font-weight: 400;
+  }
+  .katilimciler{
+    display: flex;
+}
+.avatar {
+    vertical-align: middle;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 20px;
+}
+
+.katilimciler .avatar{
+  margin-left: -16px;
+}
+
+.katilimciler :first-child{
+    margin-left: 0px;
+}
+
+.modal-user{
+  margin: 5px 5px 5px 5px;
+  border-bottom: 1px solid rgba(0,0,0,.125);
+  padding-bottom: 2px;
+}
+
+.modal-user .avatar{
+  width: 30px;
+  height: 30px;
+}
+
+.modal-user a{
+  color: #848d95;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 0.06em;
+}
+.modal-user a:hover{
+  text-decoration: none;
+  color: #3b4045;
+}
+
+.n-kisi-daha{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.creator{
+  margin: 5px;
+}
+
+.creator a{
+  color: #848d95;
+  text-decoration: none;
+  font-weight: 600;
+}
+.creator a:hover{
+  text-decoration: none;
+  color: #3b4045;
+}

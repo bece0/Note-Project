@@ -1,0 +1,245 @@
+
+body {
+    font-family: Graphik Meetup,-apple-system,BlinkMacSystemFont,Roboto,Helvetica,Arial,sans-serif;
+    background: #f6f7f8;
+}
+
+.container{
+    margin-top: 60px;
+}
+
+/* @media (max-width: 692px){
+    .container {
+        max-width: unset;
+    }
+} */
+
+@media (max-width: 692px){
+    .container {
+       
+        max-width: 650px;
+    }
+}
+
+
+/* card stilleri */
+.etkinlikler-list {
+    display: flex;
+    justify-content: space-between;
+}
+
+.etkinlik {
+    /* min-width : 25wv; */
+}
+
+.card-custom {
+    min-width: 360px;
+    max-width: 360px;
+}
+
+.event-type {
+    float: right;
+    min-width: 135px;
+}
+
+.acik-renk-form {
+    background: rgba(255, 255, 255, 0.58);
+}
+
+.siyah-cerceve {
+    -webkit-text-fill-color: white;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: black;
+}
+
+.card-date {
+    margin-right: 20px;
+}
+
+.card-body {
+    padding-bottom: unset;
+}
+
+.card-section {
+    background: #fff;
+    margin-bottom: 20px;
+    box-shadow: 0px 0px 81px 0 rgba(47, 47, 47, 0.1);
+    transition: all .3s ease-in-out;
+    border-radius: 10px;
+}
+
+.card-section-image {
+    position: relative;
+    overflow: hidden
+}
+
+.card-section-image img {
+    object-fit: cover;
+    width: 320px;
+    height: 240px;
+    transition: all .3s ease-in-out;
+    transform: scale(1.06) rotate(0deg);
+}
+
+.card-section:hover .card-section-image img {
+    transform: scale(1.1) rotate(4deg);
+}
+
+.event-card-footer {
+    position: absolute;
+    text-align: right;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+}
+
+.event-tag {
+    background: green;
+    color: #fff;
+    font-size: 14px;
+    text-decoration: none;
+    padding: 5px 25px;
+    display: inline-block;
+}
+
+.event-tag:hover{
+    text-decoration:none;
+    color: unset;
+}
+
+.card-section .card-desc {
+    padding: 15px;
+    min-height: 3em;
+}
+
+.card-section .card-desc .title h3 {
+    font-size: 24px;
+}
+
+.card-section .card-desc .title h3 a {
+    color: #333;
+    text-decoration: 0;
+}
+
+.card-section .card-desc .card-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0
+}
+
+.card-section .card-desc .card-info .list-unstyle {
+    list-style: none;
+    padding-left: 0
+}
+
+.card-section .card-desc .card-info ul {
+    margin-bottom: 6px
+}
+
+.card-section .card-desc .card-info ul li {
+    color: #333;
+    font-size: 1em;
+    margin-bottom: 6px
+}
+
+.cart_btn {
+
+    background: #333;
+    font-weight: 500;
+    border-radius: 0;
+    color: #ffffff;
+    font-family: "Rubik", sans-serif;
+    display: inline-block;
+    font-size: 12px;
+    text-transform: uppercase;
+    text-decoration: none;
+    height: 36px;
+    line-height: 36px;
+    padding: 0 20px;
+    transition: all 0.3s ease-in-out;
+}
+
+.cat-image-link {
+    display: flex;
+    justify-content: center;
+    padding-top: 11px;
+}
+
+.event-title a {
+    text-decoration: none;
+    color: #000000a1;
+}
+
+.event-title a:hover {
+    color: black;
+}
+
+
+.yuruyus{
+    background: green  !important;
+}
+
+.kosu{
+    background: rgb(126, 72, 151)  !important;
+}
+
+.bisiklet{
+    background: rgb(64, 178, 223) !important;
+}
+
+.tirmanis{
+    background: rgb(196, 72, 113) !important;
+}
+
+.yuzme{
+    background: rgb(50, 141, 141) !important;
+}
+
+.futbol{
+    background: rgb(217, 156, 63) !important;
+}
+
+.quidditch{
+    background: rgb(134, 15, 35) !important;
+}
+
+.voleybol{
+    background: rgb(216, 147, 195) !important;
+}
+
+.basketbol{
+    background: rgb(205, 112, 19) !important;
+}
+
+
+
+.callout{
+    padding: 1.25rem;
+    margin-top: 1.25rem;
+    margin-bottom: 1.25rem;
+    border: 1px solid #eee;
+    border-left-width: .25rem;
+    border-radius: .25rem;
+}
+.callout-primary {
+    border-left-color: #cce5ff;
+}
+.callout-secondary {
+    border-left-color: #e2e3e5;
+}
+.callout-success {
+    border-left-color: #d4edda;
+}
+.callout-danger {
+    border-left-color: #f0ad4e;
+}
+.callout-warning {
+    border-left-color: #fff3cd;
+}
+.callout-info { 
+    border-left-color: #d1ecf1;
+}
+.callout-dark { 
+    border-left-color: #d6d8d9;
+}
