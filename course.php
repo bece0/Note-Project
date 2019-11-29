@@ -105,10 +105,21 @@ include 'includes/head.php';
 
                                  <h5><b>Sınıf Çalışmaları</b></h5>
                                   <div class="detay">
-                                                    
+                                  <?php if($OGRETMEN){ ?> 
+                                  <div>
+                                        <a class="btn btn-info c-header-action duyuru-yap" ders-id="<?php echo $course["id"]; ?>" ders-name="<?php echo $course["isim"]; ?>">
+                                                    <i class="fa fa-bell"></i>&nbsp;Duyuru Yap
+                                                </a>
+                                        <a class="btn btn-success c-header-action olustur" ders-id="<?php echo $course["id"]; ?>" ders-name="<?php echo $course["isim"]; ?>">
+                                                    <i class="fa fa-plus"></i>&nbsp;Oluştur
+                                        </a>  
+                                    <?php } ?>   
+                                  </div> 
+                                  <br>   
                                      <!-- calismalar -->
+
                                      <div class="alert alert-warning" role="alert">
-                                        Bu derste ödev yok.
+                                        Bu derste çalışma yok.
                                     </div>
                                          
                                   </div>
@@ -178,3 +189,163 @@ include 'includes/head.php';
         <?php include 'includes/footer.php'; ?>
     </div>
 </body>
+
+<script>
+// duyuru
+        $(".duyuru-yap").on("click", function(e) {
+            var ders_id = $(e.target).attr("ders-id");
+            var ders_name = $(e.target).attr("ders-name");
+
+            Swal.fire({
+                title: 'Ders Duyurusu',
+                text: ders_name,
+                input: 'textarea',
+                inputPlaceholder: 'Öğrencilere gönderilecek olan mesajı buraya yazın...',
+                showCancelButton: true,
+                confirmButtonText: '<i class="fa fa-paper-plane"></i> Gönder!',
+                cancelButtonText: '<i class="fa fa-times"></i> İptal',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                inputValidator: (value) => {
+                    if (!value) {
+                        return 'Duyuru içeriği girmelisiniz!'
+                    }
+                    if (value.length < 15) {
+                        return 'Duyuru içeriği çok kısa!'
+                    }
+
+                    // var regex = new RegExp("^[a-zA-Z0-9]+$");
+                    // var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+                    // if (!regex.test(value.length)) {
+                    //     return 'Sadece alfanumeric değerler kabul edilmektedir.'
+                    // }
+                }
+            }).then((result) => {
+                if (!result.value)
+                    return;
+                DuyuruGonder(ders_id, result.value);
+            });
+        })
+
+        function DuyuruGonder(ders_id, duyuru) {
+            var data = {
+                ders_id: ders_id,
+                announcement: duyuru
+            }
+            $.ajax({
+                type: "POST",
+                url: 'services/notification.php?method=event_announcement',
+                data: {
+                    data: JSON.stringify(data)
+                },
+                success: function(response) {
+                    if (response && response.sonuc) {
+                        Swal.fire({
+                            type: 'success',
+                            title: 'Katılımcılara duyuru gönderildi',
+                            timer: 2000,
+                            showConfirmButton: false,
+                        });
+                    } else {
+                        console.log(response);
+                        Swal.fire({
+                            title: 'Hata',
+                            text: 'Duyuru gönderilemedi, lütfen daha sonra tekrar deneyin.',
+                            type: 'warning',
+                            timer: 2000,
+                            showConfirmButton: false,
+                        })
+                    }
+                },
+                error: function(jqXHR, error, errorThrown) {
+                    console.log(error);
+                    Swal.fire({
+                        title: 'Hata',
+                        text: 'Duyuru gönderilemedi, lütfen daha sonra tekrar deneyin.',
+                        type: 'warning',
+                        timer: 2000,
+                        showConfirmButton: false,
+                    })
+                }
+            });
+        }
+
+// oluştur
+
+$(".olustur").on("click", function(e) {
+            var ders_id = $(e.target).attr("ders-id");
+            var ders_name = $(e.target).attr("ders-name");
+
+            Swal.fire({
+                title: 'Çalışma oluştur',
+                text: ders_name,
+                input: 'textarea',
+                inputPlaceholder: 'Öğrencilere gönderilecek olan mesajı buraya yazın...',
+                showCancelButton: true,
+                confirmButtonText: '<i class="fa fa-paper-plane"></i> Gönder!',
+                cancelButtonText: '<i class="fa fa-times"></i> İptal',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                inputValidator: (value) => {
+                    if (!value) {
+                        return 'Duyuru içeriği girmelisiniz!'
+                    }
+                    if (value.length < 15) {
+                        return 'Duyuru içeriği çok kısa!'
+                    }
+                }
+            }).then((result) => {
+                if (!result.value)
+                    return;
+                DuyuruGonder(ders_id, result.value);
+            });
+        })
+
+        function DuyuruGonder(ders_id, duyuru) {
+            var data = {
+                ders_id: ders_id,
+                announcement: duyuru
+            }
+            $.ajax({
+                type: "POST",
+                url: 'services/notification.php?method=event_announcement',
+                data: {
+                    data: JSON.stringify(data)
+                },
+                success: function(response) {
+                    if (response && response.sonuc) {
+                        Swal.fire({
+                            type: 'success',
+                            title: 'Katılımcılara duyuru gönderildi',
+                            timer: 2000,
+                            showConfirmButton: false,
+                        });
+                    } else {
+                        console.log(response);
+                        Swal.fire({
+                            title: 'Hata',
+                            text: 'Duyuru gönderilemedi, lütfen daha sonra tekrar deneyin.',
+                            type: 'warning',
+                            timer: 2000,
+                            showConfirmButton: false,
+                        })
+                    }
+                },
+                error: function(jqXHR, error, errorThrown) {
+                    console.log(error);
+                    Swal.fire({
+                        title: 'Hata',
+                        text: 'Duyuru gönderilemedi, lütfen daha sonra tekrar deneyin.',
+                        type: 'warning',
+                        timer: 2000,
+                        showConfirmButton: false,
+                    })
+                }
+            });
+        }
+
+
+
+
+
+    </script>
