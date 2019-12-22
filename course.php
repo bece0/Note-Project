@@ -270,8 +270,8 @@ include 'includes/head.php';
             });
         }
 
-// oluştur
 
+// oluştur
 $(".olustur").on("click", function(e) {
             var ders_id = $(e.target).attr("ders-id");
             var ders_name = $(e.target).attr("ders-name");
@@ -279,10 +279,10 @@ $(".olustur").on("click", function(e) {
             Swal.fire({
                 title: 'Çalışma oluştur',
                 text: ders_name,
-                input: 'textarea',
-                inputPlaceholder: 'Öğrencilere gönderilecek olan mesajı buraya yazın...',
+                input: 'file',
+                //inputPlaceholder: ' ',
                 showCancelButton: true,
-                confirmButtonText: '<i class="fa fa-paper-plane"></i> Gönder!',
+                confirmButtonText: '<i class="fa fa-paper-plane"></i> Paylaş!',
                 cancelButtonText: '<i class="fa fa-times"></i> İptal',
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
@@ -297,11 +297,11 @@ $(".olustur").on("click", function(e) {
             }).then((result) => {
                 if (!result.value)
                     return;
-                DuyuruGonder(ders_id, result.value);
+                PaylasimGonder(ders_id, result.value);
             });
         })
 
-        function DuyuruGonder(ders_id, duyuru) {
+        function PaylasimGonder(ders_id, duyuru) {
             var data = {
                 ders_id: ders_id,
                 announcement: duyuru
@@ -316,7 +316,7 @@ $(".olustur").on("click", function(e) {
                     if (response && response.sonuc) {
                         Swal.fire({
                             type: 'success',
-                            title: 'Katılımcılara duyuru gönderildi',
+                            title: 'Katılımcılara paylaşım gönderildi',
                             timer: 2000,
                             showConfirmButton: false,
                         });
