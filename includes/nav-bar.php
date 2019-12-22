@@ -52,20 +52,25 @@
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
         <?php if($GirisYapildiMi){ ?>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
                 <a class="nav-link" href="takvim.php">Takvim</a>
-            </li>
-            <?php if($OGRENCI) {?>
-                <li class="nav-item">
-                    <a class="nav-link" href="attend_course.php">Derse Kayıt Ol</a>
+            </li> -->
+            <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="menuDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Ders  <!-- <i class="fas fa-plus"></i> -->
+                    </a>
+                     <div class="dropdown-menu" aria-labelledby="menuDropdown">
+                        <?php if($OGRETMEN) {?>
+                            <a class="dropdown-item" href="create_course.php" data-toggle="modal" data-target="#dersOlusturModal">Ders Oluştur</a>
+                
+                            <a class="dropdown-item" href="attend_course.php" data-toggle="modal" data-target="#derseKaydolModal">Derse Kaydol</a>
+                        <?php } ?>
+                        <?php if($OGRENCI) {?>
+                            <a class="dropdown-item" href="attend_course.php" data-toggle="modal" data-target="#derseKaydolModal">Derse Kaydol</a>
+                        <?php } ?>
+                    </div> 
                 </li>
-            <?php } ?>
-
-            <?php if($OGRETMEN) {?>
-            <li class="nav-item">
-                <a class="nav-link" href="create_course.php" data-toggle="modal" data-target="#myModal">Ders Oluştur</a>
-            </li>
-            <?php } ?>
+           
         <?php } ?>
         </ul>
         <ul class="navbar-nav ml-auto right-nav">
@@ -80,11 +85,12 @@
                         <?php if($KULLANICI['admin'] != "" && $KULLANICI['admin'] == 1) {?>
                             <!-- öğretmen menusu -->
                         <a class="dropdown-item" href="profile.php?id=<?php echo $KULLANICI["id"]?>">Profil</a>
-                        
-                            <a class="dropdown-item" href="my_course.php">Dersler</a>
+                            <a class="dropdown-item" href="takvim.php">Takvim</a>
+                            <!-- <a class="dropdown-item" href="my_course.php">Dersler</a> -->
                             <a class="dropdown-item" href="settings.php">Ayarlar</a>
                         <?php } else {?>
                             <!-- öğrenci menusu-->
+                            <a class="dropdown-item" href="takvim.php">Takvim</a>
                             <a class="dropdown-item" href="profile.php?id=<?php echo $KULLANICI["id"]?>">Profil</a>
                             <!-- <a class="dropdown-item" href="my_course.php">Dersler</a> -->
                             <a class="dropdown-item" href="settings.php">Ayarlar</a>
@@ -102,33 +108,47 @@
         </ul>
     </div>
 </nav>
+<script>
+$(document).ready(function(){
+    $(".dropdown").hover(            
+        function() {
+            $('.dropdown-menu', this).not('.in .dropdown-menu').stop( true, true ).slideDown("fast");
+            $(this).toggleClass('open');        
+        },
+        function() {
+            $('.dropdown-menu', this).not('.in .dropdown-menu').stop( true, true ).slideUp("fast");
+            $(this).toggleClass('open');       
+        }
+    );
+});
+</script>
 
-<div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog">
-    
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Ders Oluştur</h4>
-        </div>
-        <div class="modal-body">
+<!-- The Modal -->
+<div class="modal fade" id="dersOlusturModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
 
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title"><b>Ders Oluştur</b></h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
         <form class="form" action="action/create_course_action.php" method="POST" enctype="multipart/form-data"
             style="margin-top:15px;">
             <div class="form-group">
-                <!-- <label class="col-form-label">Ders Adı</label> -->
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-pen-nib"></i></span>
                     </div>
-                    <input id="etkinlik_adi" name="etkinlik_adi" placeholder="Ders Adı" class="form-control" required
+                    <input id="ders_adi" name="ders_adi" placeholder="Ders Adı" class="form-control" required
                         type="text">
                 </div>
             </div>
 
             <div class="form-group">
-                <!-- <label class="col-form-label">Bölüm Adı</label> -->
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-pen-nib"></i></span>
@@ -137,48 +157,75 @@
                         type="text">
                 </div>
             </div>
-
+   
+          
             <div class="form-group">
-                <!-- <label class=" control-label">Kontenjan</label> -->
                 <div class="input-group">
                     <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-thumbtack"></i></span>
+                        <span class="input-group-text"><i class="fas fa-user"></i></span>
                     </div>
                     <input id="kontenjan" name="kontenjan" placeholder="Kontenjan" class="form-control" required="true" value=""
                         type="number">
                 </div>
             </div>
-
+    
+                   
             <div class="form-group">
-                <!-- <label class="col-form-label">Sınıf</label> -->
                 <div class="input-group">
                     <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                        <span class="input-group-text"><i class="fas fa-thumbtack"></i></span>
                     </div>
-                    <input id="sinif" name="sinif" placeholder="Sınıf" class="form-control" required
+                    <input id="sinif" name="sinif" placeholder="Sınıf" class="form-control" required="true" value=""
                         type="text">
                 </div>
             </div>
-    
+
+
             <div class="form-group">
-                <!-- <label class="control-label">Konu</label> -->
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-pen"></i></span>
                     </div>
-                    <textarea rows="2" id="aciklama" name="aciklama" placeholder="Ders Konu"
+                    <textarea rows="2" id="aciklama" name="aciklama" placeholder="Konu"
                         class="form-control" required="true"></textarea>
                 </div>
             </div>
             
             <button type="submit" class="btn btn-success" style="float:right;">Oluştur</button>
         </form>
-    </div>
 
       </div>
-      
+
     </div>
   </div>
+</div>
+
+<!-- The Modal -->
+<div class="modal fade" id="derseKaydolModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title"><b>Derse Kaydol</b></h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+
+            <form class="form-signin" action="action/attend_course_action.php" method="post">
+                    <input type="text" class="form-control mb-2" placeholder="Ders Kodu" name="kod" required autofocus>       
+                    <!-- <button class="btn btn-lg btn-primary btn-block mb-1" type="submit" style="background-color: #1d1a1a">Kayıt ol</button> -->
+                    <button type="submit" class="btn btn-success" style="float:right;">Kayıt ol</button>
+            </form>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
 
 <?php  
   $type = "info";
