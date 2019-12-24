@@ -5,14 +5,19 @@
     include 'includes/head.php';
     include 'includes/nav-bar.php';
     if($OGRETMEN) 
-        $etkinlikler= DuzenledigiDersleriGetir($kullanici_id);
+        $dersler= DuzenledigiDersleriGetir($kullanici_id);
+        // asistan olunan dersler
     else
-        $etkinlikler = OgrenciDersleriniGetir($kullanici_id);
-   
+        $dersler = OgrenciDersleriniGetir($kullanici_id);
+      
 ?>
 
 <link rel="stylesheet" href="assets/css/index.css">
-
+<?php 
+    function badgeYazdir($icerik){
+        echo  "<span class='badge'>".$icerik."</span>";
+    }
+?>
 <body>
     <hr>
     <hr>
@@ -21,53 +26,44 @@
         <!-- Ders Kartları -->
         <div class="row justify-content-center" style="margin-top:30px">
             <?php
-            if ($etkinlikler != NULL && !is_null($etkinlikler)) {
-                $etkinlikler_count = count($etkinlikler);
+            if ($dersler != NULL && !is_null($dersler)) {
+                $dersler_count = count($dersler);
 
-                for ($i = 0; $i < $etkinlikler_count; $i++) {
-                    $etkinlik = $etkinlikler[$i];
+                for ($i = 0; $i < $dersler_count; $i++) {
+                    $ders = $dersler[$i];
 
-                    $isim =  $etkinlik["isim"];
-                    $id =  $etkinlik["id"];
+                    $isim =  $ders["isim"];
+                    $id =  $ders["id"];
 
-                    $meaningFullUrl = ToMeaningfullUrl( $etkinlik["isim"], $id)
+                    $meaningFullUrl = ToMeaningfullUrl( $ders["isim"], $id)
             ?>
 
-            <div class="col-sm-3">
-                <div class="card-section">
-                    <div class="card-section-image">
-                        <a class='cat-image-link' href='course.php?course=<?php echo $meaningFullUrl; ?>'>
-                            <img class="etkinlik-resim" src="files/images/event/<?php echo $etkinlik["kodu"] ?>.png"
-                                onerror="this.onerror=null; this.src='files/images/<?php echo ToEnglish($etkinlik["tip"]); ?>.png'">
-                        </a>
-                    </div>
-                    <div class="card-desc">
-                        <div class="event-title">
+            <div>
+                <div class="course-card" style="background:url(files/images/event/<?php echo $ders["kodu"] ?>.png) no-repeat 0 0;">
+                    <div class="course-card-desc">
+                        <div class="course-card-title">
                             <a href='course.php?course=<?php echo $meaningFullUrl; ?>'>
-                                <h3><?php echo $isim ?></h3>
+                                <h4><?php echo $isim ?></h4>
                             </a>
                         </div>
                         <div class="card-info">
-                            <ul class="list-unstyle">
-                                <li>
-                                    <i class="fas fa-user"></i>
-                                    <?php
-                                        if($OGRENCI)
-                                            echo " ".$etkinlik["ogretmen_adi"]." ".$etkinlik["ogretmen_soyadi"];
-                                            //ÖĞRETMEN İSE TOPLAM KAYITLI ÖĞRENCİ SAYISI.... 
-                                        else  echo "<b>Kontenjan: </b> ".$etkinlik["kontenjan"];
-                                     ?>
-                                </li>
-                            </ul>
-
+                            <?php  
+                                if(!$OGRENCI) { 
+                                    $ogrenci_sayisi= DerseKayitliKisiSayisi($ders["id"]);
+                                   badgeYazdir($ogrenci_sayisi." Öğrenci");
+                                }else{
+                    
+                                    badgeYazdir("<i class='fas fa-user'></i>"." ".$ders["ogretmen_adi"]." ".$ders["ogretmen_soyadi"]);
+                                }
+                            ?>
                         </div>
-                        
-                        <!-- <a href='event.php?event=<?php echo $id ?>' class="cart_btn btn btn-dark">Detay</a> -->
                     </div>
                 </div>
             </div>
 
-            <?php }
+            <?php 
+                } //for-loop ends
+
                 } else {  
             ?>
             
