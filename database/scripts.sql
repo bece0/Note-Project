@@ -27,26 +27,23 @@ CREATE TABLE `ayarlar` (
 );
 
 
-CREATE TABLE `etkinlik` (
+CREATE TABLE `dersler` (
  `id` int(11) NOT NULL AUTO_INCREMENT,
  `kodu` varchar(100) NOT NULL,
- `tip` varchar(100) NOT NULL,
  `isim` varchar(255) NOT NULL,
+ `kontenjan` varchar(100) NOT NULL,
  `aciklama` text NOT NULL,
- `k_aciklama` text NOT NULL,
- `tarih` datetime NOT NULL,
- `adres` text NOT NULL,
+ `bolum_adi` text NOT NULL,
+ `sinif` text NOT NULL,
  `duzenleyen_id` int(11) NOT NULL,
- `seviye` text NOT NULL,
- `tel` varchar(255) NOT NULL,
- `sehir` varchar(255),
+
  PRIMARY KEY (`id`)
 );
 
 CREATE TABLE `katilimci` (
  `id` int(11) NOT NULL AUTO_INCREMENT,
- `kullanici_id` int(11) NOT NULL,
- `etkinlik_id` int(11) NOT NULL,
+ `ogrenci_id` int(11) NOT NULL,
+ `ders_id` int(11) NOT NULL,
  `kayit_tarihi` datetime NOT NULL,
  PRIMARY KEY (`id`)
 );
@@ -54,7 +51,7 @@ CREATE TABLE `katilimci` (
 CREATE TABLE `yorum` (
  `id` int(11) NOT NULL AUTO_INCREMENT,
  `kullanici_id` int(11) DEFAULT 0,
- `etkinlik_id` int(11) DEFAULT 0,
+ `ders_id` int(11) DEFAULT 0,
  `tarih` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
  `icerik` text NOT NULL,
  `onay_durum` tinyint NOT NULL DEFAULT 0,
@@ -76,7 +73,7 @@ CREATE TABLE `hata` (
 CREATE TABLE `gunluk` (
  `id` int(11) NOT NULL AUTO_INCREMENT,
  `kullanici_id` int(11) DEFAULT 0,
- `etkinlik_id` int(11) DEFAULT 0,
+ `ders_id` int(11) DEFAULT 0,
  `tarih` datetime NOT NULL,
  `tip` varchar(100) NOT NULL, -- USER, EVENT, SYSTEM
  `baslik` varchar(250) NOT NULL,
@@ -90,12 +87,25 @@ CREATE TABLE `bildirim`(
     `mesaj` text NOT NULL,
     `tarih` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `kullanici_id` int(11) NOT NULL,
-    `etkinlik_id` int(11) NOT NULL DEFAULT 0,
+    `ders_id` int(11) NOT NULL DEFAULT 0,
     `goruldu`tinyint(4) NOT NULL DEFAULT 0,
     `goruldu_tarihi` datetime NULL,
     `tip` varchar(255) NOT NULL DEFAULT "NORMAL",
     PRIMARY KEY (`id`),
     KEY `idx_bildirim_kullanici_id` (`kullanici_id`)
+)CHARACTER SET latin5 COLLATE latin5_turkish_ci;
+
+
+CREATE TABLE `duyuru`(
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `mesaj` text NOT NULL,
+    `tarih` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `kullanici_id` int(11) NOT NULL,
+    `ders_id` int(11) NOT NULL DEFAULT 0,
+    `tip` int(11) NOT NULL DEFAULT 0,
+    PRIMARY KEY (`id`),
+    KEY `idx_duyuru_kullanici_id` (`kullanici_id`),
+    KEY `idx_bildirim_ders_id` (`ders_id`)
 )CHARACTER SET latin5 COLLATE latin5_turkish_ci;
 
 -- CREATE TABLE `kullanici_bildirim`(
@@ -106,3 +116,4 @@ CREATE TABLE `bildirim`(
 --     `goruldu_tarihi` datetime NULL,
 --     PRIMARY KEY (`id`)
 -- );
+
