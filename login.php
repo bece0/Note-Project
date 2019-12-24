@@ -1,4 +1,10 @@
 <?php
+    session_start();
+    if(isset($_SESSION["kullanici_id"])){    //giriş yapılmış ise index'e git
+        header('Location: index.php');
+        die();
+    }
+
     $page_title = "Giriş Yap";
     include 'includes/head.php';
 ?>
@@ -6,11 +12,6 @@
     <?php
         include 'includes/nav-bar.php';
         
-        if(isset($_SESSION["kullanici_id"])){    //giriş yapılmış ise index'e git
-            header('Location: dashboard.php');
-            die();
-        }
-
         /*
         if($GirisYapildiMi && basename(__FILE__) == "login.php"){
             header('Location: dashboard.php');
