@@ -1,4 +1,5 @@
 <?php
+// $REQUIRE_LOGIN = TRUE;
  $page_title = "SİTE KULLANIM ŞARTLARI";
   include 'includes/head.php';
 ?>

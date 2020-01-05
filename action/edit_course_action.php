@@ -9,30 +9,26 @@
     include '../database/database.php';
     
     $baglanti = BAGLANTI_GETIR();
-
-    $isim=$_POST["etkinlik_adi"];
-    $adres= mysqli_real_escape_string($baglanti, $_POST["adres"]);
-    $sehir= mysqli_real_escape_string($baglanti, $_POST["sehir"]);
-    $seviye=$_POST["seviye"];
-    $aciklama=mysqli_real_escape_string($baglanti, $_POST["aciklama"]);
-    $tel=$_POST["telefon"];
-    $tarih=$_POST["etkinlik_tarihi"];
-    $k_aciklama=mysqli_real_escape_string($baglanti, $_POST["k_aciklama"]);
-    $tip=$_POST["tip"];
-    $usedefault = $_POST["use_default"];
-
-    $event_id=$_POST["event_id"];
-/*
-    echo $event_id. "</br>" ;
-    echo $isim. "</br>" ;
-    echo $adres. "</br>" ;
-    echo $sehir. "</br>" ;
-    echo $seviye. "</br>" ;
-    echo $aciklama. "</br>" ;
-    echo $tel. "</br>" ;
-    echo $tarih. "</br>" ;
-*/
     
+    $ders_adi   = mysqli_real_escape_string($baglanti, $_POST["ders_adi"]);
+    $bolum_adi  = mysqli_real_escape_string($baglanti, $_POST["bolum_adi"]);
+    $kontenjan  = mysqli_real_escape_string($baglanti, $_POST["kontenjan"]);
+    $sinif      = mysqli_real_escape_string($baglanti, $_POST["sinif"]);
+    $aciklama   = mysqli_real_escape_string($baglanti, $_POST["aciklama"]);
+    $ders_id    = mysqli_real_escape_string($baglanti, $_POST["ders_id"]);
+
+    // echo "ders_id : ".$ders_id. "</br>" ;
+    // echo "isim : ".$ders_adi. "</br>" ;
+    // echo "kontenjan : ". $kont   enjan. "</br>" ;
+    // echo "aciklama : ".$aciklama. "</br>" ;
+    // echo "sinif : ".$sinif. "</br>" ;
+    // echo "bolum : ". $bolum_adi. "</br>" ;
+
+    // die();
+    
+    /**
+     * 
+     */
     function GUID()
     {
         if (function_exists('com_create_guid') === true)
@@ -43,47 +39,48 @@
         return sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
     }
 
+
     /**
      * 
      */
-    function ResimYukle($etkinlik_kodu, $usedefault = "0"){
+    function ResimYukle($ders_kodu, $usedefault = "0"){
 
-        if((!isset($_FILES["etkinlik_resim"]) || $_FILES['etkinlik_resim']['size'] == 0) && $usedefault == "1" ){
-            echo $etkinlik_kodu. " koduna sahip etkinliğin resmi yüklenmedi. varsayılan resimlerden tipine göre olan eklenecektir";
+        if((!isset($_FILES["ders_resim"]) || $_FILES['ders_resim']['size'] == 0) && $usedefault == "1" ){
+            echo $ders_kodu. " koduna sahip dersin resmi yüklenmedi. varsayılan resim eklenecektir";
             
-            // $yeni_resim =  __DIR__ . "\\..\\files\\images\\event\\" . $etkinlik_kodu . ".png";
+            // $yeni_resim =  __DIR__ . "\\..\\files\\images\\event\\" . $ders_kodu . ".png";
             // $varsayılan_resim =  __DIR__ . "\\..\\files\\images\\" . ToEnglish($_POST["tip"]) . ".png";
            
-            $yeni_resim =  __DIR__ . "/../files/images/event/" .   $etkinlik_kodu . ".png";
-            $varsayılan_resim =  __DIR__ . "/../files/images/" . ToEnglish($_POST["tip"]) . ".png";
+            $yeni_resim =  __DIR__ . "/../files/images/event/" .   $ders_kodu . ".png";
+            $varsayılan_resim =  __DIR__ . "/../files/images/default.png";
 
             echo "<br> yeni resim : ". $yeni_resim . "<br>";
             echo "<br>varsayılan_resim : ". $varsayılan_resim . "<br>";
 
             copy($varsayılan_resim,  $yeni_resim);
 
-            $_SESSION["_log"] = "varsailan resim kullanildi";
+            $_SESSION["_log"] = "varsayilan resim kullanildi";
             return;
         }
 
-        $filename = $_FILES["etkinlik_resim"]["name"];
+        $filename = $_FILES["ders_resim"]["name"];
         $file_basename = substr($filename, 0, strripos($filename, '.')); // get file extention
         $file_ext = substr($filename, strripos($filename, '.')); // get file name
 
         $file_ext = strtolower($file_ext);
 
-        $filesize = $_FILES["etkinlik_resim"]["size"];
+        $filesize = $_FILES["ders_resim"]["size"];
         $allowed_file_types = array('.jpg','.png','.jpeg');	
     
         if (in_array($file_ext,$allowed_file_types) && ($filesize < 3000000))
         {	
-            $newfilename = $etkinlik_kodu . ".png";
+            $newfilename = $ders_kodu . ".png";
             if (file_exists($newfilename))
                 $deleted= unlink($newfilename);
 
             // $yeni_resim =  __DIR__ . "\\..\\files\\images\\event\\" . $newfilename;
             $yeni_resim =  __DIR__ . "/../files/images/event/" . $newfilename;
-            move_uploaded_file($_FILES["etkinlik_resim"]["tmp_name"],  $yeni_resim);
+            move_uploaded_file($_FILES["ders_resim"]["tmp_name"],  $yeni_resim);
             echo "File uploaded successfully.";	
             
             $_SESSION["_log"] = "File uploaded successfully.";
@@ -106,24 +103,29 @@
             // file type error
             echo "Only these file typs are allowed for upload: " . implode(', ',$allowed_file_types);
             $_SESSION["_log"] = "Only these file typs are allowed for upload: " . implode(', ',$allowed_file_types);
-            unlink($_FILES["etkinlik_resim"]["tmp_name"]);
+            unlink($_FILES["ders_resim"]["tmp_name"]);
         }
     }
 
-    $event_detail = EtkinlikBilgileriniGetir($event_id);
-    $etkinlik_kodu =  $event_detail["kodu"];
+    $ders_detail = DersDetayGetir($ders_id);
+    $ders_kodu =  $ders_detail["kodu"];
 
-    if($event_detail["duzenleyen_id"] != $_SESSION["kullanici_id"] && $_SESSION["admin"] != 1){
-        //giriş yapmış olan kullanıcı etkinliği oluşturan kişi değilse ve admin değilse
+    // var_dump($ders_detail);
+    // echo "<br>".$_SESSION["kullanici_id"];
+    // die();
+
+    if($ders_detail["duzenleyen_id"] != $_SESSION["kullanici_id"]){
+        //giriş yapmış olan kullanıcı etkinliği oluşturan kişi değilse
+        echo "giriş yapmış olan kullanıcı etkinliği oluşturan kişi değil";
         die();
     }
 
-    if(EtkinlikDuzenle($isim, $aciklama, $tarih, $adres, $seviye, $tel, $sehir, $k_aciklama, $tip, $event_id)=== TRUE){
-        $_SESSION["_success"] = "Etkinlik düzenlendi.";
+    if(DersDuzenle($ders_id, $ders_adi, $aciklama, $kontenjan, $bolum_adi, $sinif)=== TRUE){
+        $_SESSION["_success"] = "Ders düzenlendi.";
 
-        LogYaz_EtkinlikDuzenleme($_SESSION["kullanici_id"], $event_id);
+        LogYaz_EtkinlikDuzenleme($_SESSION["kullanici_id"], $ders_id);
 
-        $eski_tarih =  $event_detail["tarih"];
+        /*$eski_tarih =  $event_detail["tarih"];
 
         $time_eski = strtotime($eski_tarih);
         $time_yeni = strtotime($tarih);
@@ -136,14 +138,14 @@
 
         if ($newformat_eski != $newformat_yeni) {
             $mesaj = "";
-            EtkinlikKatilimcilarinaBildirimGonder($event_id, $mesaj, "ETKINLIK_TARIH_UPDATE");
+            EtkinlikKatilimcilarinaBildirimGonder($ders_id, $mesaj, "ETKINLIK_TARIH_UPDATE");
         }
-
-        ResimYukle($etkinlik_kodu,$usedefault);
-        header('Location: ../event.php?event='.$event_id); 
+*/
+        // ResimYukle($ders_kodu,$usedefault);
+        header('Location: ../course.php?course='.$ders_id); 
     }else {
-        $_SESSION["_error"] = "Bir hata oluştu.Etkinlik düzenlenemedi.";
-        $_SESSION["_log"] = "Bir hata oluştu.Etkinlik düzenlenemedi." ;
+        $_SESSION["_error"] = "Bir hata oluştu.Ders düzenlenemedi.";
+        $_SESSION["_log"] = "Bir hata oluştu.Ders düzenlenemedi." ;
 
         header('Location: ../index.php'); 
     }

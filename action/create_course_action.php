@@ -12,9 +12,13 @@
     $baglanti = BAGLANTI_GETIR();
 
     //$isim=$_POST["etkinlik_adi"];
-    $isim= mysqli_real_escape_string($baglanti, $_POST["etkinlik_adi"]);
+    $isim= mysqli_real_escape_string($baglanti, $_POST["ders_adi"]);
+    $bolum=mysqli_real_escape_string($baglanti, $_POST["bolum_adi"]);
     $kontenjan= mysqli_real_escape_string($baglanti, $_POST["kontenjan"]);
+    $sinif= mysqli_real_escape_string($baglanti, $_POST["sinif"]);
     $aciklama=mysqli_real_escape_string($baglanti, $_POST["aciklama"]);
+
+   
     //$bolum_adi= mysqli_real_escape_string($baglanti, $_POST["kontenjan"]);
     $duzenleyen_id=$_SESSION["kullanici_id"];
 
@@ -23,6 +27,8 @@
     echo "kontenjan : ". $kontenjan. "</br>" ;
     echo "aciklama : ".$aciklama. "</br>" ;
     echo "duzenleyen_id : ". $duzenleyen_id. "</br>" ;
+    echo "sinif : ".$sinif. "</br>" ;
+    echo "bolum : ". $bolum. "</br>" ;
 
 //die();
 
@@ -55,27 +61,27 @@ function random_str(
      * 
      */
     function ResimYukle($ders_kodu){
+            $varsayılan_resim =  __DIR__ . "/../files/images/default.png";
 
-        if(!isset($_FILES["etkinlik_resim"]) || $_FILES['etkinlik_resim']['size'] == 0){
-            echo $ders_kodu. " koduna sahip dersin resmi yüklenmedi. varsayılan resimlerden eklenecektir";
+             if(!isset($_FILES["ders_resim"]) || $_FILES['ders_resim']['size'] == 0){
+      //         echo $ders_kodu. " koduna sahip dersin resmi yüklenmedi. varsayılan resimeklenecektir";         
+     //           $yeni_resim =  __DIR__ . "/../files/images/event/" . $ders_kodu . ".png";
             
-            $yeni_resim =  __DIR__ . "/../files/images/event/" . $ders_kodu . ".png";
-            $varsayılan_resim =  __DIR__ . "/../files/images/" . ToEnglish($_POST["tip"]) . ".png";
 
-            echo "<br> yeni resim : ". $yeni_resim . "<br>";
-            echo "<br>varsayılan_resim : ". $varsayılan_resim . "<br>";
+        //       echo "<br> yeni resim : ". $yeni_resim . "<br>";
+        //      echo "<br>varsayılan_resim : ". $varsayılan_resim . "<br>";
 
-            copy($varsayılan_resim,  $yeni_resim);
-            return;
+                copy($varsayılan_resim/*,  $yeni_resim*/);
+                return;
         }
 
-        $filename = $_FILES["etkinlik_resim"]["name"];
+        $filename = $_FILES["ders_resim"]["name"];
         $file_basename = substr($filename, 0, strripos($filename, '.')); // get file extention
         $file_ext = substr($filename, strripos($filename, '.')); // get file name
 
         $file_ext = strtolower($file_ext);
 
-        $filesize = $_FILES["etkinlik_resim"]["size"];
+        $filesize = $_FILES["ders_resim"]["size"];
         $allowed_file_types = array('.jpg','.png','.jpeg');	
     
         if (in_array($file_ext, $allowed_file_types) && ($filesize < 3000000))
@@ -84,7 +90,7 @@ function random_str(
             $newfilename = $ders_kodu . ".png";
             
             $yeni_resim =  __DIR__ . "/../files/images/event/" . $newfilename;
-            move_uploaded_file($_FILES["etkinlik_resim"]["tmp_name"],  $yeni_resim);
+            move_uploaded_file($_FILES["ders_resim"]["tmp_name"],  $yeni_resim);
             echo "File uploaded successfully.";		
         }
         elseif (empty($file_basename))
@@ -101,19 +107,19 @@ function random_str(
         {
             // file type error
             echo "Only these file typs are allowed for upload: " . implode(', ',$allowed_file_types);
-            unlink($_FILES["etkinlik_resim"]["tmp_name"]);
+            unlink($_FILES["ders_resim"]["tmp_name"]);
         }
     }
 
 
      $ders_kodu =  random_str(6);
 
-    if(DersKaydet($ders_kodu, $isim, $aciklama, $kontenjan, $duzenleyen_id) === TRUE){
+    if(DersKaydet($ders_kodu, $isim, $aciklama, $kontenjan,$bolum, $sinif, $duzenleyen_id) === TRUE){
         ResimYukle($ders_kodu);
 
         $_SESSION["_success"] = "Ders oluşturuldu";
 
-        $etkinlik = EtkinlikBilgileriniGetir_Kod($ders_kodu);
+        $etkinlik = DersDetayGetir_Kod($ders_kodu);
         LogYaz_EtkinlikOlusturma($_SESSION["kullanici_id"], $etkinlik["id"]);
 
         header('Location: ../index.php'); 

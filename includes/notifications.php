@@ -196,7 +196,7 @@ function BildirimUygunIcerikGetir($bildirim)
     //var_dump($bildirim);
     $bildirim_tipi = $bildirim["tip"];
     $icerik = $bildirim["mesaj"];
-    $etkinlik_adi = $bildirim["etkinlik"];
+    $etkinlik_adi = $bildirim["ders"];
 
     if ($bildirim_tipi == "NORMAL")
         $icerik =  $icerik;
@@ -245,7 +245,7 @@ foreach ($notifications as $key => $value) {
                         <div class="col-11">
                             <div>
                                 <i class="fa fa-dot-circle-o"></i>
-                                <a href="event.php?event=<?php echo $notification["etkinlik_id"] ?>" class="bildirim-mesaj">
+                                <a href="course.php?course=<?php echo $notification["ders_id"] ?>#yorum" class="bildirim-mesaj">
                                     <?php echo BildirimUygunIcerikGetir($notification); ?>
                                 </a>
                             </div>

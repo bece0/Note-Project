@@ -10,11 +10,10 @@
     background-clip: padding-box;
     background-size: cover;
 
-    padding-top: 10px;
-    padding-left: 10px;
-    padding-bottom: 10px;
+    padding: 10px;
     margin-top: 8px;
   }
+
   .detay-item{
     margin-bottom: 10px;
   }

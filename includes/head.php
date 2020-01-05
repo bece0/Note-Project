@@ -4,11 +4,15 @@
   //$REQUIRE_ADMIN - admin yetkisi gerektiren sayfaların başına eklenir
   //$page_title - sayfa başlığını (title) ayarlamak için kullanılır
 
+if(!isset($_SESSION))
+{
   session_start();
+}
 
   $kullanici_id = 0;
   //isset($REQUIRE_LOGIN) && $REQUIRE_LOGIN == TRUE && !isset($_SESSION["kullanici_id"])
   if(isset($REQUIRE_LOGIN) && $REQUIRE_LOGIN == TRUE && !isset($_SESSION["kullanici_id"])){
+    echo "logine gider..";
     header('Location: login.php');
   }else {
     if(isset($_SESSION["kullanici_id"]))

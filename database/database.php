@@ -107,6 +107,13 @@
             
     }
 
+    function SQLCountCalistir($sql_sorgusu){
+        $con = BAGLANTI_GETIR();
+        $result = $con->query($sql_sorgusu);
+        
+        return $result->num_rows;   
+    }
+
     function SQLInsertCalistir($sql_sorgusu) : bool{
         $con = BAGLANTI_GETIR();
 
@@ -157,5 +164,6 @@
     include 'stats_repo.php';
     include 'settings_repo.php';
     include 'notification_repo.php';
+    include 'duyuru_repo.php';
 
 ?>

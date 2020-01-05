@@ -48,17 +48,17 @@ if ($method == "event_announcement") {
         die();
     }
 
-    if ($data->event_id == NULL || $data->event_id == "" || $data->announcement == NULL || $data->announcement == "") {
+    if ($data->ders_id == NULL || $data->ders_id == "" || $data->announcement == NULL || $data->announcement == "") {
         $mesaj = "data eksik";
     } else {
-        $etkinlik = EtkinlikBilgileriniGetir($data->event_id);
-        if ($etkinlik != NULL && $etkinlik["duzenleyen_id"] == $kullanici_id) {
+        $ders = DersBilgileriniGetir($data->ders_id);
+        if ($ders != NULL && $ders["duzenleyen_id"] == $kullanici_id) {
             //$duyuru_icerigi = $etkinlik["isim"]." - Duyuru : ".$data->announcement;
-            EtkinlikDuyuruGonder($data->event_id, $data->announcement);
+            DersDuyuruGonder($data->ders_id, $data->announcement);
             $islem_sonucu = true;
         } else {
             var_dump($data);
-            $mesaj = "etkink bulunamadi " . $data->event_id;
+            $mesaj = "ders bulunamadi " . $data->ders_id;
 
             die();
         }

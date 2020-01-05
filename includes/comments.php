@@ -57,7 +57,7 @@
 ?>
 <!--Comments-->
 <?php 
-    $event_id = UrlIdFrom("event");
+    $ders_id = UrlIdFrom("course");
 
     $canApprove = false;
     $canDelete = false;
@@ -70,19 +70,19 @@
 
     if($course["duzenleyen_id"] == $giris_yapan_kullanici){
         //Giriş yapmış kullanıcı etkinlik sahibi ise tüm yorumları getir
-        $comments = GetEventAllComments($event_id);
+        $comments = GetEventAllComments($ders_id);
         $canApprove = true;
         $canDelete = true;
     }
     else if(isset($_SESSION["admin"]) && $_SESSION["admin"] == 1){
         //Giriş yapmış kullanıcı ADMİN ise tüm yorumları getir
-        $comments = GetEventAllComments($event_id);
+        $comments = GetEventAllComments($ders_id);
         $canApprove = true;
         $canDelete = true;
     }
     else{
         //Sadece onaylanmış yorumları getir
-        $comments = GetEventApprovedComments($event_id);
+        $comments = GetEventApprovedComments($ders_id);
     }
     
     $comment_count = 0;
@@ -179,7 +179,7 @@
          $canAddComment = true;
     }else{
        //Giriş yapmış kullanici bu etkinliğe katılmış mı
-       $katilimciMi = KatilimciVarMi($event_id, $giris_yapan_kullanici);
+       $katilimciMi = KatilimciVarMi($ders_id, $giris_yapan_kullanici);
        if($katilimciMi == TRUE)
             $canAddComment = true;
     }
@@ -197,7 +197,7 @@
         </div>
         <div class="card-body">
             <form id="comment-form">
-                <input type="hidden" name="event_id" id="event_id" value="<?php echo $event_id?>">
+                <input type="hidden" name="ders_id" id="ders_id" value="<?php echo $ders_id?>">
                 <div class="form-group">
                     <label for="txt_comment">Not : Yorumunun onaylandıktan sonra yayınlanacaktır.</label>
                     <textarea class="form-control" name="comment" id="txt_comment" rows="6"

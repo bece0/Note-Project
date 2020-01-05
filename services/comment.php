@@ -36,10 +36,10 @@
     $sonuc = false;
 
     if($method == "add"){
-        $comment =  mysqli_real_escape_string($baglanti,$_POST["comment"]);
-        $event_id = $_POST["event_id"];
+        $comment =  mysqli_real_escape_string($baglanti, $_POST["comment"]);
+        $ders_id = $_POST["ders_id"];
         
-        $sonuc = AddComment($user_id, $event_id, $comment);
+        $sonuc = AddComment($user_id, $ders_id, $comment);
 
         $sonucObjesi->sonuc = true;
     }

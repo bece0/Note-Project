@@ -24,10 +24,10 @@ function KatilimciVarMi($ders_id, $kullanici_id)
         return FALSE;
 }
 
-function DersKaydet($ders_kodu, $isim, $aciklama, $kontenjan, $duzenleyen_id)
+function DersKaydet($ders_kodu, $isim, $aciklama, $kontenjan,$bolum, $sinif, $duzenleyen_id)
 {
-    $sql = "INSERT INTO dersler (kodu, isim, aciklama, kontenjan, duzenleyen_id)
-    VALUES ('$ders_kodu','$isim','$aciklama', $kontenjan, $duzenleyen_id)";
+    $sql = "INSERT INTO dersler (kodu, isim, aciklama, kontenjan,bolum_adi, sinif, duzenleyen_id)
+    VALUES ('$ders_kodu','$isim','$aciklama', '$kontenjan','$bolum','$sinif','$duzenleyen_id')";
 
     return SQLInsertCalistir($sql);
 }
@@ -42,8 +42,6 @@ function DersIdBul($ders_kod){
     return SQLTekliKayitGetir($sql);
 }
 
-
-
 function DerseKayitOl($ogrenci_id, $ders_id)
 {
 
@@ -51,6 +49,43 @@ function DerseKayitOl($ogrenci_id, $ders_id)
     VALUES ('$ogrenci_id', '$ders_id', CURDATE())";
 
     return SQLInsertCalistir($sql);
+}
+
+function DersKoduKontrol($ders_kod)
+{
+
+    $sql = "SELECT CASE WHEN EXISTS (
+        SELECT *
+        FROM dersler
+        WHERE kodu = ".$ders_kod."
+    )
+        THEN CAST(1 AS BIT)
+        ELSE CAST(0 AS BIT) END";
+  //  $sql = "SELECT ders_kod FROM dersler WHERE kodu=".ders_kod." ";
+
+    return SQLInsertCalistir($sql);
+}
+
+/**
+ * Verilen ders is ve öğrenci id değerine sahip katılımcı kaydı varsa TRUE yoksa FALSE döner
+ */
+function DerseKayitliMi($ogrenci_id, $ders_id)
+{
+    $sql = "SELECT * FROM katilimci WHERE ders_id = $ders_id and ogrenci_id = $ogrenci_id";
+    $sonuc = SQLCountCalistir($sql) > 0;
+
+    // echo $sql;
+    // var_dump($sonuc);
+    // die();
+
+    return  $sonuc;
+}
+
+function DerseKayitliKisiSayisi($ders_id)
+{
+    $sql = "SELECT COUNT(*) as toplam FROM katilimci WHERE ders_id = $ders_id";
+    $sonuc = SQLTekliKayitGetir($sql);
+    return $sonuc["toplam"];
 }
 
 /**
@@ -146,10 +181,10 @@ function EtkinlikAra_Text($search, $onlyFeature = false, $skip = 0, $limit = 50)
  * @param string $event_id etkinliğin id'si
  * @return string gelen sonucu döner,sonuç boş ise NULL döner 
  */
-function EtkinlikBilgileriniGetir($event_id)
+function DersDetayGetir($id)
 {
     // var_dump($event_id);
-    $sql = "SELECT * FROM etkinlik where id = " . $event_id . "";
+    $sql = "SELECT * FROM dersler where id = " . $id . "";
 
     return SQLTekliKayitGetir($sql);
 }
@@ -167,10 +202,10 @@ function DersBilgileriniGetir($ders_id)
  * @param string $kodu etkinliğin kodu
  * @return string gelen sonucu döner,sonuç boş ise NULL döner 
  */
-function EtkinlikBilgileriniGetir_Kod($kodu)
+function DersDetayGetir_Kod($kodu)
 {
-    $sql = "SELECT * FROM etkinlik where kodu ='" . $kodu . "'";
-
+    $sql = "SELECT * FROM dersler where kodu ='" . $kodu . "'";
+    echo $sql;
     return SQLTekliKayitGetir($sql);
 }
 
@@ -196,17 +231,18 @@ function KullaniciEskiEtkinlikleriniGetir($kullanici_id)
     return SQLCalistir($sql);
 }
 
-function EtkinlikDuzenle($isim, $aciklama, $tarih, $adres, $seviye, $tel, $sehir, $k_aciklama, $tip, $event_id)
+//($ders_kodu, $ders_adi, $aciklama, $kontenjan, $bolum_adi, $sinif
+function DersDuzenle($ders_id, $ders_adi, $aciklama, $kontenjan, $bolum_adi, $sinif)
 {
-    $sql = "UPDATE etkinlik SET isim = '$isim', aciklama = '$aciklama', tarih = '$tarih', adres ='$adres', seviye = '$seviye',
-    tel = '$tel', sehir = '$sehir', k_aciklama = '$k_aciklama',tip = '$tip' WHERE id=$event_id";
+    $sql = "UPDATE dersler SET isim = '$ders_adi', aciklama = '$aciklama' , kontenjan ='$kontenjan', bolum_adi = '$bolum_adi',
+    sinif = '$sinif' WHERE id=$ders_id";
 
     return SQLUpdateCalistir($sql);
 }
 
-function EtkinlikSil($event_id)
+function EtkinlikSil($ders_id)
 {
-    $sql = "DELETE FROM etkinlik  WHERE  id=$event_id";
+    $sql = "DELETE FROM dersler  WHERE  kodu=$ders_id";
 
     return SQLDeleteCalistir($sql);
 }
@@ -251,6 +287,16 @@ function DuzenledigiDersleriGetir($kullanici_id)
   
     return SQLCalistir($sql);
 }
+
+function AsistanOlunanDersleriGetir($kullanici_id)
+{       
+     $sql = "SELECT d.*,k.adi as ogretmen_adi ,k.soyadi as ogretmen_soyadi  FROM dersler d,katilimci kt,kullanici k 
+     where kt.ders_id = d.id and d.duzenleyen_id=k.id 
+     and kt.tip = '1' and kt.ogrenci_id='".$kullanici_id."'";
+    // echo $sql;
+    return SQLCalistir($sql);
+}
+
 function  DuzenledigiGecmisDersleriGetir($kullanici_id)
 {
     $sql = "SELECT dersler.* FROM dersler WHERE duzenleyen_id=" . $kullanici_id . " AND etkinlik.tarih < CURDATE()";
@@ -265,16 +311,19 @@ function DersKatilimcilariniGetir($ders_id)
 
     return SQLCalistir($sql);
 }
-
-/*
-function EtkinlikSehirleriniGetir()
+function KayitliOgrenciSayisiGetir($ders_id)
 {
-    $sql = "SELECT DISTINCT(sehir) FROM etkinlik order by sehir";
+    $sql = "SELECT count(*) FROM katilimci where katilimci.ders_id=" . $ders_id . "";
+
+    return SQLTekliKayitGetir($sql);
+}
+
+function DersDuyurulariGetir($ders_id)
+{
+    $sql = "SELECT d.*,k.adi as isim ,k.soyadi as soyisim FROM duyuru d inner join kullanici k on k.id=d.kullanici_id where d.ders_id='". $ders_id ."'
+    order by tarih desc ";
+
     return SQLCalistir($sql);
 }
 
-function EtkinlikTipleriniGetir()
-{
-    $sql = "SELECT DISTINCT(tip) FROM etkinlik order by tip";
-    return SQLCalistir($sql);
-}*/
+

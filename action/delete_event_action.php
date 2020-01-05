@@ -12,7 +12,7 @@ $event_id = $_POST["event_id"];
 
 include '../database/database.php';
 
-$event_detail = EtkinlikBilgileriniGetir($event_id);
+$event_detail = DersDetayGetir($event_id);
 $etkinlik_kodu =  $event_detail["kodu"];
 
 if ($event_detail["duzenleyen_id"] != $_SESSION["kullanici_id"] && $_SESSION["admin"] != 1) {

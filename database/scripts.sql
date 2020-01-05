@@ -45,6 +45,7 @@ CREATE TABLE `katilimci` (
  `ogrenci_id` int(11) NOT NULL,
  `ders_id` int(11) NOT NULL,
  `kayit_tarihi` datetime NOT NULL,
+ `tip` INT NOT NULL DEFAULT '0'
  PRIMARY KEY (`id`)
 );
 

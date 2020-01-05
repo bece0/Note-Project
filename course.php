@@ -29,8 +29,10 @@ include 'includes/head.php';
     //var_dump($course)
     $kullanici_detail = KullaniciBilgileriniGetirById($kullanici_id);
 
-    $GIRIS_YAPAN_DERSIN_HOCASI_MI = ($course["duzenleyen_id"] == $_SESSION["kullanici_id"])
-    ?>
+    $GIRIS_YAPAN_DERSIN_HOCASI_MI = ($course["duzenleyen_id"] == $_SESSION["kullanici_id"]);
+   
+    echo "<input type='hidden' id='ders_id' value='$course_id'/>";
+   ?>
 
 <?php if($GIRIS_YAPAN_DERSIN_HOCASI_MI) { ?>
     <div class="modal fade" id="dersGuncelleModal">
@@ -148,7 +150,7 @@ include 'includes/head.php';
              <!--  nav -->
              <div> 
                 <ul class="nav nav-tabs" role="tablist">
-                    <li class="nav-item">
+                    <li class="nav-item" id="genel_akis">
                         <a class="nav-link active" data-toggle="tab" href="#genel">Genel Akış</a>
                     </li>
                     <li class="nav-item">
@@ -171,10 +173,10 @@ include 'includes/head.php';
                 <div class="tab-content">
                     <div id="genel" class="container tab-pane active" style="  margin-top: auto;"><br>
                         <h5><b>Genel Akış</b></h5>
-                        <div class="detay"> 
+                        <div class="detay" id="duyurulistesi"> 
                             <div class="alert alert-warning" role="alert">
-                                    Bu derste etkinlik yok .
-                            </div>    
+                                Bu derste etkinlik yok .
+                            </div> 
                         </div>
                     </div>
                     <div id="calismalar" class="container tab-pane fade" style="  margin-top: auto;"><br>
@@ -185,9 +187,14 @@ include 'includes/head.php';
                                     <a class="btn btn-info c-header-action duyuru-yap" ders-id="<?php echo $course["id"]; ?>" ders-name="<?php echo $course["isim"]; ?>">
                                                 <i class="fa fa-bell"></i>&nbsp;Duyuru Yap
                                             </a>
-                                    <a class="btn btn-success c-header-action olustur" ders-id="<?php echo $course["id"]; ?>" ders-name="<?php echo $course["isim"]; ?>">
+                                    <a class="btn btn-success dropdown-toggle" data-toggle="dropdown" ders-id="<?php echo $course["id"]; ?>" ders-name="<?php echo $course["isim"]; ?>">
                                                 <i class="fa fa-plus"></i>&nbsp;Oluştur 
-                                    </a> 
+                                    </a>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item c-header-action OdevOlustur" >Ödev</a>
+                                        <a class="dropdown-item c-header-action DokumanOlustur" >Döküman</a>                                     
+                                    </div>   
+                                    <!-- c-header-action olustur" -->
                                 </div>
                             <?php } ?>   
                              
@@ -220,12 +227,16 @@ include 'includes/head.php';
                     <!--  katılımcı -->
                     <div id="katılımcı" class="container tab-pane fade" style="  margin-top: auto;"><br>
                         <h5><b>Katılımcılar</b></h5>
-                    
+                        <a class="btn btn-info c-header-action katilimciEkle" ders-id="<?php echo $course["id"]; ?>" ders-name="<?php echo $course["isim"]; ?>">
+                                                <i class="fa fa-plus"></i>&nbsp;Katılımcı Ekle
+                                            </a>
                         <div class="detay">
                         <div class="modal-body">
                                         <!-- KİŞİ LİSTESİ-->
+                                        <h6><b>Öğrenciler</b></h6>
                                     <?php
-                                            $participant_list = DersKatilimcilariniGetir($course["id"]);
+
+                                        $participant_list = DersKatilimcilariniGetir($course["id"]);
                                         if ($participant_list != NULL) {
                                             for ($i = 0; $i < count($participant_list); $i++) {
                                                 $user_detail = $participant_list[$i];
@@ -264,7 +275,7 @@ include 'includes/head.php';
 </body>
 
 <script>
-// duyuru
+        // duyuru
         $(".duyuru-yap").on("click", function(e) {
             var ders_id = $(e.target).attr("ders-id");
             var ders_name = $(e.target).attr("ders-name");
@@ -320,6 +331,8 @@ include 'includes/head.php';
                             timer: 2000,
                             showConfirmButton: false,
                         });
+                        DersDuyurulariGetir();
+                        $('#genel_akis a')[0].click();
                     } else {
                         console.log(response);
                         Swal.fire({
@@ -344,14 +357,42 @@ include 'includes/head.php';
             });
         }
 
-
         // oluştur
-        $(".olustur").on("click", function(e) {
+        $(".OdevOlustur").on("click", function(e) {
             var ders_id = $(e.target).attr("ders-id");
             var ders_name = $(e.target).attr("ders-name");
 
             Swal.fire({
-                title: 'Çalışma oluştur',
+                title: 'Ödev oluştur',
+                text: ders_name,
+                input: 'file',
+                //inputPlaceholder: ' ',
+                showCancelButton: true,
+                confirmButtonText: '<i class="fa fa-paper-plane"></i> Paylaş!',
+                cancelButtonText: '<i class="fa fa-times"></i> İptal',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                inputValidator: (value) => {
+                    if (!value) {
+                        return 'Duyuru içeriği girmelisiniz!'
+                    }
+                    if (value.length < 15) {
+                        return 'Duyuru içeriği çok kısa!'
+                    }
+                }
+            }).then((result) => {
+                if (!result.value)
+                    return;
+                PaylasimGonder(ders_id, result.value);
+            });
+        })
+
+        $(".DokumanOlustur").on("click", function(e) {
+            var ders_id = $(e.target).attr("ders-id");
+            var ders_name = $(e.target).attr("ders-name");
+
+            Swal.fire({
+                title: 'Doküman oluştur',
                 text: ders_name,
                 input: 'file',
                 //inputPlaceholder: ' ',
@@ -416,6 +457,50 @@ include 'includes/head.php';
                     })
                 }
             });
+        }
+
+        $(function(){
+            //duyuru ajax ile çek
+            //duyuruları html olarak akışa ekle..
+           
+            DersDuyurulariGetir();
+        })
+
+        function DersDuyurulariGetir(){
+            var dersId = $("#ders_id").val();
+            $.ajax({
+                type: "GET",
+                url: 'services/duyuru_getir.php?ders=' + dersId,
+                success: function(response) {
+                    if (response) {
+                        DersDuyurulariniYazdir(response);
+                    }
+                },
+                error: function(jqXHR, error, errorThrown) {
+                    console.log(error);
+                    console.log("ders duyurulari getirilemedi");
+                }
+            });
+        }
+
+        function DersDuyurulariniYazdir(duyurular){
+            if(!duyurular)
+                return;
+
+            $("#duyurulistesi").empty();
+            
+            for (let i = 0; i < duyurular.length; i++) {
+                var duyuru = duyurular[i];
+                var html = "";
+                html += '<div class="alert alert-secondary " role="alert">'
+                html += ("<b>" + duyuru.isim + " " + duyuru.soyisim +  "</b><br>");
+                html += duyuru.mesaj;
+                html += "<b><hr>";
+                html += duyuru.tarih;
+                html += "</b></div>";
+
+                $("#duyurulistesi").append(html);
+            }
         }
 
     </script>

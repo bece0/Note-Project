@@ -3,10 +3,10 @@
 /**
  * Etkinliğe ait ONAYLANMIŞ tüm yorumları getirir.
  */
-function GetEventApprovedComments($event_id){
+function GetEventApprovedComments($ders_id){
     $sql = "SELECT yorum.*, kullanici.adi, kullanici.soyadi FROM yorum 
         INNER JOIN kullanici ON kullanici.id=yorum.kullanici_id
-        where yorum.etkinlik_id=$event_id and yorum.onay_durum = 1";
+        where yorum.ders_id = $ders_id and yorum.onay_durum = 1";
     
     return SQLCalistir($sql);
 }
@@ -14,10 +14,10 @@ function GetEventApprovedComments($event_id){
 /**
  * Etkinliğe ait tüm yorumları getirir.
  */
-function GetEventAllComments($event_id){
+function GetEventAllComments($ders_id){
     $sql = "SELECT yorum.*, kullanici.adi, kullanici.soyadi FROM yorum 
         INNER JOIN kullanici ON kullanici.id=yorum.kullanici_id
-        where yorum.etkinlik_id=$event_id";
+        where yorum.ders_id = $ders_id";
     
     return SQLCalistir($sql);
 }
@@ -25,10 +25,10 @@ function GetEventAllComments($event_id){
 /**
  * Etkinliğe ait ONAYLANMAMIŞ tüm yorumları getirir.
  */
-function GetEventUnApprovedComments($event_id){
+function GetEventUnApprovedComments($ders_id){
     $sql = "SELECT yorum.*, kullanici.adi, kullanici.soyadi FROM yorum 
         INNER JOIN kullanici ON kullanici.id=yorum.kullanici_id
-        where yorum.etkinlik_id=$event_id and yorum.onay_durum = 0";
+        where yorum.ders_id = $ders_id and yorum.onay_durum = 0";
     
     return SQLCalistir($sql);
 }
@@ -49,9 +49,9 @@ function GetCommentById($comment_id){
     return SQLTekliKayitGetir($sql);
 }
 
-function AddComment($user_id, $event_id, $comment_text) : bool{
-    $sql = "INSERT INTO yorum (kullanici_id, etkinlik_id, icerik)
-    VALUES ('$user_id', '$event_id', '$comment_text')";
+function AddComment($user_id, $ders_id, $comment_text) : bool{
+    $sql = "INSERT INTO yorum (kullanici_id, ders_id, icerik)
+    VALUES ('$user_id', '$ders_id', '$comment_text')";
     
     return SQLInsertCalistir($sql); 
 }

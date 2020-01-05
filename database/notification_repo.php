@@ -7,8 +7,9 @@
  */
 function GetUserNotifications($kullanici_id, $count = 5)
 {
-    $sql = "SELECT bildirim.*, etkinlik.isim as etkinlik FROM bildirim 
-            INNER JOIN etkinlik ON etkinlik.id=bildirim.etkinlik_id
+    
+    $sql = "SELECT bildirim.*, dersler.isim as ders FROM bildirim 
+            INNER JOIN dersler ON dersler.id=bildirim.ders_id
             where kullanici_id = $kullanici_id  
             order by bildirim.id desc LIMIT $count ";
     //echo "SQL : ". $sql;
@@ -23,14 +24,25 @@ function GetUserNotifications($kullanici_id, $count = 5)
  * @param $url bildirim tıklaması sonucu açılacak adres
  * @return void
  */
-function EtkinlikDuyuruGonder($etkinlik_id, $mesaj, $url = "")
+function DersDuyuruBildirimiGonder($ders_id, $mesaj, $url = "")
 {
-    $sql_katilimcilar = "SELECT * from katilimci where etkinlik_id = $etkinlik_id";
+    $sql_katilimcilar = "SELECT * from katilimci where ders_id = $ders_id";
     $katilimcilar = SQLCalistir($sql_katilimcilar, FALSE);
 
     for ($i = 0; $i < count($katilimcilar); $i++) {
         $katilimci = $katilimcilar[$i];
-        BildirimYaz($katilimci["kullanici_id"], $etkinlik_id, $mesaj, $url, "DUYURU");
+        BildirimYaz($katilimci["ogrenci_id"], $ders_id, $mesaj, $url, "DUYURU");
+    }
+}
+
+function DersDuyuruGonder($ders_id, $mesaj, $url = "")
+{
+    $sql_katilimcilar = "SELECT * from katilimci where ders_id = $ders_id";
+    $katilimcilar = SQLCalistir($sql_katilimcilar, FALSE);
+
+    for ($i = 0; $i < count($katilimcilar); $i++) {
+        $katilimci = $katilimcilar[$i];
+        BildirimYaz($katilimci["kullanici_id"], $ders_id, $mesaj, $url, "DUYURU");
     }
 }
 
@@ -42,14 +54,14 @@ function EtkinlikDuyuruGonder($etkinlik_id, $mesaj, $url = "")
  * @param $url bildirim tıklaması sonucu açılacak adres
  * @return void
  */
-function EtkinlikKatilimcilarinaBildirimGonder($etkinlik_id, string $mesaj, string $tip = "NORMAL", string $url = "")
+function EtkinlikKatilimcilarinaBildirimGonder($ders_id, string $mesaj, string $tip = "NORMAL", string $url = "")
 {
-    $sql_katilimcilar = "SELECT * from katilimci where etkinlik_id = $etkinlik_id";
+    $sql_katilimcilar = "SELECT * from katilimci where ders_id = $ders_id";
     $katilimcilar = SQLCalistir($sql_katilimcilar, FALSE);
 
     for ($i = 0; $i < count($katilimcilar); $i++) {
         $katilimci = $katilimcilar[$i];
-        BildirimYaz($katilimci["kullanici_id"], $etkinlik_id, $mesaj, $url, $tip);
+        BildirimYaz($katilimci["kullanici_id"], $ders_id, $mesaj, $url, $tip);
     }
 }
 
@@ -62,10 +74,10 @@ function EtkinlikKatilimcilarinaBildirimGonder($etkinlik_id, string $mesaj, stri
  * @param $url bildirim tıklaması sonucu açılacak adres
  * @return bool işlem başarılı ise TRUE, değil ise FALSE döner.
  */
-function BildirimYaz($kullanici_id, $etkinlik_id, $mesaj, $url = "", $tip = "NORMAL") : bool
+function BildirimYaz($kullanici_id, $ders_id, $mesaj, $url = "", $tip = "NORMAL") : bool
 {
-    $sql = "INSERT INTO bildirim (kullanici_id, etkinlik_id, mesaj, url, tip)
-    VALUES ('$kullanici_id', '$etkinlik_id', '$mesaj', '$url', '$tip')";
+    $sql = "INSERT INTO bildirim (kullanici_id, ders_id, mesaj, url, tip)
+    VALUES ('$kullanici_id', '$ders_id', '$mesaj', '$url', '$tip')";
 
     return SQLInsertCalistir($sql);
 }

@@ -50,3 +50,13 @@ section {
  text-decoration: none;
 }
 
+.course-list{
+  margin-top: 30px;
+  margin-bottom: 40px;
+}
+
+.course-list-header{
+    border-bottom: solid 1px grey;
+    padding-bottom: 6px;
+}
+

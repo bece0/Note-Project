@@ -29,16 +29,21 @@
 }
 </style>
    <?php 
-        if($GirisYapildiMi){ 
+        if($GirisYapildiMi){
             $KULLANICI = KullaniciBilgileriniGetirById($_SESSION["kullanici_id"]);
 
             $OGRETMEN = FALSE;
             $OGRENCI = FALSE;
 
-            if($KULLANICI['admin'] != "" && $KULLANICI['admin'] == 0)
+            if($KULLANICI['admin'] != "" && $KULLANICI['admin'] == 0){
                 $OGRENCI = TRUE;
-            else if ($KULLANICI['admin'] != "" && $KULLANICI['admin'] == 1)
+                include 'course_attend_modal.php';
+            }  
+            else if ($KULLANICI['admin'] != "" && $KULLANICI['admin'] == 1){
                 $OGRETMEN = TRUE;
+                include 'course_modals.php';
+                include 'course_attend_modal.php';
+            }
         }?>
 <nav class="navbar navbar-expand-md fixed-top navbar-dark bg-dark">
     
@@ -109,6 +114,7 @@
     </div>
 </nav>
 <script>
+
 $(document).ready(function(){
     $(".dropdown").hover(            
         function() {
@@ -122,110 +128,6 @@ $(document).ready(function(){
     );
 });
 </script>
-
-<!-- The Modal -->
-<div class="modal fade" id="dersOlusturModal">
-  <div class="modal-dialog">
-    <div class="modal-content">
-
-      <!-- Modal Header -->
-      <div class="modal-header">
-        <h4 class="modal-title"><b>Ders Oluştur</b></h4>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-      </div>
-
-      <!-- Modal body -->
-      <div class="modal-body">
-        <form class="form" action="action/create_course_action.php" method="POST" enctype="multipart/form-data"
-            style="margin-top:15px;">
-            <div class="form-group">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-pen-nib"></i></span>
-                    </div>
-                    <input id="ders_adi" name="ders_adi" placeholder="Ders Adı" class="form-control" required
-                        type="text">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-pen-nib"></i></span>
-                    </div>
-                    <input id="bolum_adi" name="bolum_adi" placeholder="Bölüm Adı" class="form-control" required
-                        type="text">
-                </div>
-            </div>
-   
-          
-            <div class="form-group">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-user"></i></span>
-                    </div>
-                    <input id="kontenjan" name="kontenjan" placeholder="Kontenjan" class="form-control" required="true" value=""
-                        type="number">
-                </div>
-            </div>
-    
-                   
-            <div class="form-group">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-thumbtack"></i></span>
-                    </div>
-                    <input id="sinif" name="sinif" placeholder="Sınıf" class="form-control" required="true" value=""
-                        type="text">
-                </div>
-            </div>
-
-
-            <div class="form-group">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-pen"></i></span>
-                    </div>
-                    <textarea rows="2" id="aciklama" name="aciklama" placeholder="Konu"
-                        class="form-control" required="true"></textarea>
-                </div>
-            </div>
-            
-            <button type="submit" class="btn btn-success" style="float:right;">Oluştur</button>
-        </form>
-
-      </div>
-
-    </div>
-  </div>
-</div>
-
-<!-- The Modal -->
-<div class="modal fade" id="derseKaydolModal">
-  <div class="modal-dialog">
-    <div class="modal-content">
-
-      <!-- Modal Header -->
-      <div class="modal-header">
-        <h4 class="modal-title"><b>Derse Kaydol</b></h4>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-      </div>
-
-      <!-- Modal body -->
-      <div class="modal-body">
-
-            <form class="form-signin" action="action/attend_course_action.php" method="post">
-                    <input type="text" class="form-control mb-2" placeholder="Ders Kodu" name="kod" required autofocus>       
-                    <!-- <button class="btn btn-lg btn-primary btn-block mb-1" type="submit" style="background-color: #1d1a1a">Kayıt ol</button> -->
-                    <button type="submit" class="btn btn-success" style="float:right;">Kayıt ol</button>
-            </form>
-
-      </div>
-
-    </div>
-  </div>
-</div>
-
 
 <?php  
   $type = "info";
