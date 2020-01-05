@@ -123,7 +123,7 @@
     if(DersDuzenle($ders_id, $ders_adi, $aciklama, $kontenjan, $bolum_adi, $sinif)=== TRUE){
         $_SESSION["_success"] = "Ders düzenlendi.";
 
-        LogYaz_EtkinlikDuzenleme($_SESSION["kullanici_id"], $ders_id);
+        LogYaz_DersDuzenleme($_SESSION["kullanici_id"], $ders_id);
 
         /*$eski_tarih =  $event_detail["tarih"];
 

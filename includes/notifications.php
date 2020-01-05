@@ -253,7 +253,7 @@ foreach ($notifications as $key => $value) {
                         <hr>
                         <div style="width: 100%;">
                             <p class="time"><?php echo zamanOnce($notification["tarih"]); ?></p>
-                        </div>
+                        </div> 
                     </li>
                 <?php } ?>
             </div>

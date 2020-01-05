@@ -11,496 +11,322 @@ include 'includes/head.php';
 
 <body>
 
-<?php
+    <?php
     include 'includes/nav-bar.php';
 
     if (!isset($_GET["course"]))
         header('Location: dashboard.php');
 
-    $course_id = UrlIdFrom("course");
-    //event=istanbul-bilmem-ne-etkinligi-12
+    //course=veri-yapisi-12  ---> 12
+    $COURSE_ID = UrlIdFrom("course");
+    
+    $COURSE = DersBilgileriniGetir($COURSE_ID);
 
-    $course = DersBilgileriniGetir($course_id);
-
-    if ($course == NULL)
+    if ($COURSE == NULL)
         header('Location: dashboard.php');
 
-    $event_creator = KullaniciBilgileriniGetirById($course["duzenleyen_id"]);
-    //var_dump($course)
-    $kullanici_detail = KullaniciBilgileriniGetirById($kullanici_id);
+    $DUZENLEYEN_ID = KullaniciBilgileriniGetirById($COURSE["duzenleyen_id"]);
 
-    $GIRIS_YAPAN_DERSIN_HOCASI_MI = ($course["duzenleyen_id"] == $_SESSION["kullanici_id"]);
+    $DERS_HOCA = KullaniciBilgileriniGetirById($kullanici_id);
+
+    $GIRIS_YAPAN_DERSIN_HOCASI_MI = ($COURSE["duzenleyen_id"] == $_SESSION["kullanici_id"]);
    
-    echo "<input type='hidden' id='ders_id' value='$course_id'/>";
+    //ders_id değerini gizli input olarak gömüyoruz, javascript tarafında kullanmak için
+    echo "<input type='hidden' id='ders_id' value='$COURSE_ID'/>";
    ?>
 
-<?php if($GIRIS_YAPAN_DERSIN_HOCASI_MI) { ?>
+    <?php if($GIRIS_YAPAN_DERSIN_HOCASI_MI) { ?>
     <div class="modal fade" id="dersGuncelleModal">
         <div class="modal-dialog">
             <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title"><b>Ders Güncelle</b></h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body">
-            <form class="form" action="action/edit_course_action.php" method="POST" enctype="multipart/form-data" style="margin-top:25px;">
-                    <input type="hidden" name="ders_id" value="<?php echo $course['id'] ?>">
-                    <div class="form-group">
-                        <label class="col-form-label"><b>Ders Adı</b></label>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-pen-nib"></i></span>
+                <div class="modal-header">
+                    <h4 class="modal-title"><b>Ders Güncelle</b></h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form class="form" action="action/edit_course_action.php" method="POST"
+                        enctype="multipart/form-data" style="margin-top:25px;">
+                        <input type="hidden" name="ders_id" value="<?php echo $COURSE['id'] ?>">
+                        <div class="form-group">
+                            <label class="col-form-label"><b>Ders Adı</b></label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-pen-nib"></i></span>
+                                </div>
+                                <input type="text" name="ders_adi" placeholder="" class="form-control" required
+                                    value="<?php echo $COURSE['isim'] ?>" maxlength="25">
                             </div>
-                            <input type="text" name="ders_adi" placeholder="" class="form-control" required 
-                                    value="<?php echo $course['isim'] ?>" maxlength="25">
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label class="col-form-label"><b>Bölüm Adı</b></label>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-pen-nib"></i></span>
+                        <div class="form-group">
+                            <label class="col-form-label"><b>Bölüm Adı</b></label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-pen-nib"></i></span>
+                                </div>
+                                <input type="text" name="bolum_adi" placeholder="" class="form-control" required
+                                    value="<?php echo $COURSE['bolum_adi'] ?>">
                             </div>
-                            <input  type="text" name="bolum_adi" placeholder="" class="form-control" required                     
-                                    value="<?php echo $course['bolum_adi'] ?>">
                         </div>
-                    </div>
-        
-                
-                    <div class="form-group">
-                        <label class=" control-label"><b>Kontenjan</b></label>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-user"></i></span>
-                            </div>
-                            <input  type="number" name="kontenjan" placeholder="" class="form-control" required="true" 
-                            value="<?php echo $course['kontenjan'] ?>">
-                        </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label class="col-form-label"><b>Sınıf</b></label>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-thumbtack"></i></span>
+
+                        <div class="form-group">
+                            <label class=" control-label"><b>Kontenjan</b></label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                </div>
+                                <input type="number" name="kontenjan" placeholder="" class="form-control"
+                                    required="true" value="<?php echo $COURSE['kontenjan'] ?>">
                             </div>
-                            <input  type="text" name="sinif" placeholder="" class="form-control" required
-                                value="<?php echo $course['sinif'] ?>">
                         </div>
-                    </div>
-            
-                    <div class="form-group">
-                        <label class="control-label"><b>Açıklama</b></label>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-pen"></i></span>
+
+                        <div class="form-group">
+                            <label class="col-form-label"><b>Sınıf</b></label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-thumbtack"></i></span>
+                                </div>
+                                <input type="text" name="sinif" placeholder="" class="form-control" required
+                                    value="<?php echo $COURSE['sinif'] ?>">
                             </div>
-                            <textarea rows="3" name="aciklama" placeholder="Ders detayını açıklayın..."
-                                    class="form-control" required="true" ><?php echo $course['aciklama'] ?></textarea>
                         </div>
-                    </div>
-                    <button type="submit" class="btn btn-success" style="float:right;">Güncelle</button>
-                </form>
-            </div>
+
+                        <div class="form-group">
+                            <label class="control-label"><b>Açıklama</b></label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-pen"></i></span>
+                                </div>
+                                <textarea rows="3" name="aciklama" placeholder="Ders detayını açıklayın..."
+                                    class="form-control" required="true"><?php echo $COURSE['aciklama'] ?></textarea>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success" style="float:right;">Güncelle</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-<?php } ?>
+    <?php } ?>
 
 
-    <?php echo "<title>" . $course["isim"] . "</title>" ?>
+    <?php echo "<title>" . $COURSE["isim"] . "</title>" ?>
     <div class="container">
         <div class="detay">
-             <div class="row" style="margin-top:25px;">
-      
-                    <div class="col-md-7 col-sm-12">
-                        <img class="etkinlik-resim" src="files/images/event/<?php echo $course["kodu"] ?>.png">
+            <div class="row" style="margin-top:25px;">
 
+                <div class="col-md-7 col-sm-12">
+                    <img class="etkinlik-resim" src="files/images/event/<?php echo $COURSE["kodu"] ?>.png">
+
+                </div>
+
+                <div class="col-md-5 col-sm-12">
+
+                    <h1 class='e-adi'><?php echo $COURSE["isim"]  ?></h1>
+                    <div class="creator">
+                        <div>
+                            Öğretmen:
+                            <a href="profile.php?id=<?php echo $DUZENLEYEN_ID["id"] ?>">
+                                <?php echo $DUZENLEYEN_ID["adi"] . " " . $DUZENLEYEN_ID["soyadi"] ?>
+                            </a>
+                        </div>
                     </div>
-
-                    <div class="col-md-5 col-sm-12">
-                        
-                            <h1 class='e-adi'><?php echo $course["isim"]  ?></h1>
-                            <div class="creator"> Öğretmen:
-                                <a
-                                    href="profile.php?id=<?php echo $event_creator["id"] ?>"><?php echo $event_creator["adi"] . " " . $event_creator["soyadi"] ?></a>
-                                    <br><i class="fas fa-key"></i><?php echo "  Ders Kodu:  ". $course["kodu"] ?>
-                            </div>
-                            <div class="aciklama">
-                                <p>
-                                    <?php 
+                    <div class="course-code">
+                        <i class="fas fa-key"></i><?php echo "  Ders Kodu:  ". $COURSE["kodu"] ?>
+                    </div>
+                    <div class="aciklama">
+                        <p>
+                            <?php 
                                     $url = '@(http(s)?)(://)?(([a-zA-Z])([-\w]+\.)+([^\s\.]+[^\s]*)+[^,.\s])@';
-                                    $aciklama = preg_replace($url, '<a href="http$2://$4" target="_blank" title="$0">$0</a>', $course["aciklama"]);
+                                    $aciklama = preg_replace($url, '<a href="http$2://$4" target="_blank" title="$0">$0</a>', $COURSE["aciklama"]);
                                     echo nl2br($aciklama); 
                                     ?>
-                                </p>
-                                <?php if($GIRIS_YAPAN_DERSIN_HOCASI_MI){ ?> 
-                                    <a class="btn btn-info c-header-action" data-toggle="modal" data-target="#dersGuncelleModal">
-                                        <i class="fa fa-edit"></i>&nbsp;Düzenle
-                                    </a>
-                                <?php } ?>            
-                           </div>
-                    </div>
-        
-        </div>
-
-                      
-        </div>
-             <!--  nav -->
-             <div> 
-                <ul class="nav nav-tabs" role="tablist">
-                    <li class="nav-item" id="genel_akis">
-                        <a class="nav-link active" data-toggle="tab" href="#genel">Genel Akış</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-toggle="tab" href="#calismalar">Sınıf Çalışmaları</a>
-                    </li>
-                    <?php if($OGRETMEN){ ?> 
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#notlar">Notlar</a>
-                        </li>
-                    <?php } ?>
-                            
-                    <li class="nav-item">
-                        <a class="nav-link" data-toggle="tab" href="#yorum">Tartışma</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-toggle="tab" href="#katılımcı">Katılımcılar</a>
-                    </li>
-                </ul>
-                    <!-- Tab panes -->
-                <div class="tab-content">
-                    <div id="genel" class="container tab-pane active" style="  margin-top: auto;"><br>
-                        <h5><b>Genel Akış</b></h5>
-                        <div class="detay" id="duyurulistesi"> 
-                            <div class="alert alert-warning" role="alert">
-                                Bu derste etkinlik yok .
-                            </div> 
-                        </div>
-                    </div>
-                    <div id="calismalar" class="container tab-pane fade" style="  margin-top: auto;"><br>
-                        <h5><b>Sınıf Çalışmaları</b></h5>
-                        <div class="detay">
-                            <?php if($OGRETMEN){ ?> 
-                                <div>
-                                    <a class="btn btn-info c-header-action duyuru-yap" ders-id="<?php echo $course["id"]; ?>" ders-name="<?php echo $course["isim"]; ?>">
-                                                <i class="fa fa-bell"></i>&nbsp;Duyuru Yap
-                                            </a>
-                                    <a class="btn btn-success dropdown-toggle" data-toggle="dropdown" ders-id="<?php echo $course["id"]; ?>" ders-name="<?php echo $course["isim"]; ?>">
-                                                <i class="fa fa-plus"></i>&nbsp;Oluştur 
-                                    </a>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item c-header-action OdevOlustur" >Ödev</a>
-                                        <a class="dropdown-item c-header-action DokumanOlustur" >Döküman</a>                                     
-                                    </div>   
-                                    <!-- c-header-action olustur" -->
-                                </div>
-                            <?php } ?>   
-                             
-                            <br>   
-                                <!-- calismalar -->
-
-                            <div class="alert alert-warning" role="alert">
-                                Bu derste çalışma yok.
-                            </div>
-                        </div>
-                    </div>
-
-                    <?php if($OGRETMEN){ ?> 
-                        <div id="notlar" class="container tab-pane fade" style="  margin-top: auto;"><br>
-                            <h5><b>Notlar</b></h5>
-                            <div class="detay">
-                                <!-- Notlar -->
-                                <div class="alert alert-warning" role="alert">
-                                    Bu derste notlandırılmış ödev yok.
-                                </div>
-                            </div>
-                        </div>
-                    <?php } ?> 
-                    <div id="yorum" class="container tab-pane fade" style="  margin-top: auto;"><br>
-                        <h5><b>Tartışma</b></h5>
-                        <div class="detay">
-                            <?php include 'includes/comments.php' ?>
-                        </div>
-                    </div>
-                    <!--  katılımcı -->
-                    <div id="katılımcı" class="container tab-pane fade" style="  margin-top: auto;"><br>
-                        <h5><b>Katılımcılar</b></h5>
-                        <a class="btn btn-info c-header-action katilimciEkle" ders-id="<?php echo $course["id"]; ?>" ders-name="<?php echo $course["isim"]; ?>">
-                                                <i class="fa fa-plus"></i>&nbsp;Katılımcı Ekle
-                                            </a>
-                        <div class="detay">
-                        <div class="modal-body">
-                                        <!-- KİŞİ LİSTESİ-->
-                                        <h6><b>Öğrenciler</b></h6>
-                                    <?php
-
-                                        $participant_list = DersKatilimcilariniGetir($course["id"]);
-                                        if ($participant_list != NULL) {
-                                            for ($i = 0; $i < count($participant_list); $i++) {
-                                                $user_detail = $participant_list[$i];
-                                                $ad_soyad =  $user_detail['adi'] . " " . $user_detail['soyadi'];
-                                                $user_url = $user_detail['adi']."-". $user_detail['soyadi']."-".$user_detail['id'];
-                                                ?>
-
-                                        <div class="modal-user">
-                                            <img class="avatar" src="files/profile/<?php echo $user_detail['id'] ?>.png"
-                                                title="<?php echo $user_detail['adi'] ?>"
-                                                alt="<?php echo $user_detail['adi'] ?>"
-                                                onerror="this.onerror=null; this.src='files/profile/profile.png'">
-                                            <a href="profile.php?user=<?php echo $user_url; ?>"><?php echo $ad_soyad ?></a>
-                                        </div>
-
-                                        <?php  }
-                                    } else { ?>
-                                        <div class="alert alert-warning" role="alert">
-                                            Bu derste katılımcı yok.
-                                        </div>
-                                        <?php } ?>
-                                    </div>
+                        </p>
+                        <?php if($GIRIS_YAPAN_DERSIN_HOCASI_MI){ ?>
+                        <a class="btn btn-info c-header-action" data-toggle="modal" data-target="#dersGuncelleModal">
+                            <i class="fa fa-edit"></i>&nbsp;Düzenle
+                        </a>
+                        <?php } ?>
                     </div>
                 </div>
-                             <!-- / katılımcı -->   
+
+            </div>
 
 
-             </div>  
-             <!-- /nav -->
-    </div>    
-  
-<hr>
-    <div>
-        <?php include 'includes/footer.php'; ?>
-    </div>
+        </div>
+        <!--  nav -->
+        <div>
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item" id="genel_akis">
+                    <a class="nav-link active" data-toggle="tab" href="#genel">Genel Akış</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#calismalar">Sınıf Çalışmaları</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#yorum">Tartışma</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#katılımcı">Katılımcılar</a>
+                </li>
+                <?php if($OGRETMEN){ ?>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#notlar">Notlar</a>
+                </li>
+                <?php } ?>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <!-- Genel Akış -->
+                <div id="genel" class="container tab-pane active" style="  margin-top: auto;"><br>
+                    <h5><b>Genel Akış</b></h5>
+                    <div class="detay" id="duyurulistesi">
+                        <?php include 'includes/course/genel_akis.php' ?>
+                    </div>
+                </div>
+                <!-- Sınıf Çalışmaları -->
+                <div id="calismalar" class="container tab-pane fade" style="  margin-top: auto;"><br>
+                    <h5><b>Sınıf Çalışmaları</b></h5>
+                    <div class="detay">
+                        <?php include 'includes/course/sinif_calismalari.php' ?>
+                    </div>
+                </div>
+                <!-- Tartışma -->
+                <div id="yorum" class="container tab-pane fade" style="  margin-top: auto;"><br>
+                    <h5><b>Tartışma</b></h5>
+                    <div class="detay">
+                        <?php include 'includes/comments.php' ?>
+                    </div>
+                </div>
+                <!--  Katılımcılar -->
+                <div id="katılımcı" class="container tab-pane fade" style="  margin-top: auto;"><br>
+                    <h5><b>Katılımcılar</b></h5>
+                    <div class="detay">
+                        <?php include 'includes/course/katilimcilar.php' ?>
+                    </div>
+                </div>
+                <!-- Notlar -->
+                <?php if($OGRETMEN){ ?>
+                <div id="notlar" class="container tab-pane fade" style="  margin-top: auto;"><br>
+                    <h5><b>Notlar</b></h5>
+                    <div class="detay">
+                        <?php include 'includes/course/notlar.php' ?>
+                    </div>
+                </div>
+                <?php } ?>
+            </div>
+            <!-- /nav -->
+        </div>
+
+        <div>
+            <?php include 'includes/footer.php'; ?>
+        </div>
 </body>
 
 <script>
-        // duyuru
-        $(".duyuru-yap").on("click", function(e) {
-            var ders_id = $(e.target).attr("ders-id");
-            var ders_name = $(e.target).attr("ders-name");
 
-            Swal.fire({
-                title: 'Ders Duyurusu',
-                text: ders_name,
-                input: 'textarea',
-                inputPlaceholder: 'Öğrencilere gönderilecek olan mesajı buraya yazın...',
-                showCancelButton: true,
-                confirmButtonText: '<i class="fa fa-paper-plane"></i> Gönder!',
-                cancelButtonText: '<i class="fa fa-times"></i> İptal',
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                inputValidator: (value) => {
-                    if (!value) {
-                        return 'Duyuru içeriği girmelisiniz!'
-                    }
-                    if (value.length < 15) {
-                        return 'Duyuru içeriği çok kısa!'
-                    }
+// oluştur
+$(".OdevOlustur").on("click", function(e) {
+    var ders_id = $(e.target).attr("ders-id");
+    var ders_name = $(e.target).attr("ders-name");
 
-                    // var regex = new RegExp("^[a-zA-Z0-9]+$");
-                    // var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
-                    // if (!regex.test(value.length)) {
-                    //     return 'Sadece alfanumeric değerler kabul edilmektedir.'
-                    // }
-                }
-            }).then((result) => {
-                if (!result.value)
-                    return;
-                DuyuruGonder(ders_id, result.value);
-            });
-        })
-
-        function DuyuruGonder(ders_id, mesaj) {
-            var data = {
-                ders_id: ders_id,
-                mesaj: mesaj
+    Swal.fire({
+        title: 'Ödev oluştur',
+        text: ders_name,
+        input: 'file',
+        //inputPlaceholder: ' ',
+        showCancelButton: true,
+        confirmButtonText: '<i class="fa fa-paper-plane"></i> Paylaş!',
+        cancelButtonText: '<i class="fa fa-times"></i> İptal',
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        inputValidator: (value) => {
+            if (!value) {
+                return 'Duyuru içeriği girmelisiniz!'
             }
-            $.ajax({
-                type: "POST",
-                url: 'services/duyuru.php',
-                // data: {
-                //     data: JSON.stringify(data)
-                // },
-                data : data,
-                success: function(response) {
-                    if (response && response.sonuc) {
-                        Swal.fire({
-                            type: 'success',
-                            title: 'Katılımcılara duyuru gönderildi',
-                            timer: 2000,
-                            showConfirmButton: false,
-                        });
-                        DersDuyurulariGetir();
-                        $('#genel_akis a')[0].click();
-                    } else {
-                        console.log(response);
-                        Swal.fire({
-                            title: 'Hata',
-                            text: 'Duyuru gönderilemedi, lütfen daha sonra tekrar deneyin.',
-                            type: 'warning',
-                            timer: 2000,
-                            showConfirmButton: false,
-                        })
-                    }
-                },
-                error: function(jqXHR, error, errorThrown) {
-                    console.log(error);
-                    Swal.fire({
-                        title: 'Hata',
-                        text: 'Duyuru gönderilemedi, lütfen daha sonra tekrar deneyin.',
-                        type: 'warning',
-                        timer: 2000,
-                        showConfirmButton: false,
-                    })
-                }
-            });
-        }
-
-        // oluştur
-        $(".OdevOlustur").on("click", function(e) {
-            var ders_id = $(e.target).attr("ders-id");
-            var ders_name = $(e.target).attr("ders-name");
-
-            Swal.fire({
-                title: 'Ödev oluştur',
-                text: ders_name,
-                input: 'file',
-                //inputPlaceholder: ' ',
-                showCancelButton: true,
-                confirmButtonText: '<i class="fa fa-paper-plane"></i> Paylaş!',
-                cancelButtonText: '<i class="fa fa-times"></i> İptal',
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                inputValidator: (value) => {
-                    if (!value) {
-                        return 'Duyuru içeriği girmelisiniz!'
-                    }
-                    if (value.length < 15) {
-                        return 'Duyuru içeriği çok kısa!'
-                    }
-                }
-            }).then((result) => {
-                if (!result.value)
-                    return;
-                PaylasimGonder(ders_id, result.value);
-            });
-        })
-
-        $(".DokumanOlustur").on("click", function(e) {
-            var ders_id = $(e.target).attr("ders-id");
-            var ders_name = $(e.target).attr("ders-name");
-
-            Swal.fire({
-                title: 'Doküman oluştur',
-                text: ders_name,
-                input: 'file',
-                //inputPlaceholder: ' ',
-                showCancelButton: true,
-                confirmButtonText: '<i class="fa fa-paper-plane"></i> Paylaş!',
-                cancelButtonText: '<i class="fa fa-times"></i> İptal',
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                inputValidator: (value) => {
-                    if (!value) {
-                        return 'Duyuru içeriği girmelisiniz!'
-                    }
-                    if (value.length < 15) {
-                        return 'Duyuru içeriği çok kısa!'
-                    }
-                }
-            }).then((result) => {
-                if (!result.value)
-                    return;
-                PaylasimGonder(ders_id, result.value);
-            });
-        })
-
-        function PaylasimGonder(ders_id, duyuru) {
-            var data = {
-                ders_id: ders_id,
-                announcement: duyuru
-            }
-            $.ajax({
-                type: "POST",
-                url: 'services/notification.php?method=event_announcement',
-                data: {
-                    data: JSON.stringify(data)
-                },
-                success: function(response) {
-                    if (response && response.sonuc) {
-                        Swal.fire({
-                            type: 'success',
-                            title: 'Katılımcılara paylaşım gönderildi',
-                            timer: 2000,
-                            showConfirmButton: false,
-                        });
-                    } else {
-                        console.log(response);
-                        Swal.fire({
-                            title: 'Hata',
-                            text: 'Duyuru gönderilemedi, lütfen daha sonra tekrar deneyin.',
-                            type: 'warning',
-                            timer: 2000,
-                            showConfirmButton: false,
-                        })
-                    }
-                },
-                error: function(jqXHR, error, errorThrown) {
-                    console.log(error);
-                    Swal.fire({
-                        title: 'Hata',
-                        text: 'Duyuru gönderilemedi, lütfen daha sonra tekrar deneyin.',
-                        type: 'warning',
-                        timer: 2000,
-                        showConfirmButton: false,
-                    })
-                }
-            });
-        }
-
-        $(function(){
-            //duyuru ajax ile çek
-            //duyuruları html olarak akışa ekle..
-           
-            DersDuyurulariGetir();
-        })
-
-        function DersDuyurulariGetir(){
-            var dersId = $("#ders_id").val();
-            $.ajax({
-                type: "GET",
-                url: 'services/duyuru_getir.php?ders=' + dersId,
-                success: function(response) {
-                    if (response) {
-                        DersDuyurulariniYazdir(response);
-                    }
-                },
-                error: function(jqXHR, error, errorThrown) {
-                    console.log(error);
-                    console.log("ders duyurulari getirilemedi");
-                }
-            });
-        }
-
-        function DersDuyurulariniYazdir(duyurular){
-            if(!duyurular)
-                return;
-
-            $("#duyurulistesi").empty();
-            
-            for (let i = 0; i < duyurular.length; i++) {
-                var duyuru = duyurular[i];
-                var html = "";
-                html += '<div class="alert alert-secondary " role="alert">'
-                html += ("<b>" + duyuru.isim + " " + duyuru.soyisim +  "</b><br>");
-                html += duyuru.mesaj;
-                html += "<b><hr>";
-                html += duyuru.tarih;
-                html += "</b></div>";
-
-                $("#duyurulistesi").append(html);
+            if (value.length < 15) {
+                return 'Duyuru içeriği çok kısa!'
             }
         }
+    }).then((result) => {
+        if (!result.value)
+            return;
+        PaylasimGonder(ders_id, result.value);
+    });
+})
 
-    </script>
+$(".DokumanOlustur").on("click", function(e) {
+    var ders_id = $(e.target).attr("ders-id");
+    var ders_name = $(e.target).attr("ders-name");
+
+    Swal.fire({
+        title: 'Doküman oluştur',
+        text: ders_name,
+        input: 'file',
+        //inputPlaceholder: ' ',
+        showCancelButton: true,
+        confirmButtonText: '<i class="fa fa-paper-plane"></i> Paylaş!',
+        cancelButtonText: '<i class="fa fa-times"></i> İptal',
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        inputValidator: (value) => {
+            if (!value) {
+                return 'Duyuru içeriği girmelisiniz!'
+            }
+            if (value.length < 15) {
+                return 'Duyuru içeriği çok kısa!'
+            }
+        }
+    }).then((result) => {
+        if (!result.value)
+            return;
+        PaylasimGonder(ders_id, result.value);
+    });
+})
+
+function PaylasimGonder(ders_id, duyuru) {
+    var data = {
+        ders_id: ders_id,
+        announcement: duyuru
+    }
+    $.ajax({
+        type: "POST",
+        url: 'services/notification.php?method=event_announcement',
+        data: {
+            data: JSON.stringify(data)
+        },
+        success: function(response) {
+            if (response && response.sonuc) {
+                Swal.fire({
+                    type: 'success',
+                    title: 'Katılımcılara paylaşım gönderildi',
+                    timer: 2000,
+                    showConfirmButton: false,
+                });
+            } else {
+                console.log(response);
+                Swal.fire({
+                    title: 'Hata',
+                    text: 'Duyuru gönderilemedi, lütfen daha sonra tekrar deneyin.',
+                    type: 'warning',
+                    timer: 2000,
+                    showConfirmButton: false,
+                })
+            }
+        },
+        error: function(jqXHR, error, errorThrown) {
+            console.log(error);
+            Swal.fire({
+                title: 'Hata',
+                text: 'Duyuru gönderilemedi, lütfen daha sonra tekrar deneyin.',
+                type: 'warning',
+                timer: 2000,
+                showConfirmButton: false,
+            })
+        }
+    });
+}
+
+
+</script>

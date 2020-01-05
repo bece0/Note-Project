@@ -28,16 +28,16 @@ include 'includes/head.php';
     $ayarlar = KullaniciAyarlariniGetirById($kullanici_id);
     $kullanici_detail = KullaniciBilgileriniGetirById($kullanici_id);
 
-    //$yeni_etkinlikler=KullaniciYeniEtkinlikleriniGetir($kullanici_id);
-    //$eski_etkinlikler=KullaniciEskiEtkinlikleriniGetir($kullanici_id);
+    //$yeni_Dersler=KullaniciYeniDersleriniGetir($kullanici_id);
+    //$eski_Dersler=KullaniciEskiDersleriniGetir($kullanici_id);
 
-    $eski_etkinlikler = [];
+    $eski_Dersler = [];
     if ($ayarlar["gecmis_private"] == "no")
-        $eski_etkinlikler = KullaniciEskiEtkinlikleriniGetir($kullanici_id);
+        $eski_Dersler = KullaniciEskiDersleriniGetir($kullanici_id);
 
-    $gelecek_etkinlikler = [];
+    $gelecek_Dersler = [];
     if ($ayarlar["gelecek_private"] == "no")
-        $gelecek_etkinlikler = KullaniciYeniEtkinlikleriniGetir($kullanici_id);
+        $gelecek_Dersler = KullaniciYeniDersleriniGetir($kullanici_id);
     ?>
     <style>
     .profile-detail {
@@ -142,13 +142,13 @@ include 'includes/head.php';
                         <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel"
                             aria-labelledby="v-pills-home-tab">
                             <?php
-                            $gelecek_etkinlikler_count = 0;
-                            if ($gelecek_etkinlikler != NULL)
-                                $gelecek_etkinlikler_count = count($gelecek_etkinlikler);
+                            $gelecek_Dersler_count = 0;
+                            if ($gelecek_Dersler != NULL)
+                                $gelecek_Dersler_count = count($gelecek_Dersler);
 
-                            if ($gelecek_etkinlikler != NULL && $gelecek_etkinlikler_count > 0) {
-                                for ($i = 0; $i < count($gelecek_etkinlikler); $i++) {
-                                    $etkinlik = $gelecek_etkinlikler[$i];
+                            if ($gelecek_Dersler != NULL && $gelecek_Dersler_count > 0) {
+                                for ($i = 0; $i < count($gelecek_Dersler); $i++) {
+                                    $etkinlik = $gelecek_Dersler[$i];
                                     ?>
                             <div class="card row mx-2 mb-3">
                                 <div class="card-body">
@@ -184,9 +184,9 @@ include 'includes/head.php';
                         <div class="tab-pane fade" id="v-pills-profile" role="tabpanel"
                             aria-labelledby="v-pills-profile-tab">
                             <?php
-                            if ($eski_etkinlikler != NULL  && count($eski_etkinlikler) > 0) {
-                                for ($i = 0; $i < count($eski_etkinlikler); $i++) {
-                                    $etkinlik = $eski_etkinlikler[$i];
+                            if ($eski_Dersler != NULL  && count($eski_Dersler) > 0) {
+                                for ($i = 0; $i < count($eski_Dersler); $i++) {
+                                    $etkinlik = $eski_Dersler[$i];
                                     ?>
                             <div class="card row mx-2 mb-3">
                                 <div class="card-body" style="">

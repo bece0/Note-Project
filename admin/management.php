@@ -54,8 +54,8 @@
         </nav>
         <?php 
             $aktif_kullanıcı= AktifKullaniciSayisi();
-            $gecmis_etkinlik= ToplamGecmisEtkinlikSayisi();
-            $gelecek_etkinlik= ToplamGelecekEtkinlikSayisi();
+            $GECMIS_DERS_SAYISI= DurumaGoreDersSayisi(0);
+            $ACIK_DERS_SAYISI= DurumaGoreDersSayisi(1);
             $katilim_sayisi= ToplamKatılımSayisi();
             // var_dump($aktif_kullanıcı);
         ?>
@@ -80,10 +80,10 @@
                             <div class="card border-success shadow text-success p-3 stat-ikon"><span
                                     class="fa fa-calendar-alt" aria-hidden="true"></span></div>
                             <div class="text-success text-center mt-3">
-                                <h5>Geçmiş Etkinlikler</h5>
+                                <h5>Geçmiş Dersler</h5>
                             </div>
                             <div class="text-success text-center mt-2">
-                                <h1 class="count"><?php echo $gecmis_etkinlik["toplam"]  ?></h1>
+                                <h1 class="count"><?php echo $GECMIS_DERS_SAYISI["toplam"]  ?></h1>
                             </div>
                         </div>
                     </div>
@@ -92,10 +92,10 @@
                             <div class="card border-danger shadow text-danger p-3 stat-ikon"><span
                                     class="fa fa-calendar" aria-hidden="true"></span></div>
                             <div class="text-danger text-center mt-3">
-                                <h5>Gelecek Etkinlikler</h5>
+                                <h5>Açık Dersler</h5>
                             </div>
                             <div class="text-danger text-center mt-2">
-                                <h1 class="count"><?php echo $gelecek_etkinlik["toplam"]  ?></h1>
+                                <h1 class="count"><?php echo $ACIK_DERS_SAYISI["toplam"]  ?></h1>
                             </div>
                         </div>
                     </div>

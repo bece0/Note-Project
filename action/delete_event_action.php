@@ -30,7 +30,7 @@ if (EtkinlikSil($event_id) === TRUE) {
     // $icerik =  $event_detail["isim"] . " etkinliği iptal edildi";
     EtkinlikKatilimcilarinaBildirimGonder($event_id, "", "ETKINLIK_IPTAL");
     
-    LogYaz_EtkinlikSilme($_SESSION["kullanici_id"], $event_id);
+    LogYaz_DersSilme($_SESSION["kullanici_id"], $event_id);
 
     $_SESSION["_success"] = "Etkinlik silindi";
     header('Location: ../index.php');

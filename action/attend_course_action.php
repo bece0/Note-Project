@@ -45,7 +45,7 @@
             }else{
                 if(DerseKayitOl($kullanici_id,  $ders_id) === TRUE){
                     $_SESSION["_success"]="Kayıt olundu.";
-                    //LogYaz_EtkinlikKayit($kullanici_id, $etkinlik_id);
+                    //LogYaz_DersKayit($kullanici_id, $etkinlik_id);
                     
                     header('Location: ../course.php?course='. $ders_id); 
                 }else{

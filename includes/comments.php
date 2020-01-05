@@ -68,7 +68,7 @@
     if(isset($_SESSION["kullanici_id"]))
         $giris_yapan_kullanici = $_SESSION["kullanici_id"];
 
-    if($course["duzenleyen_id"] == $giris_yapan_kullanici){
+    if($COURSE["duzenleyen_id"] == $giris_yapan_kullanici){
         //Giriş yapmış kullanıcı etkinlik sahibi ise tüm yorumları getir
         $comments = GetEventAllComments($ders_id);
         $canApprove = true;
@@ -170,7 +170,7 @@
     if($giris_yapan_kullanici == NULL){
         $canAddComment = false;
     }
-    else if($course["duzenleyen_id"] == $giris_yapan_kullanici){
+    else if($COURSE["duzenleyen_id"] == $giris_yapan_kullanici){
         //Etkinlik sahibi yorum ekleyebilir
         $canAddComment = true;
     }

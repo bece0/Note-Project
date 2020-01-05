@@ -22,7 +22,7 @@
         $sonuc = LogGetir_Kullanici();
     }
     if($method == "event_logs"){
-        $sonuc = LogGetir_Etkinlik();
+        $sonuc = LogGetir_Ders();
     }
     if($method == "system_logs"){
         $sonuc = LogGetir_Sistem();

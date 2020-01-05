@@ -120,7 +120,7 @@ function random_str(
         $_SESSION["_success"] = "Ders oluşturuldu";
 
         $etkinlik = DersDetayGetir_Kod($ders_kodu);
-        LogYaz_EtkinlikOlusturma($_SESSION["kullanici_id"], $etkinlik["id"]);
+        LogYaz_DersOlusturma($_SESSION["kullanici_id"], $etkinlik["id"]);
 
         header('Location: ../index.php'); 
     }else {

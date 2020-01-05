@@ -20,7 +20,7 @@
     if(EtkinligiIptalEt($kullanici_id, $etkinlik_id) === TRUE){
         $_SESSION["_success"]="İptal edildi..";
 
-        LogYaz_EtkinlikKayitIptal($kullanici_id, $etkinlik_id);
+        LogYaz_DersKayitIptal($kullanici_id, $etkinlik_id);
 
         header('Location: ../event.php?event='.$etkinlik_id); 
     }else {

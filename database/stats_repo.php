@@ -11,15 +11,11 @@
         if ($result->num_rows > 0) 
             return mysqli_fetch_assoc($result);
         else
-            return NULL;   
-
+            return 0;   
     }
-    
-     /**
-     * @return int Databasedeki geçmiş etkinlik sayısını döner.
-     */
-    function ToplamGecmisEtkinlikSayisi(){
-        $sql = "SELECT count(*) as toplam FROM etkinlik WHERE tarih<CURDATE()" ;
+
+    function DurumaGoreDersSayisi($DURUM = 1){
+        $sql = "SELECT count(*) as toplam FROM dersler WHERE status = $DURUM" ;
      
         $con = BAGLANTI_GETIR();
         $result = $con->query($sql);
@@ -27,30 +23,15 @@
         if ($result->num_rows > 0) 
             return mysqli_fetch_assoc($result);
         else
-            return NULL;     
-
+            return 0;     
     }
-
-     /**
-     * @return int Databasedeki gelecek etkinlik sayısını döner.
-     */
-    function ToplamGelecekEtkinlikSayisi(){
-        $sql = "SELECT count(*) as toplam FROM etkinlik WHERE tarih>CURDATE()" ;
-     
-        $con = BAGLANTI_GETIR();
-        $result = $con->query($sql);
     
-        if ($result->num_rows > 0) 
-            return mysqli_fetch_assoc($result);
-        else
-            return NULL;     
-    }
 
      /**
      * @return int Databasedeki katılımcı sayısını döner.
      */
     function ToplamKatılımSayisi(){
-        $sql = "SELECT count(kullanici_id) as toplam FROM katilimci";
+        $sql = "SELECT count(ogrenci_id) as toplam FROM katilimci";
      
         $con = BAGLANTI_GETIR();
         $result = $con->query($sql);
@@ -58,7 +39,7 @@
         if ($result->num_rows > 0) 
             return mysqli_fetch_assoc($result);
         else
-            return NULL;     
+            return 0;     
     }
 
 ?>

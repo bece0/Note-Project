@@ -1,6 +1,6 @@
 <?php
 $REQUIRE_LOGIN = TRUE;
-$page_title = "Etkinliklerim";
+$page_title = "Derslerim";
 
 include 'includes/page-common.php';
 include 'includes/head.php';

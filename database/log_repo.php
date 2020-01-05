@@ -7,11 +7,11 @@
 $USER_LOGIN = "LOGIN";
 $USER_LOGOUT = "LOGOUT";
 
-$LOG_EVENT_CREATE = "EVENT_CREATE";
-$LOG_EVENT_EDIT = "EVENT_EDIT";
-$LOG_EVENT_DELETE = "EVENT_DELETE";
-$LOG_EVENT_REGISTER = "EVENT_REGISTER";
-$LOG_EVENT_REGISTER_CANCEL = "EVENT_REGISTER_CANCEL";
+$LOG_COURSE_CREATE = "COURSE_CREATE";
+$LOG_COURSE_EDIT = "COURSE_EDIT";
+$LOG_COURSE_DELETE = "COURSE_DELETE";
+$LOG_COURSE_REGISTER = "COURSE_REGISTER";
+$LOG_COURSE_REGISTER_CANCEL = "COURSE_REGISTER_CANCEL";
 
 
 function SistemLogYaz($baslik, $mesaj){
@@ -58,44 +58,44 @@ function LogYaz_KullaniciCikisi($kullanici_id, $mesaj = "")
     return LogYaz($kullanici_id, 0, "user", "LOGOUT", $mesaj);
 }
 
-function LogYaz_EtkinlikKayit($kullanici_id, $etkinlik_id, $mesaj = "")
+function LogYaz_DersKayit($kullanici_id, $etkinlik_id, $mesaj = "")
 {   
     if($mesaj == NULL || $mesaj == "")
         $mesaj = $kullanici_id." id nolu kullanıcı $etkinlik_id nolu etkinliğine katıldı.";
 
-    return LogYaz($kullanici_id, $etkinlik_id, "event", "EVENT_REGISTER", $mesaj);
+    return LogYaz($kullanici_id, $etkinlik_id, "event", "COURSE_REGISTER", $mesaj);
 }
 
-function LogYaz_EtkinlikKayitIptal($kullanici_id, $etkinlik_id, $mesaj = "")
+function LogYaz_DersKayitIptal($kullanici_id, $etkinlik_id, $mesaj = "")
 {   
     if($mesaj == NULL || $mesaj == "")
-        $mesaj = $kullanici_id." id nolu kullanıcı $etkinlik_id nolu etkinlikten çıktı.";
+        $mesaj = $kullanici_id." id nolu kullanıcı $etkinlik_id nolu dersten çıktı.";
 
-    return LogYaz($kullanici_id, $etkinlik_id, "event", "EVENT_REGISTER_CANCEL", $mesaj);
+    return LogYaz($kullanici_id, $etkinlik_id, "event", "COURSE_REGISTER_CANCEL", $mesaj);
 }
 
-function LogYaz_EtkinlikOlusturma($kullanici_id, $etkinlik_id, $mesaj = "")
+function LogYaz_DersOlusturma($kullanici_id, $etkinlik_id, $mesaj = "")
 {   
     if($mesaj == NULL || $mesaj == "")
-        $mesaj = $kullanici_id." id nolu kullanıcı $etkinlik_id nolu etkinliği oluşturdu.";
+        $mesaj = $kullanici_id." id nolu kullanıcı $etkinlik_id nolu ders oluşturdu.";
 
-    return LogYaz($kullanici_id, $etkinlik_id, "event", "EVENT_CREATE", $mesaj);
+    return LogYaz($kullanici_id, $etkinlik_id, "event", "COURSE_CREATE", $mesaj);
 }
 
-function LogYaz_EtkinlikDuzenleme($kullanici_id, $etkinlik_id, $mesaj = "")
+function LogYaz_DersDuzenleme($kullanici_id, $etkinlik_id, $mesaj = "")
 {   
     if($mesaj == NULL || $mesaj == "")
-        $mesaj = $kullanici_id." id nolu kullanıcı $etkinlik_id nolu etkinliği düzenledi.";
+        $mesaj = $kullanici_id." id nolu kullanıcı $etkinlik_id nolu dersi düzenledi.";
 
-    return LogYaz($kullanici_id, $etkinlik_id, "event", "EVENT_EDIT", $mesaj);
+    return LogYaz($kullanici_id, $etkinlik_id, "event", "COURSE_EDIT", $mesaj);
 }
 
-function LogYaz_EtkinlikSilme($kullanici_id, $etkinlik_id, $mesaj = "")
+function LogYaz_DersSilme($kullanici_id, $etkinlik_id, $mesaj = "")
 {   
     if($mesaj == NULL || $mesaj == "")
-        $mesaj = $kullanici_id." id nolu kullanıcı $etkinlik_id nolu etkinliği sildi.";
+        $mesaj = $kullanici_id." id nolu kullanıcı $etkinlik_id nolu dersi sildi.";
 
-    return LogYaz($kullanici_id, $etkinlik_id, "event", "EVENT_DELETE", $mesaj);
+    return LogYaz($kullanici_id, $etkinlik_id, "event", "COURSE_DELETE", $mesaj);
 }
 
 /**
@@ -109,7 +109,7 @@ function LogGetir_Kullanici($limit = 500){
 /**
  * tipi event olan tüm logları döner
  */
-function LogGetir_Etkinlik($limit = 500){
+function LogGetir_Ders($limit = 500){
     $sql = "SELECT * FROM gunluk WHERE tip = 'event' order by id desc LIMIT $limit";
     return SQLCalistir($sql);
 }

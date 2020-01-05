@@ -36,7 +36,7 @@ CREATE TABLE `dersler` (
  `bolum_adi` text NOT NULL,
  `sinif` text NOT NULL,
  `duzenleyen_id` int(11) NOT NULL,
-
+ `status` tinyint NOT NULL DEFAULT '1',
  PRIMARY KEY (`id`)
 );
 

@@ -99,10 +99,10 @@ function EtkinligiIptalEt($kullanici_id, $etkinlik_id)
 }
 
 /**
- * Databasedeki tüm etkinlikleri döner
+ * Databasedeki tüm Dersleri döner
  *  @return array gelen sonucu döner,sonuç boş ise NULL döner 
  */
-function EtkinlikleriGetir($limit = 50)
+function DersleriGetir($limit = 50)
 {
     $sql = "SELECT * FROM etkinlik order by id desc LIMIT $limit ";
 
@@ -141,7 +141,7 @@ function EtkinlikAra($search, $tip, $city, $timeOperator, $time_start, $time_end
 
     // echo "<br>" . $sql . "<br>";
     if (endsWith($sql, "where") == 1)
-        return GelecekEtkinlikleriGetir($skip, $limit);
+        return GelecekDersleriGetir($skip, $limit);
 
     // echo "<br> order öncesi : " . $sql . "<br>";
     $sql = $sql . " order by id desc LIMIT $limit ";
@@ -155,7 +155,7 @@ function EtkinlikAra($search, $tip, $city, $timeOperator, $time_start, $time_end
 function EtkinlikAra_Text($search, $onlyFeature = false, $skip = 0, $limit = 50)
 {
     if (empty($search))
-        return GelecekEtkinlikleriGetir($skip, $limit);
+        return GelecekDersleriGetir($skip, $limit);
 
     $sql = "SELECT * FROM etkinlik where";
     if ($onlyFeature)
@@ -168,7 +168,7 @@ function EtkinlikAra_Text($search, $onlyFeature = false, $skip = 0, $limit = 50)
     }
 
     if (endsWith($sql, "where") == 1) {
-        return GelecekEtkinlikleriGetir($skip, $limit);
+        return GelecekDersleriGetir($skip, $limit);
     }
 
     $sql = $sql . " order by id desc LIMIT $limit ";
@@ -212,7 +212,7 @@ function DersDetayGetir_Kod($kodu)
 /**
  * 
  */
-function KullaniciYeniEtkinlikleriniGetir($kullanici_id)
+function KullaniciYeniDersleriniGetir($kullanici_id)
 {
     $sql = "SELECT etkinlik.* FROM etkinlik INNER JOIN katilimci 
         ON katilimci.etkinlik_id=etkinlik.id where katilimci.kullanici_id='" . $kullanici_id . "' and etkinlik.tarih > CURDATE()";
@@ -223,7 +223,7 @@ function KullaniciYeniEtkinlikleriniGetir($kullanici_id)
 /**
  * 
  */
-function KullaniciEskiEtkinlikleriniGetir($kullanici_id)
+function KullaniciEskiDersleriniGetir($kullanici_id)
 {
     $sql = "SELECT etkinlik.* FROM etkinlik INNER JOIN katilimci 
         ON katilimci.etkinlik_id=etkinlik.id where katilimci.kullanici_id='" . $kullanici_id . "' and etkinlik.tarih < CURDATE()";
@@ -248,10 +248,10 @@ function EtkinlikSil($ders_id)
 }
 
 /**
- * Gelecek etkinlikleri etkinlik tarihi sırasına göre getirir.
+ * Açık Dersleri etkinlik tarihi sırasına göre getirir.
  * @param int $limit sorgu sonucu kayıt limiti
  */
-function GelecekEtkinlikleriGetir($skip = 0, $limit = 50)
+function GelecekDersleriGetir($skip = 0, $limit = 50)
 {
     $sql = "SELECT etkinlik.* FROM etkinlik WHERE etkinlik.tarih > CURDATE() 
     order by etkinlik.tarih LIMIT $limit";

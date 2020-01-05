@@ -1,8 +1,13 @@
 <?php
 function zamanOnce($zaman)
 {
+    // echo $zaman." - ";
     $zaman =  strtotime($zaman);
     $zaman_farki = time() - $zaman;
+
+    
+    // echo $zaman." - ".$zaman_farki." ";
+
     $saniye = $zaman_farki;
     $dakika = round($zaman_farki / 60);
     $saat = round($zaman_farki / 3600);

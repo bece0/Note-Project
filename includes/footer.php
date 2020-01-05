@@ -45,7 +45,7 @@
 					</ul>
 				</div>
 				<!-- <div class="col-xs-12 col-sm-4 col-md-4">
-					<h5>Etkinlikleri Keşfet</h5>
+					<h5>Dersleri Keşfet</h5>
 					<ul class="list-unstyled quick-links">
 						<li><a href="find.php?tip=Koşu"><i class="fa fa-angle-double-right"></i>Koşu</a></li>
 						<li><a href="find.php?tip=Bisiklet"><i class="fa fa-angle-double-right"></i>Bisiklet</a></li>
