@@ -17,4 +17,16 @@ function DersDuyurulariniGetir($ders_id, $count = 50)
     return SQLCalistir($sql, FALSE);
 }
 
+function DuyuruBilgileriniGetir($duyuru_id)
+{
+    $sql = "SELECT * FROM duyuru where id = " . $duyuru_id . "";
+    return SQLTekliKayitGetir($sql);
+}
+
+function DuyuruSil($duyuru_id)
+{
+    $sql = "DELETE FROM duyuru where id = " . $duyuru_id . "";
+    return SQLDeleteCalistir($sql);
+}
+
 ?>

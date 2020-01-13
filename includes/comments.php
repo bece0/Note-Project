@@ -15,6 +15,10 @@
 
 }
 
+.onaysiz{
+    background: #90bd957a;
+}
+
 .no-comment{
     margin-top: 3px;
 }
@@ -103,7 +107,7 @@
 
                 $adi_soyadi = $current_comment["adi"]." ".$current_comment["soyadi"];
             ?>
-                <div class="media d-block d-md-flex comment-container" 
+                <div class="media d-block d-md-flex comment-container <?php if($onay_durum == 0) echo "onaysiz"; ?>" 
                     id="comment-<?php echo $comment_id ?>" user="<?php echo $comment_id ?>">
                     <img class="comment-avatar d-flex mb-3 mx-auto" src="files/profile/<?php echo $current_comment["kullanici_id"] ?>.png"
                     alt="<?php echo $adi_soyadi ?>" title="<?php echo $adi_soyadi ?>" 
@@ -112,7 +116,7 @@
                         <h6 class="mt-0 font-weight-bold comment-title">
                             <?php echo $adi_soyadi; ?>
 
-                            <?php if(($onay_durum == NULL || $onay_durum == 0) && $YORUM_ONAYLAYABILIR) { ?>
+                            <?php if($onay_durum == 0 && $YORUM_ONAYLAYABILIR) { ?>
                                 <button href="#" class="btn btn-sm comment-action float-right btn-success approve-comment" 
                                 title="Onayla" comment-id="<?php echo $comment_id ?>">
                                     <i class="fa fa-check"></i>

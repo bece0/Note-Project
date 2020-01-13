@@ -24,13 +24,17 @@ function GetUserNotifications($kullanici_id, $count = 5)
  * @param $url bildirim tıklaması sonucu açılacak adres
  * @return void
  */
-function DersDuyuruBildirimiGonder($ders_id, $mesaj, $url = "")
+function DersDuyuruBildirimiGonder($ders_id, $mesaj, $url = "", $haricListesi= [])
 {
     $sql_katilimcilar = "SELECT * from katilimci where ders_id = $ders_id";
     $katilimcilar = SQLCalistir($sql_katilimcilar, FALSE);
 
     for ($i = 0; $i < count($katilimcilar); $i++) {
         $katilimci = $katilimcilar[$i];
+        
+        if(in_array($katilimci["ogrenci_id"], $haricListesi))
+            continue;
+       
         BildirimYaz($katilimci["ogrenci_id"], $ders_id, $mesaj, $url, "DUYURU");
     }
 }

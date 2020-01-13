@@ -46,18 +46,28 @@ include 'includes/head.php';
     $ODEV_EKLEYEBILIR = FALSE;
     $DOKUMAN_EKLEYEBILIR = FALSE;
     $DUYURU_YAPABILIR = FALSE;
+    $DUYURU_SILEBILIR = FALSE;
     
     if($GIRIS_YAPAN_DERSIN_HOCASI_MI){
         $ODEV_EKLEYEBILIR = TRUE;
         $DOKUMAN_EKLEYEBILIR = TRUE;
         $DUYURU_YAPABILIR = TRUE;
+        $DUYURU_SILEBILIR = TRUE;
     }
     
     if($GIRIS_YAPAN_DERSIN_ASISTANI_MI){
         $ODEV_EKLEYEBILIR = TRUE;
         $DOKUMAN_EKLEYEBILIR = TRUE;
         $DUYURU_YAPABILIR = TRUE;
+        $DUYURU_SILEBILIR = TRUE;
     }
+
+    echo "<script>";
+    echo "var ODEV_EKLEYEBILIR = ".($ODEV_EKLEYEBILIR ? "true" : "false").";";
+    echo "var DOKUMAN_EKLEYEBILIR = ".($DOKUMAN_EKLEYEBILIR ? "true" : "false").";";
+    echo "var DUYURU_SILEBILIR = ".($DUYURU_SILEBILIR ? "true" : "false").";";
+    echo "var DUYURU_YAPABILIR = ".($DUYURU_YAPABILIR ? "true" : "false").";";
+    echo "</script>";
 
     //ders_id değerini gizli input olarak gömüyoruz, javascript tarafında kullanmak için
     echo "<input type='hidden' id='ders_id' value='$COURSE_ID'/>";
