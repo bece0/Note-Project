@@ -38,7 +38,7 @@
             header('Location: ../dashboard.php'); 
         }else{
 
-            $kayitli = DerseKayitliKisiSayisi($ders_id);
+            $kayitli = DerseKayitliOgrenciSayisi($ders_id);
             if($kayitli >= $ders["kontenjan"]){
                 $_SESSION["_alert"]="Ders kontenjanı dolu.";
                 header('Location: ../course.php?course='. $ders_id); 

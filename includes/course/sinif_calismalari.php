@@ -1,152 +1,114 @@
+<?php 
 
+
+
+if($ODEV_EKLEYEBILIR)
+    include 'sinif_calismalari_odev_modal.php';
+
+if($DOKUMAN_EKLEYEBILIR)
+    include 'sinif_calismalari_doc_modal.php';
+
+?>
 
 <?php if($OGRETMEN){ ?>
-<div>
-    <a class="btn btn-info c-header-action duyuru-yap" ders-id="<?php echo $COURSE["id"]; ?>"
-        ders-name="<?php echo $COURSE["isim"]; ?>">
-        <i class="fa fa-bell"></i>&nbsp;Duyuru Yap
-    </a>
-    <a class="btn btn-success dropdown-toggle" data-toggle="dropdown" ders-id="<?php echo $COURSE["id"]; ?>"
-        ders-name="<?php echo $COURSE["isim"]; ?>">
+<div class="tab-detay-controls">
+
+  
+
+    <?php if($ODEV_EKLEYEBILIR ||$DOKUMAN_EKLEYEBILIR ){ ?>
+    <a class="btn btn-success dropdown-toggle" data-toggle="dropdown">
         <i class="fa fa-plus"></i>&nbsp;Oluştur
     </a>
     <div class="dropdown-menu">
-        <a class="dropdown-item c-header-action OdevOlustur">Ödev</a>
-        <a class="dropdown-item c-header-action DokumanOlustur">Döküman</a>
+        <?php if($ODEV_EKLEYEBILIR){ ?>
+        <a class="dropdown-item c-header-action" data-toggle="modal" data-target="#odevOlusturModal">Ödev</a>
+        <?php } ?>
+        <?php if($DOKUMAN_EKLEYEBILIR){ ?>
+        <a class="dropdown-item c-header-action" data-toggle="modal" data-target="#dokumanOlusturModal">Döküman</a>
+        <?php } ?>
     </div>
+    <?php } ?>
+
 </div>
 <?php } ?>
 
-<div class="alert alert-warning" role="alert">
-    Bu derste çalışma yok.
+<?php
+
+$ODEVLER = DersOdevleriniGetir($COURSE["id"]);
+$DOKUMANLAR = DersDokumanlariniGetir($COURSE["id"]);
+
+?>
+
+<div class="row">
+    <div class="col-md-6 col-sm12">
+        <?php if($ODEVLER !=NULL && count($ODEVLER) >0) {?>
+        <h6>Ödevler</h6>
+        <div id="odevListesi" class="odev-liste">
+            <?php for ($i = 0; $i < count($ODEVLER); $i++) {
+                $ODEV = $ODEVLER[$i];
+                $ODEV_YUKLEYEN =  $ODEV['adi'] . " " . $ODEV['soyadi'];
+            ?>
+            <div class="odev-item">
+                <div>
+                    <div class="odev-isim">
+                        <a target="blank_" href='odev.php?kod=<?php echo $ODEV["id"]?>'>
+                            <i class="fa fa-link"></i>&nbsp;
+                            <?php echo $ODEV["isim"]?>
+                        </a>
+                    </div>
+                </div>
+                <div class="odev-kunye">
+                    <div class="odev-tarih"><?php echo $ODEV["olusturma_tarih"]?></div>
+                    <div class="odev-yukleyen"> <?php echo $ODEV_YUKLEYEN ?></div>
+                </div>
+            </div>
+            <?php } ?>
+        </div>
+        <?php } else { ?>
+        <div class="alert alert-warning" role="alert">
+            Bu derste henüz ödev verilmedi.
+        </div>
+        <?php } ?>
+    </div>
+    <div class="col-md-6 col-sm12">
+        <?php if($DOKUMANLAR !=NULL && count($DOKUMANLAR) >0) {?>
+        <h6>Dokümanlar</h6>
+        <div id="dokumanListesi" class="dokuman-liste">
+            <?php for ($i = 0; $i < count($DOKUMANLAR); $i++) {
+                $DOKUMAN = $DOKUMANLAR[$i];
+                $DOKUMAN_YUKLEYEN =  $DOKUMAN['adi'] . " " . $DOKUMAN['soyadi'];
+            ?>
+            <div class="dokuman-item">
+                <div>
+                    <div class="dokuman-isim">
+                        <a target="blank_" href='dosya.php?kod=<?php echo $DOKUMAN["kod"]?>'>
+                            <i class="fa fa-download"></i>&nbsp;
+                            <?php echo $DOKUMAN["isim"]?>
+                        </a>
+                    </div>
+                </div>
+                <div class="dokuman-kunye">
+                    <div class="dokuman-tarih"><?php echo $DOKUMAN["olusturma_tarih"]?></div>
+                    <div class="dokuman-yukleyen"> <?php echo $DOKUMAN_YUKLEYEN ?></div>
+                </div>
+            </div>
+            <?php } ?>
+        </div>
+        <?php } else { ?>
+        <div class="alert alert-warning" role="alert">
+            Bu derste henüz doküman paylaşılmadı.
+        </div>
+        <?php } ?>
+    </div>
 </div>
+
 
 <script>
 
+
 $(function() {
+    $("#odevOlusturBtn").on("click", function(e) {
 
-    $(".duyuru-yap").on("click", function(e) {
-        var ders_id = $(e.target).attr("ders-id");
-        var ders_name = $(e.target).attr("ders-name");
-
-        Swal.fire({
-            title: 'Ders Duyurusu',
-            text: ders_name,
-            input: 'textarea',
-            inputPlaceholder: 'Öğrencilere gönderilecek olan mesajı buraya yazın...',
-            showCancelButton: true,
-            confirmButtonText: '<i class="fa fa-paper-plane"></i> Gönder!',
-            cancelButtonText: '<i class="fa fa-times"></i> İptal',
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            inputValidator: (value) => {
-                if (!value) {
-                    return 'Duyuru içeriği girmelisiniz!'
-                }
-                if (value.length < 15) {
-                    return 'Duyuru içeriği çok kısa!'
-                }
-
-                // var regex = new RegExp("^[a-zA-Z0-9]+$");
-                // var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
-                // if (!regex.test(value.length)) {
-                //     return 'Sadece alfanumeric değerler kabul edilmektedir.'
-                // }
-            }
-        }).then((result) => {
-            if (!result.value)
-                return;
-            DuyuruGonder(ders_id, result.value);
-        });
-    })
-
-    //duyuru ajax ile çek
-    //duyuruları html olarak akışa ekle..
-    DersDuyurulariGetir();
+    });
 })
-
-function DersDuyurulariGetir() {
-    var dersId = $("#ders_id").val();
-    $.ajax({
-        type: "GET",
-        url: 'services/duyuru_getir.php?ders=' + dersId,
-        success: function(response) {
-            if (response) {
-                DersDuyurulariniYazdir(response);
-            }
-        },
-        error: function(jqXHR, error, errorThrown) {
-            console.log(error);
-            console.log("ders duyurulari getirilemedi");
-        }
-    });
-}
-
-function DersDuyurulariniYazdir(duyurular) {
-    if (!duyurular)
-        return;
-
-    $("#duyurulistesi").empty();
-
-    for (let i = 0; i < duyurular.length; i++) {
-        var duyuru = duyurular[i];
-        var html = "";
-        html += '<div class="alert alert-secondary " role="alert">'
-        html += ("<b>" + duyuru.isim + " " + duyuru.soyisim + "</b><br>");
-        html += duyuru.mesaj;
-        html += "<b><hr>";
-        html += duyuru.tarih;
-        html += "</b></div>";
-
-        $("#duyurulistesi").append(html);
-    }
-}
-
-function DuyuruGonder(ders_id, mesaj) {
-    var data = {
-        ders_id: ders_id,
-        mesaj: mesaj
-    }
-    $.ajax({
-        type: "POST",
-        url: 'services/duyuru.php',
-        // data: {
-        //     data: JSON.stringify(data)
-        // },
-        data: data,
-        success: function(response) {
-            if (response && response.sonuc) {
-                Swal.fire({
-                    type: 'success',
-                    title: 'Katılımcılara duyuru gönderildi',
-                    timer: 2000,
-                    showConfirmButton: false,
-                });
-                DersDuyurulariGetir();
-                $('#genel_akis a')[0].click();
-            } else {
-                console.log(response);
-                Swal.fire({
-                    title: 'Hata',
-                    text: 'Duyuru gönderilemedi, lütfen daha sonra tekrar deneyin.',
-                    type: 'warning',
-                    timer: 2000,
-                    showConfirmButton: false,
-                })
-            }
-        },
-        error: function(jqXHR, error, errorThrown) {
-            console.log(error);
-            Swal.fire({
-                title: 'Hata',
-                text: 'Duyuru gönderilemedi, lütfen daha sonra tekrar deneyin.',
-                type: 'warning',
-                timer: 2000,
-                showConfirmButton: false,
-            })
-        }
-    });
-}
-
-
 </script>

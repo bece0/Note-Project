@@ -42,19 +42,18 @@ function DersIdBul($ders_kod){
     return SQLTekliKayitGetir($sql);
 }
 
-function DerseKayitOl($ogrenci_id, $ders_id)
+function DerseKayitOl($ogrenci_id, $ders_id, $tip = 0)
 {
-
-    $sql = "INSERT INTO katilimci (ogrenci_id, ders_id, kayit_tarihi)
-    VALUES ('$ogrenci_id', '$ders_id', CURDATE())";
+    $sql = "INSERT INTO katilimci (ogrenci_id, ders_id, tip, kayit_tarihi)
+    VALUES ('$ogrenci_id', '$ders_id', $tip, CURDATE())";
 
     return SQLInsertCalistir($sql);
 }
 
-function DersinAsistanıMı($ogrenci_id, $ders_id){
+function DersinAsistanıMı($ders_id, $ogrenci_id){
     $sql = "SELECT * FROM katilimci WHERE 
         ders_id = $ders_id and 
-        ogrenci_id = $kullanici_id and
+        ogrenci_id = $ogrenci_id and
         tip = 1";
 
     $con = BAGLANTI_GETIR();
@@ -67,7 +66,6 @@ function DersinAsistanıMı($ogrenci_id, $ders_id){
 
 function DersKoduKontrol($ders_kod)
 {
-
     $sql = "SELECT CASE WHEN EXISTS (
         SELECT *
         FROM dersler
@@ -95,9 +93,10 @@ function DerseKayitliMi($ogrenci_id, $ders_id)
     return  $sonuc;
 }
 
-function DerseKayitliKisiSayisi($ders_id)
+function DerseKayitliOgrenciSayisi($ders_id)
 {
-    $sql = "SELECT COUNT(*) as toplam FROM katilimci WHERE ders_id = $ders_id";
+    $sql = "SELECT COUNT(*) as toplam FROM katilimci 
+        WHERE ders_id = $ders_id AND tip = 0";
     $sonuc = SQLTekliKayitGetir($sql);
     return $sonuc["toplam"];
 }
@@ -105,9 +104,16 @@ function DerseKayitliKisiSayisi($ders_id)
 /**
  * TODO
  */
-function EtkinligiIptalEt($kullanici_id, $etkinlik_id)
+function EtkinligiIptalEt($kullanici_id, $ders_id)
 {
-    $sql = "DELETE FROM katilimci WHERE kullanici_id='" . $kullanici_id . "'AND etkinlik_id='" . $etkinlik_id . "'";
+    if(!isset($kullanici_id) || !isset($ders_id))
+        return false;
+
+    if($kullanici_id == NULL || $ders_id == NULL)
+        return false;
+
+    $sql = "DELETE FROM katilimci 
+    WHERE ogrenci_id = '$kullanici_id' AND ders_id = '$ders_id' ";
 
     return SQLDeleteCalistir($sql);
 }
@@ -256,9 +262,45 @@ function DersDuzenle($ders_id, $ders_adi, $aciklama, $kontenjan, $bolum_adi, $si
 
 function EtkinlikSil($ders_id)
 {
+    if(!isset($ders_id))
+        return false;
+
+    if($ders_id == NULL)
+        return false;
+
     $sql = "DELETE FROM dersler  WHERE  kodu=$ders_id";
 
     return SQLDeleteCalistir($sql);
+}
+
+function DerstenKayitSil($ders_id, $ogrenci_id)
+{
+    if(!isset($ders_id) || !isset($ogrenci_id))
+        return false;
+
+    if($ders_id == NULL || $ogrenci_id == NULL)
+        return false;
+
+    $sql = "DELETE FROM katilimci 
+    WHERE ders_id = $ders_id AND ogrenci_id = $ogrenci_id";
+
+    return SQLDeleteCalistir($sql);
+}
+
+function DersKayitTipiGüncelle($ders_id, $ogrenci_id, $tip = 0){
+    // echo "ders_id: $ders_id, ogrenci_id: $ogrenci_id, tip: $tip";
+
+    if(!isset($ders_id) || !isset($ogrenci_id)){
+        return false;
+    }
+    if($ders_id == NULL || $ogrenci_id == NULL){
+        return false;
+    }
+
+    $sql = "UPDATE katilimci SET tip = $tip
+    WHERE ders_id = $ders_id AND ogrenci_id = $ogrenci_id";
+
+    return SQLUpdateCalistir($sql);
 }
 
 /**

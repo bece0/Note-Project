@@ -1,5 +1,5 @@
 
-CREATE TABLE `kullanici` (
+CREATE TABLE IF NOT EXISTS `kullanici` (
  `id` int(11) NOT NULL AUTO_INCREMENT,
  `admin` tinyint NOT NULL DEFAULT 0,
  `adi` varchar(30) NOT NULL,
@@ -13,7 +13,7 @@ CREATE TABLE `kullanici` (
  PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `ayarlar` (
+CREATE TABLE IF NOT EXISTS `ayarlar` (
  `id` int(11) NOT NULL AUTO_INCREMENT,
  `kullanici_id` int(11) NOT NULL UNIQUE,
  `duyuru_mail` varchar(5) NOT NULL DEFAULT "no",
@@ -27,7 +27,7 @@ CREATE TABLE `ayarlar` (
 );
 
 
-CREATE TABLE `dersler` (
+CREATE TABLE IF NOT EXISTS `dersler` (
  `id` int(11) NOT NULL AUTO_INCREMENT,
  `kodu` varchar(100) NOT NULL,
  `isim` varchar(255) NOT NULL,
@@ -40,7 +40,7 @@ CREATE TABLE `dersler` (
  PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `katilimci` (
+CREATE TABLE IF NOT EXISTS `katilimci` (
  `id` int(11) NOT NULL AUTO_INCREMENT,
  `ogrenci_id` int(11) NOT NULL,
  `ders_id` int(11) NOT NULL,
@@ -49,7 +49,7 @@ CREATE TABLE `katilimci` (
  PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `yorum` (
+CREATE TABLE IF NOT EXISTS `yorum` (
  `id` int(11) NOT NULL AUTO_INCREMENT,
  `kullanici_id` int(11) DEFAULT 0,
  `ders_id` int(11) DEFAULT 0,
@@ -61,7 +61,7 @@ CREATE TABLE `yorum` (
  PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `hata` (
+CREATE TABLE IF NOT EXISTS `hata` (
  `id` int(11) NOT NULL AUTO_INCREMENT,
  `kullanici_id` int(11) NOT NULL,
  `tarih` datetime NOT NULL,
@@ -71,7 +71,7 @@ CREATE TABLE `hata` (
  PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `gunluk` (
+CREATE TABLE IF NOT EXISTS `gunluk` (
  `id` int(11) NOT NULL AUTO_INCREMENT,
  `kullanici_id` int(11) DEFAULT 0,
  `ders_id` int(11) DEFAULT 0,
@@ -82,7 +82,7 @@ CREATE TABLE `gunluk` (
  PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `bildirim`(
+CREATE TABLE IF NOT EXISTS `bildirim`(
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `url` text NULL,
     `mesaj` text NOT NULL,
@@ -97,7 +97,7 @@ CREATE TABLE `bildirim`(
 )CHARACTER SET latin5 COLLATE latin5_turkish_ci;
 
 
-CREATE TABLE `duyuru`(
+CREATE TABLE IF NOT EXISTS `duyuru`(
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `mesaj` text NOT NULL,
     `tarih` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -109,12 +109,45 @@ CREATE TABLE `duyuru`(
     KEY `idx_bildirim_ders_id` (`ders_id`)
 )CHARACTER SET latin5 COLLATE latin5_turkish_ci;
 
--- CREATE TABLE `kullanici_bildirim`(
---     `id` int(11) NOT NULL AUTO_INCREMENT,
---     `bildirim_id` int(11) NOT NULL,
---     `kullanici_id` int(11) NOT NULL,
---     `goruldu`tinyint(4) NOT NULL DEFAULT 0,
---     `goruldu_tarihi` datetime NULL,
---     PRIMARY KEY (`id`)
--- );
+
+CREATE TABLE  IF NOT EXISTS `odev`(
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `isim` varchar(255) NOT NULL,
+    `aciklama` text NOT NULL,
+    `olusturma_tarih` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `son_tarih` datetime NOT NULL,
+    `olusturan_id` int(11) NOT NULL,
+    `ders_id` int(11) NOT NULL DEFAULT 0,
+    `dosya_gonderme` tinyint NOT NULL DEFAULT 0,
+    `dosya_id` int(11) NOT NULL DEFAULT 0,
+    PRIMARY KEY (`id`),
+    KEY `idx_duyuru_olusturan_id` (`olusturan_id`),
+    KEY `idx_bildirim_ders_id` (`ders_id`)
+)CHARACTER SET latin5 COLLATE latin5_turkish_ci;
+
+CREATE TABLE  IF NOT EXISTS `dokuman`(
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `isim` varchar(255) NOT NULL,
+    `aciklama` text NOT NULL,
+    `olusturma_tarih` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `olusturan_id` int(11) NOT NULL,
+    `ders_id` int(11) NOT NULL DEFAULT 0,
+    `dosya_id` int(11) NOT NULL DEFAULT 0,
+    PRIMARY KEY (`id`),
+    KEY `idx_duyuru_olusturan_id` (`olusturan_id`),
+    KEY `idx_bildirim_ders_id` (`ders_id`)
+)CHARACTER SET latin5 COLLATE latin5_turkish_ci;
+
+
+CREATE TABLE  IF NOT EXISTS `dosya`(
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `kod` VARCHAR(60) NOT NULL,
+    `isim` varchar(255) NOT NULL,
+    `olusturma_tarih` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `yukleyen_id` int(11) NOT NULL DEFAULT 0,
+    `dosya_adi` tinyint NOT NULL DEFAULT 0,
+    `indirme_link` int(11) NOT NULL DEFAULT 0,
+    PRIMARY KEY (`id`),
+    KEY `idx_bildirim_ders_id` (`yukleyen_id`)
+)CHARACTER SET latin5 COLLATE latin5_turkish_ci;
 

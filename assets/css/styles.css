@@ -243,3 +243,8 @@ body {
 .callout-dark { 
     border-left-color: #d6d8d9;
 }
+
+
+button > * {
+    pointer-events: none;
+  }

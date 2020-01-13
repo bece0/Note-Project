@@ -14,3 +14,50 @@ function TurkceKarakterKaldir(deger) {
 
     return deger;
 }
+
+
+function BilgiMesajiGoster(mesaj){
+    mesaj = mesaj || 'İşlem tamamlandı';
+    Swal.fire({
+        title: mesaj,
+        type: 'info',
+        confirmButtonText: 'Tamam'
+    });
+}
+
+function HataMesajiGoster(mesaj){
+    mesaj = mesaj || 'Bir hata oluştu';
+    Swal.fire({
+        title: mesaj,
+        type: 'error',
+        confirmButtonText: 'Tamam'
+    });
+}
+
+function ajaxGenelHataCallback(jqXHR, error, errorThrown){
+    var mesaj = "Bir hata oluştu!";
+    var response = jQuery.parseJSON(jqXHR.responseText);
+    if (response && response.mesaj)
+        mesaj = response.mesaj;
+
+    HataMesajiGoster(mesaj);
+}
+
+Date.prototype.monthNames = [
+    "Ocak", "Şubat", "Mart",
+    "Nisan", "Mayıs", "Haziran",
+    "Temmuz", "Ağustos", "Eylül",
+    "Ekim", "Kasım", "Aralık"
+];
+
+Date.prototype.getMonthName = function() {
+    return this.monthNames[this.getMonth()];
+};
+Date.prototype.getShortMonthName = function () {
+    return this.getMonthName().substr(0, 3);
+};
+
+// usage:
+// var d = new Date();
+// alert(d.getMonthName()); 
+// alert(d.getShortMonthName()); 

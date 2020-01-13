@@ -1,5 +1,11 @@
 <?php 
 
+function GetSingleCommentById($id)
+{
+    $sql = "SELECT * FROM yorum where id = " . $id . "";
+    return SQLTekliKayitGetir($sql);
+}
+
 /**
  * Etkinliğe ait ONAYLANMIŞ tüm yorumları getirir.
  */
@@ -49,9 +55,9 @@ function GetCommentById($comment_id){
     return SQLTekliKayitGetir($sql);
 }
 
-function AddComment($user_id, $ders_id, $comment_text) : bool{
-    $sql = "INSERT INTO yorum (kullanici_id, ders_id, icerik)
-    VALUES ('$user_id', '$ders_id', '$comment_text')";
+function AddComment($user_id, $ders_id, $comment_text, $onay_durum=0) : bool{
+    $sql = "INSERT INTO yorum (kullanici_id, ders_id, icerik, onay_durum)
+    VALUES ('$user_id', '$ders_id', '$comment_text', '$onay_durum')";
     
     return SQLInsertCalistir($sql); 
 }

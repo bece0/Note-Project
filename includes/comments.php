@@ -16,7 +16,7 @@
 }
 
 .no-comment{
-
+    margin-top: 3px;
 }
 
 .comment-action{
@@ -25,15 +25,17 @@
 }
 
 .comment-container{
+    border: 1px solid rgba(0,0,0,.125);
     padding: 5px;
     border-radius: 3px;
     margin-bottom: 0.75rem;
     transition: background-color 1s cubic-bezier(1, 1, 1, 1);
-	transition-delay: 0s;
+    transition-delay: 0s;
+    border-left: 4px solid;
 }
 
 .commment-block{
-    border-bottom: 1px solid rgba(0,0,0,.125);
+    /* border-bottom: 1px solid rgba(0,0,0,.125); */
 }
 
 /* buton içindeki ikona tıklandığında target olarak ikon gitmesin diye */
@@ -59,32 +61,21 @@
 <?php 
     $ders_id = UrlIdFrom("course");
 
-    $canApprove = false;
-    $canDelete = false;
+    $YORUM_ONAYLAYABILIR = false;
+    $YORUM_SILEBILIR = false;
 
     $comments = [];
-    $giris_yapan_kullanici = NULL;
 
-    if(isset($_SESSION["kullanici_id"]))
-        $giris_yapan_kullanici = $_SESSION["kullanici_id"];
-
-    if($COURSE["duzenleyen_id"] == $giris_yapan_kullanici){
-        //Giriş yapmış kullanıcı etkinlik sahibi ise tüm yorumları getir
+    if($GIRIS_YAPAN_DERSIN_HOCASI_MI || $GIRIS_YAPAN_DERSIN_ASISTANI_MI){
+        $YORUM_ONAYLAYABILIR = TRUE;
+        $YORUM_SILEBILIR = TRUE;
+        
         $comments = GetEventAllComments($ders_id);
-        $canApprove = true;
-        $canDelete = true;
-    }
-    else if(isset($_SESSION["admin"]) && $_SESSION["admin"] == 1){
-        //Giriş yapmış kullanıcı ADMİN ise tüm yorumları getir
-        $comments = GetEventAllComments($ders_id);
-        $canApprove = true;
-        $canDelete = true;
-    }
-    else{
+    }else{
         //Sadece onaylanmış yorumları getir
         $comments = GetEventApprovedComments($ders_id);
     }
-    
+
     $comment_count = 0;
     if($comments != NULL)
         $comment_count = count($comments);
@@ -105,33 +96,36 @@
                 $current_comment = $comments[$i];
                 $comment_id = $current_comment["id"];
                 $onay_durum = $current_comment["onay_durum"];
-                if($current_comment["kullanici_id"] == $giris_yapan_kullanici)
-                    $canDelete = true;
+
+                $YORUM_SAHIBI = false;
+                if($current_comment["kullanici_id"] == $LOGIN_ID)
+                    $YORUM_SAHIBI = true;
 
                 $adi_soyadi = $current_comment["adi"]." ".$current_comment["soyadi"];
             ?>
-                <div class="media d-block d-md-flex comment-container" id="comment-<?php echo $comment_id ?>">
+                <div class="media d-block d-md-flex comment-container" 
+                    id="comment-<?php echo $comment_id ?>" user="<?php echo $comment_id ?>">
                     <img class="comment-avatar d-flex mb-3 mx-auto" src="files/profile/<?php echo $current_comment["kullanici_id"] ?>.png"
                     alt="<?php echo $adi_soyadi ?>" title="<?php echo $adi_soyadi ?>" 
                     onerror="this.onerror=null; this.src='files/profile/profile.png'">
                     <div class="media-body text-center text-md-left ml-md-3 ml-0 commment-block">
-                        <h5 class="mt-0 font-weight-bold comment-title">
-                            <?php echo $adi_soyadi ?>
+                        <h6 class="mt-0 font-weight-bold comment-title">
+                            <?php echo $adi_soyadi; ?>
 
-                            <?php if(($onay_durum == NULL || $onay_durum == 0) && $canApprove) { ?>
+                            <?php if(($onay_durum == NULL || $onay_durum == 0) && $YORUM_ONAYLAYABILIR) { ?>
                                 <button href="#" class="btn btn-sm comment-action float-right btn-success approve-comment" 
                                 title="Onayla" comment-id="<?php echo $comment_id ?>">
-                                    <i class="fa fa-thumbs-up"></i>
+                                    <i class="fa fa-check"></i>
                                 </button>
                             <?php }?>
 
-                            <?php if($canDelete) { ?>
+                            <?php if($YORUM_SILEBILIR || $YORUM_SAHIBI) { ?>
                                 <button href="#" class="btn btn-sm comment-action float-right btn-danger delete-comment" 
                                 title="Sil" comment-id="<?php echo $comment_id ?>">
                                     <i class="fa fa-trash"></i>
                                 </button>
                             <?php }?>
-                        </h5>
+                        </h6>
                         <div class="comment-date"><?php echo turkcetarih_formati('d M Y', $current_comment["tarih"]) ?></div>
                         <p class="comment-content">
                             <?php echo $current_comment["icerik"]  ?>
@@ -167,19 +161,15 @@
     $canAddComment = false;
     $whyCantComment = "";
 
-    if($giris_yapan_kullanici == NULL){
+    if($LOGIN_ID == NULL){
         $canAddComment = false;
     }
-    else if($COURSE["duzenleyen_id"] == $giris_yapan_kullanici){
+    else if($GIRIS_YAPAN_DERSIN_HOCASI_MI){
         //Etkinlik sahibi yorum ekleyebilir
         $canAddComment = true;
-    }
-    else if(isset($_SESSION["admin"]) && $_SESSION["admin"] == 1){
-         //Admin kullanıcı yorum ekleyebilir
-         $canAddComment = true;
     }else{
        //Giriş yapmış kullanici bu etkinliğe katılmış mı
-       $katilimciMi = KatilimciVarMi($ders_id, $giris_yapan_kullanici);
+       $katilimciMi = KatilimciVarMi($ders_id, $LOGIN_ID);
        if($katilimciMi == TRUE)
             $canAddComment = true;
     }
@@ -200,7 +190,7 @@
                 <input type="hidden" name="ders_id" id="ders_id" value="<?php echo $ders_id?>">
                 <div class="form-group">
                     <label for="txt_comment">Not : Yorumunun onaylandıktan sonra yayınlanacaktır.</label>
-                    <textarea class="form-control" name="comment" id="txt_comment" rows="6"
+                    <textarea class="form-control" name="comment" id="txt_comment" rows="3"
                         maxlength="500" placeholder="Yorumunuz buraya yazabilirsiniz..."></textarea>
                 </div>
                 <div class="text-right mt-4">
@@ -275,7 +265,7 @@
 
             $.ajax({
                 type: "POST",
-                url: 'services/comment.php?method=approve&comment='+comment_id,
+                url: 'services/comment.php?method=approve&comment_id='+comment_id,
                 success: function(response){
                     $(e.target).remove();
                     $('#comment-' + comment_id).addClass('chighlighted');
@@ -295,7 +285,7 @@
 
             $.ajax({
                 type: "POST",
-                url: 'services/comment.php?method=delete&comment='+comment_id,
+                url: 'services/comment.php?method=delete&comment_id='+comment_id,
                 success: function(response){
                     $('#comment-' + comment_id).text("Yorum silindi...")
                     $('#comment-' + comment_id).addClass("comment-deleted");

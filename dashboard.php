@@ -54,7 +54,7 @@
                                     <div class="card-info">
                                         <?php  
                                             if(!$OGRENCI) { 
-                                            $ogrenci_sayisi= DerseKayitliKisiSayisi($ders["id"]);
+                                            $ogrenci_sayisi= DerseKayitliOgrenciSayisi($ders["id"]);
                                             badgeYazdir($ogrenci_sayisi." Öğrenci");
                                             }else{
                                 
