@@ -167,5 +167,7 @@
     include 'duyuru_repo.php';
     include 'dokuman_repo.php';
     include 'odev_repo.php';
+    include 'dosya_repo.php';
+    include 'ogrenci_odev_repo.php';
 
 ?>

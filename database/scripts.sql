@@ -112,6 +112,7 @@ CREATE TABLE IF NOT EXISTS `duyuru`(
 
 CREATE TABLE  IF NOT EXISTS `odev`(
     `id` int(11) NOT NULL AUTO_INCREMENT,
+    `kod` varchar(75) NOT NULL,
     `isim` varchar(255) NOT NULL,
     `aciklama` text NOT NULL,
     `olusturma_tarih` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -122,11 +123,13 @@ CREATE TABLE  IF NOT EXISTS `odev`(
     `dosya_id` int(11) NOT NULL DEFAULT 0,
     PRIMARY KEY (`id`),
     KEY `idx_duyuru_olusturan_id` (`olusturan_id`),
-    KEY `idx_bildirim_ders_id` (`ders_id`)
+    KEY `idx_bildirim_ders_id` (`ders_id`),
+    KEY `idx_odev_kod` (`kod`)
 )CHARACTER SET latin5 COLLATE latin5_turkish_ci;
 
 CREATE TABLE  IF NOT EXISTS `dokuman`(
     `id` int(11) NOT NULL AUTO_INCREMENT,
+    `kod` VARCHAR(75) NOT NULL,
     `isim` varchar(255) NOT NULL,
     `aciklama` text NOT NULL,
     `olusturma_tarih` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -134,20 +137,37 @@ CREATE TABLE  IF NOT EXISTS `dokuman`(
     `ders_id` int(11) NOT NULL DEFAULT 0,
     `dosya_id` int(11) NOT NULL DEFAULT 0,
     PRIMARY KEY (`id`),
-    KEY `idx_duyuru_olusturan_id` (`olusturan_id`),
+    KEY `idx_dokuman_olusturan_id` (`olusturan_id`),
     KEY `idx_bildirim_ders_id` (`ders_id`)
 )CHARACTER SET latin5 COLLATE latin5_turkish_ci;
 
 
 CREATE TABLE  IF NOT EXISTS `dosya`(
     `id` int(11) NOT NULL AUTO_INCREMENT,
-    `kod` VARCHAR(60) NOT NULL,
+    `kod` VARCHAR(75) NOT NULL,
     `isim` varchar(255) NOT NULL,
     `olusturma_tarih` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `yukleyen_id` int(11) NOT NULL DEFAULT 0,
-    `dosya_adi` tinyint NOT NULL DEFAULT 0,
-    `indirme_link` int(11) NOT NULL DEFAULT 0,
+    `dosya_adi` VARCHAR(250),
+    `indirme_link` VARCHAR(250),
     PRIMARY KEY (`id`),
-    KEY `idx_bildirim_ders_id` (`yukleyen_id`)
+    KEY `idx_dosya_ders_id` (`yukleyen_id`)
+)CHARACTER SET latin5 COLLATE latin5_turkish_ci;
+
+CREATE TABLE  IF NOT EXISTS `ogrenci_odev`(
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `kod` VARCHAR(75) NOT NULL,
+    `odev_id` int(11) NOT NULL DEFAULT 0,
+    `ders_id` int(11) NOT NULL DEFAULT 0,
+    `ogrenci_id` int(11) NOT NULL,
+    `dosya_id` int(11) NOT NULL DEFAULT 0,
+    `gonderim_tarih` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `durum` int(11) NOT NULL DEFAULT 0,-- 0 : bekliyor, 1: notlandirildi
+    `not` int(11) NOT NULL DEFAULT 0,
+    PRIMARY KEY (`id`),
+    KEY `idx_ogrenci_odev_kod` (`kod`),
+    KEY `idx_ogrenci_odev_odev_id` (`odev_id`),
+    KEY `idx_ogrenci_odev_ogrenci_id` (`ogrenci_id`),
+    KEY `idx_ogrenci_odev_ders_id` (`ders_id`)
 )CHARACTER SET latin5 COLLATE latin5_turkish_ci;
 

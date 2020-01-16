@@ -30,7 +30,7 @@
                     <p>Zaman kazanın ve öğrencilerin topluluğun gücünü kullanarak öğrenmelerine yardımcı olun</p>
                     <div class="py-2"></div>
                     Üye değil misiniz?  
-                    <button type="button" class="btn btn-outline-light"><a href="signup.php" class="float-right" style="margin-right: 1px; color:yellow;">Hesap oluştur</a></button>
+                    <a class="btn btn-outline-light" href="signup.php" class="float-right" style="margin-right: 1px; color:yellow;">Hesap oluştur</a>
                 </div>
                  <div class="clearfix visible-sm"></div>
                 <!-- <div class="col-md-4 col-sm-6 col-xs-12">

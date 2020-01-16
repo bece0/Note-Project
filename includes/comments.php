@@ -272,10 +272,11 @@
                 url: 'services/comment.php?method=approve&comment_id='+comment_id,
                 success: function(response){
                     $(e.target).remove();
+                    $('#comment-' + comment_id).removeClass('onaysiz');
                     $('#comment-' + comment_id).addClass('chighlighted');
                     setTimeout(function () {
                         $('#comment-' + comment_id).removeClass('chighlighted');
-                    }.bind(this), 2000);
+                    }.bind(this), 1000);
                 },
                 error : function(jqXHR,error, errorThrown){
                     console.log("yorum onaylanamadı!")

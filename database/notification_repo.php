@@ -24,10 +24,13 @@ function GetUserNotifications($kullanici_id, $count = 5)
  * @param $url bildirim tıklaması sonucu açılacak adres
  * @return void
  */
-function DersDuyuruBildirimiGonder($ders_id, $mesaj, $url = "", $haricListesi= [])
+function DersKatilimcilarinaDuyuruBildirimiGonder($ders_id, $mesaj = "", $url = "", $haricListesi= [])
 {
     $sql_katilimcilar = "SELECT * from katilimci where ders_id = $ders_id";
     $katilimcilar = SQLCalistir($sql_katilimcilar, FALSE);
+    $ders = DersBilgileriniGetir($ders_id);
+    if($mesaj == NULL || $mesaj == "")
+        $mesaj =  $ders["isim"]." dersine yeni yorum geldi";
 
     for ($i = 0; $i < count($katilimcilar); $i++) {
         $katilimci = $katilimcilar[$i];
@@ -36,6 +39,68 @@ function DersDuyuruBildirimiGonder($ders_id, $mesaj, $url = "", $haricListesi= [
             continue;
        
         BildirimYaz($katilimci["ogrenci_id"], $ders_id, $mesaj, $url, "DUYURU");
+    }
+}
+
+function DersKatilimcilarinaYeniOdevBildirimiGonder($ders_id, $odev_adi, $mesaj = "", $url = "", $haricListesi= [])
+{
+    $sql_katilimcilar = "SELECT * from katilimci where ders_id = $ders_id";
+    $katilimcilar = SQLCalistir($sql_katilimcilar, FALSE);
+
+    $ders = DersBilgileriniGetir($ders_id);
+    if($mesaj == NULL || $mesaj == "")
+        $mesaj =  $ders["isim"]." dersine yeni ödev eklendi : $odev_adi";
+
+    for ($i = 0; $i < count($katilimcilar); $i++) {
+        $katilimci = $katilimcilar[$i];
+        
+        if(in_array($katilimci["ogrenci_id"], $haricListesi))
+            continue;
+       
+        BildirimYaz($katilimci["ogrenci_id"], $ders_id, $mesaj, $url, "YENI_ODEV");
+    }
+}
+
+function DersKatilimcilarinaYeniDokumanBildirimiGonder($ders_id, $dokuman_adi, $mesaj = "", $url = "", $haricListesi= [])
+{
+    $sql_katilimcilar = "SELECT * from katilimci where ders_id = $ders_id";
+    $katilimcilar = SQLCalistir($sql_katilimcilar, FALSE);
+
+    $ders = DersBilgileriniGetir($ders_id);
+    if($mesaj == NULL || $mesaj == "")
+        $mesaj =  $ders["isim"]." dersine yeni doküman eklendi : $dokuman_adi";
+
+    for ($i = 0; $i < count($katilimcilar); $i++) {
+        $katilimci = $katilimcilar[$i];
+        
+        if(in_array($katilimci["ogrenci_id"], $haricListesi))
+            continue;
+       
+        BildirimYaz($katilimci["ogrenci_id"], $ders_id, $mesaj, $url, "YENI_DOKUMAN");
+    }
+}
+
+function DersHocalarinaYorumBildirimiGonder($ders_id, $yorum_yapan_adi_soyadi, $mesaj = "", $url = "", $haricListesi= [])
+{
+    $sql_asistanlar = "SELECT * from katilimci where ders_id = '$ders_id' AND tip = 1";
+    $asistan_katilimcilar = SQLCalistir($sql_asistanlar, FALSE);
+
+    $ders = DersBilgileriniGetir($ders_id);
+
+    if($mesaj == NULL || $mesaj == "")
+        $mesaj =  $ders["isim"]." dersine $yorum_yapan_adi_soyadi tarafından yeni yorum eklendi.";
+
+    for ($i = 0; $i < count($asistan_katilimcilar); $i++) {
+        $asistan = $asistan_katilimcilar[$i];
+        
+        if(in_array($asistan["ogrenci_id"], $haricListesi))
+            continue;
+       
+        BildirimYaz($asistan["ogrenci_id"], $ders_id, $mesaj, $url, "YENI_YORUM");
+    }
+
+    if(!in_array($ders["duzenleyen_id"], $haricListesi)){
+        BildirimYaz($ders["duzenleyen_id"], $ders_id, $mesaj, $url, "YENI_YORUM");
     }
 }
 

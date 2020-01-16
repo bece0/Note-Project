@@ -187,9 +187,15 @@ function BildirimUygunIconGetir($bildirim_tipi)
     else if ($bildirim_tipi == "ETKINLIK_YORUM_ONAY")
         $icon = "thumbs-up";
     else if ($bildirim_tipi == "OGRENCI_KAYIT")
-        $icon = "university";
+        $icon = "user-plus";
     else if ($bildirim_tipi == "ASISTAN_KAYIT")
         $icon = "chalkboard-teacher";
+    else if ($bildirim_tipi == "YENI_YORUM")
+        $icon = "comment";
+    else if ($bildirim_tipi == "YENI_ODEV")
+        $icon = "file-alt";
+    else if ($bildirim_tipi == "YENI_DOKUMAN")
+        $icon = "file-pdf";
 
     return $icon;
 }

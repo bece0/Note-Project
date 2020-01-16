@@ -29,19 +29,20 @@ include 'includes/head.php';
     }
         
 
-    $DUZENLEYEN_ID = KullaniciBilgileriniGetirById($COURSE["duzenleyen_id"]);
+    $DUZENLEYEN_ID = $COURSE["duzenleyen_id"];
 
-    $DERS_HOCA = KullaniciBilgileriniGetirById($COURSE["duzenleyen_id"]);
+    $DERS_HOCA = KullaniciBilgileriniGetirById($DUZENLEYEN_ID);
 
     $LOGIN_ID = $_SESSION["kullanici_id"];
 
-    $GIRIS_YAPAN_DERSIN_HOCASI_MI = ($COURSE["duzenleyen_id"] == $LOGIN_ID);
-    
+    $GIRIS_YAPAN_DERSIN_HOCASI_MI = FALSE;
     $GIRIS_YAPAN_DERSIN_ASISTANI_MI = FALSE;
     
-    if($KULLANICI["admin"] == 1 && $GIRIS_YAPAN_DERSIN_HOCASI_MI == FALSE){
+    if($DUZENLEYEN_ID == $LOGIN_ID)
+        $GIRIS_YAPAN_DERSIN_HOCASI_MI = TRUE;
+
+    if($KULLANICI["admin"] == 1 && $GIRIS_YAPAN_DERSIN_HOCASI_MI == FALSE)
         $GIRIS_YAPAN_DERSIN_ASISTANI_MI = DersinAsistanıMı($COURSE_ID, $LOGIN_ID);
-    }
 
     $ODEV_EKLEYEBILIR = FALSE;
     $DOKUMAN_EKLEYEBILIR = FALSE;
@@ -151,27 +152,24 @@ include 'includes/head.php';
     <?php echo "<title>" . $COURSE["isim"] . "</title>" ?>
     <div class="container">
         <div class="detay">
-            <div class="row" style="margin-top:25px;">
-
-                <div class="col-md-7 col-sm-12">
-                    <img class="etkinlik-resim" src="files/images/event/<?php echo $COURSE["kodu"] ?>.png">
+            <div class="row">
+                <div class="col-md-7 col-sm-12 ders-resim-container">
+                    <img class="ders-resim" src="files/images/event/<?php echo $COURSE["kodu"] ?>.png">
                 </div>
-
                 <div class="col-md-5 col-sm-12">
-
                     <h1 class='e-adi'><?php echo $COURSE["isim"]  ?></h1>
                     <div class="creator">
-                        <div>
-                           <b> Öğretmen: </b>
-                            <a href="profile.php?id=<?php echo $DUZENLEYEN_ID["id"] ?>">
-                                <?php echo $DUZENLEYEN_ID["adi"] . " " . $DUZENLEYEN_ID["soyadi"] ?>
-                            </a>
-                        </div>
+                        <i class="fas fa-chalkboard-teacher"></i>
+                        <b>Öğretmen: </b>
+                        <a href="profile.php?id=<?php echo $DERS_HOCA["id"] ?>">
+                            <?php echo $DERS_HOCA["adi"]." ".$DERS_HOCA["soyadi"] ?>
+                        </a>
                     </div>
                     <div class="course-code">
-                        <i class="fas fa-key"></i><?php echo " <b> Ders Kodu: </b>  ". $COURSE["kodu"] ?>
+                        <i class="fas fa-key"></i>
+                        <b>Ders Kodu:</b><?php echo " ".$COURSE["kodu"] ?>
                     </div>
-                    <div class="aciklama">
+                    <div class="course-aciklama">
                         <p>
                             <?php 
                             $url = '@(http(s)?)(://)?(([a-zA-Z])([-\w]+\.)+([^\s\.]+[^\s]*)+[^,.\s])@';
@@ -217,7 +215,7 @@ include 'includes/head.php';
                 <!-- Genel Akış -->
                 <div id="genel" class="container tab-pane active" style="  margin-top: auto;"><br>
                     <h5><b>Duyurular</b></h5>
-                    <div class="detay" >
+                    <div class="detay">
                         <?php include 'includes/course/duyuru.php' ?>
                     </div>
                 </div>

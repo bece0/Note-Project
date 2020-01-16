@@ -70,7 +70,7 @@ try {
         
         if($GIRIS_YAPAN_DERSIN_HOCASI_MI || $GIRIS_YAPAN_DERSIN_ASISTANI_MI){
             DersDuyuruKaydet($COURSE_ID, $KULLANICI_ID, $mesaj);
-            DersDuyuruBildirimiGonder($COURSE_ID, $mesaj, "", [$KULLANICI_ID]);
+            DersKatilimcilarinaDuyuruBildirimiGonder($COURSE_ID, $mesaj, "", [$KULLANICI_ID]);
         }
         else{
             $statusCode = 401;

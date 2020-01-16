@@ -13,7 +13,7 @@ if($DOKUMAN_EKLEYEBILIR)
 <?php if($OGRETMEN){ ?>
 <div class="tab-detay-controls">
 
-  
+
 
     <?php if($ODEV_EKLEYEBILIR ||$DOKUMAN_EKLEYEBILIR ){ ?>
     <a class="btn btn-success dropdown-toggle" data-toggle="dropdown">
@@ -41,8 +41,8 @@ $DOKUMANLAR = DersDokumanlariniGetir($COURSE["id"]);
 
 <div class="row">
     <div class="col-md-6 col-sm12">
-        <?php if($ODEVLER !=NULL && count($ODEVLER) >0) {?>
         <h6>Ödevler</h6>
+        <?php if($ODEVLER !=NULL && count($ODEVLER) >0) {?>
         <div id="odevListesi" class="odev-liste">
             <?php for ($i = 0; $i < count($ODEVLER); $i++) {
                 $ODEV = $ODEVLER[$i];
@@ -51,10 +51,11 @@ $DOKUMANLAR = DersDokumanlariniGetir($COURSE["id"]);
             <div class="odev-item">
                 <div>
                     <div class="odev-isim">
-                        <a target="blank_" href='odev.php?kod=<?php echo $ODEV["id"]?>'>
+                        <a target="blank_" href='odev.php?kod=<?php echo $ODEV["kod"]?>'>
                             <i class="fa fa-link"></i>&nbsp;
                             <?php echo $ODEV["isim"]?>
                         </a>
+                        <span class="odev-son-tarih">(Son Gönderim: <i> <?php echo $ODEV["son_tarih"]?></i>)</span>
                     </div>
                 </div>
                 <div class="odev-kunye">
@@ -71,28 +72,41 @@ $DOKUMANLAR = DersDokumanlariniGetir($COURSE["id"]);
         <?php } ?>
     </div>
     <div class="col-md-6 col-sm12">
-        <?php if($DOKUMANLAR !=NULL && count($DOKUMANLAR) >0) {?>
         <h6>Dokümanlar</h6>
+        <?php if($DOKUMANLAR !=NULL && count($DOKUMANLAR) >0) {?>
         <div id="dokumanListesi" class="dokuman-liste">
-            <?php for ($i = 0; $i < count($DOKUMANLAR); $i++) {
+            <div class="accordion" id="accordionExample">
+                <?php for ($i = 0; $i < count($DOKUMANLAR); $i++) {
                 $DOKUMAN = $DOKUMANLAR[$i];
                 $DOKUMAN_YUKLEYEN =  $DOKUMAN['adi'] . " " . $DOKUMAN['soyadi'];
             ?>
-            <div class="dokuman-item">
-                <div>
-                    <div class="dokuman-isim">
-                        <a target="blank_" href='dosya.php?kod=<?php echo $DOKUMAN["kod"]?>'>
+                <div class="dokuman-item">
+                    <div class="dokuman-isim" id="<?php echo $DOKUMAN["kod"]?>" title="Dokümanı İndir" data-toggle="collapse"
+                            data-target="#collapse<?php echo $DOKUMAN["kod"]?>" aria-expanded="true"
+                            aria-controls="collapse<?php echo $DOKUMAN["kod"]?>">
+                        <a target="blank_" href='dosya_indir.php?type=dokuman&kod=<?php echo $DOKUMAN["kod"]?>'>
                             <i class="fa fa-download"></i>&nbsp;
                             <?php echo $DOKUMAN["isim"]?>
                         </a>
+                        <button class="btn btn-link" type="button" style="float: right;" data-toggle="collapse"
+                            data-target="#collapse<?php echo $DOKUMAN["kod"]?>" aria-expanded="true"
+                            aria-controls="collapse<?php echo $DOKUMAN["kod"]?>">
+                            <i class="fa fa-angle-right"></i>
+                        </button>
+                    </div>
+                    <div id="collapse<?php echo $DOKUMAN["kod"]?>" class="collapse"
+                        aria-labelledby="<?php echo $DOKUMAN["kod"]?>" data-parent="#accordionExample">
+                        <div class="" style="margin-top:10px;">
+                            <div class="dokuman-kunye">
+                                <div class="dokuman-tarih"><?php echo $DOKUMAN["olusturma_tarih"]?></div>
+                                <div class="dokuman-yukleyen"> <?php echo $DOKUMAN_YUKLEYEN ?></div>
+                            </div>
+                            <?php echo $DOKUMAN["aciklama"]?>
+                        </div>
                     </div>
                 </div>
-                <div class="dokuman-kunye">
-                    <div class="dokuman-tarih"><?php echo $DOKUMAN["olusturma_tarih"]?></div>
-                    <div class="dokuman-yukleyen"> <?php echo $DOKUMAN_YUKLEYEN ?></div>
-                </div>
+                <?php } ?>
             </div>
-            <?php } ?>
         </div>
         <?php } else { ?>
         <div class="alert alert-warning" role="alert">
@@ -104,8 +118,6 @@ $DOKUMANLAR = DersDokumanlariniGetir($COURSE["id"]);
 
 
 <script>
-
-
 $(function() {
     $("#odevOlusturBtn").on("click", function(e) {
 

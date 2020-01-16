@@ -82,10 +82,13 @@ try{
     if($METHOD == "add"){
         $comment =  mysqli_real_escape_string($baglanti, $_POST["comment"]);
         
-        if($GIRIS_YAPAN_DERSIN_HOCASI_MI || $GIRIS_YAPAN_DERSIN_ASISTANI_MI)
+        if($GIRIS_YAPAN_DERSIN_HOCASI_MI || $GIRIS_YAPAN_DERSIN_ASISTANI_MI){
             $sonuc = AddComment($KULLANICI_ID, $COURSE_ID, $comment, 1);
-        else
+        }
+        else{
             $sonuc = AddComment($KULLANICI_ID, $COURSE_ID, $comment);
+            DersHocalarinaYorumBildirimiGonder($COURSE_ID, $KULLANICI["adi"]." ".$KULLANICI["soyadi"], );
+        }
 
         $sonucObjesi->sonuc = true;
     }

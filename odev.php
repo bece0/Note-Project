@@ -1,14 +1,9 @@
-
-
 <?php
 $REQUIRE_LOGIN = TRUE;
 include 'includes/page-common.php';
 include 'includes/head.php';
 ?>
-<link rel="stylesheet" href="assets/css/course.css">
-
-<!-- <link rel="stylesheet" href="assets/css/social-share-kit.css" type="text/css">
-<script type="text/javascript" src="assets/js/vendor/social-share-kit.min.js"></script> -->
+<link rel="stylesheet" href="assets/css/odev.css">
 
 <body>
 
@@ -16,14 +11,101 @@ include 'includes/head.php';
     <?php
     include 'includes/nav-bar.php';
 
-    if (!isset($_GET["kod"])){
+    if (!isset($_GET["kod"]) && $_GET["kod"] != ""){
         header('Location: dashboard.php');
         die();
     }
 
-   ?>
+    if(!isset($baglanti)){
+        $baglanti = BAGLANTI_GETIR();
+    }
+
+    $KOD = mysqli_real_escape_string($baglanti, $_GET["kod"]);
+    $ODEV = GetOdevDetailsByKod($KOD);
+
+    if($ODEV == NULL){
+        header('Location: dashboard.php');
+        die();
+    }
+
     
-        <div>
-            <?php include 'includes/footer.php'; ?>
+
+    $ODEV_ID = $ODEV["id"];
+    $COURSE_ID = $ODEV["ders_id"];
+    $COURSE = DersBilgileriniGetir($COURSE_ID);
+
+    echo "<title>".$COURSE["isim"]." - ".$ODEV["isim"]."</title>";
+
+    $DUZENLEYEN_ID = $COURSE["duzenleyen_id"];
+
+    $DERS_HOCA = KullaniciBilgileriniGetirById($DUZENLEYEN_ID);
+
+    $LOGIN_ID = $_SESSION["kullanici_id"];
+
+    $GIRIS_YAPAN_DERSIN_HOCASI_MI = FALSE;
+    $GIRIS_YAPAN_DERSIN_ASISTANI_MI = FALSE;
+    $GIRIS_YAPAN_DERSIN_OGRENCISI_MI = FALSE;
+    
+    if($DUZENLEYEN_ID == $LOGIN_ID)
+        $GIRIS_YAPAN_DERSIN_HOCASI_MI = TRUE;
+
+    if($KULLANICI["admin"] == 1 && $GIRIS_YAPAN_DERSIN_HOCASI_MI == FALSE)
+        $GIRIS_YAPAN_DERSIN_ASISTANI_MI = DersinAsistanıMı($COURSE_ID, $LOGIN_ID);
+
+    if(!$GIRIS_YAPAN_DERSIN_HOCASI_MI && !$GIRIS_YAPAN_DERSIN_ASISTANI_MI)
+        $GIRIS_YAPAN_DERSIN_OGRENCISI_MI = TRUE;
+
+   ?>
+
+    <!-- start container -->
+    <div class="container" style="min-height: 500px;">
+        <div class="row">
+            <?php 
+            $DIV_CLASS = "col-md-8";
+            if(!$GIRIS_YAPAN_DERSIN_OGRENCISI_MI)
+                $DIV_CLASS = "col-md-12"
+        ?>
+
+
+            <div class="<?php echo $DIV_CLASS; ?>">
+                <div class="detay">
+                    <div class="odev-detay">
+                        <h3 class="odev-isim">
+                            <i class="fa fa-file-alt"></i>
+                            <?php  echo $ODEV["isim"]; ?>
+                        </h3>
+                        <div class="odev-aciklama"><?php  echo $ODEV["aciklama"]; ?></div>
+                        <?php if($ODEV["dosya_id"]){
+                        $DOSYA = GetDosyaById($ODEV["dosya_id"]);
+                        if($DOSYA != NULL){
+                    ?>
+                        <div class="odev-dosya">
+                            <span>Ödev Dosyası : </span>
+                            <a target="blank_" href='dosya_indir.php?type=odev&kod=<?php echo $ODEV["kod"]?>'>
+                                <i class="fa fa-download"></i>&nbsp;
+                                <?php echo $DOSYA["isim"]?>
+                            </a>
+                        </div>
+                        <?php } }?>
+                    </div>
+                </div>
+
+            </div>
+
+            <?php if($GIRIS_YAPAN_DERSIN_OGRENCISI_MI) {?>
+            <div class="col-md-4 col-sm-12">
+                <div class="detay">
+                    <?php include 'includes/odev/odev_upload.php'?>
+                </div>
+            </div>
+            <?php }?>
+
         </div>
+    </div>
+    <!-- end container -->
+
+
+    <div>
+        <?php include 'includes/footer.php'; ?>
+    </div>
 </body>

@@ -1,8 +1,9 @@
 <?php
+$REQUIRE_LOGIN = TRUE;
 include 'includes/page-common.php';
 include 'includes/head.php';
 ?>
-<link rel="stylesheet" href="assets/css/event.css">
+<link rel="stylesheet" href="assets/css/profile.css">
 <!-- TODO - https://codepen.io/dsalvagni/pen/BLapab KULLAN -->
 
 <body>
@@ -28,6 +29,11 @@ include 'includes/head.php';
     $ayarlar = KullaniciAyarlariniGetirById($kullanici_id);
     $kullanici_detail = KullaniciBilgileriniGetirById($kullanici_id);
 
+    if($kullanici_detail == NULL){
+        header('Location: dashboard.php');
+        die();
+    }
+
     //$yeni_Dersler=KullaniciYeniDersleriniGetir($kullanici_id);
     //$eski_Dersler=KullaniciEskiDersleriniGetir($kullanici_id);
 
@@ -39,38 +45,7 @@ include 'includes/head.php';
     if ($ayarlar["gelecek_private"] == "no")
         $gelecek_Dersler = KullaniciYeniDersleriniGetir($kullanici_id);
     ?>
-    <style>
-    .profile-detail {
-        padding: 2rem 1rem;
-        margin-bottom: 2rem;
-        background-color: #e9ecef;
-        border-radius: .3rem;
-    }
 
-    .profile-name {
-        font-size: 28px;
-        line-height: 1.25;
-        stroke: transparent;
-        fill: rgba(0, 0, 0, .87);
-        color: rgba(0, 0, 0, .87);
-        font-weight: 600;
-        letter-spacing: -.02em;
-    }
-
-    .profile-pic {
-        /* display: flex; */
-        justify-content: center;
-        text-align: center;
-        height: 250;
-        width: 250;
-    }
-
-    .profile-img {
-        max-width: 240px;
-        max-height: 100%;
-    }
-    </style>
-    <!--Profil Kartı -->
     <div class="container">
         <div class="profile-detail">
             <div class="row">
@@ -173,11 +148,11 @@ include 'includes/head.php';
                             <?php }
                         } else { ?>
                             <div class="alert alert-warning" role="alert">
-                             <?php if($kullanici_detail["admin"]=1) 
+                                <?php if($kullanici_detail["admin"]=1) 
                                  echo $kullanici_detail["adi"]." herhangi bir ders oluşturmadı.";
                                else echo $kullanici_detail["adi"]." herhangi bir derse kayıtlı değil.";
                              ?>
-                               
+
                             </div>
                             <?php  }  ?>
                         </div>
@@ -220,6 +195,6 @@ include 'includes/head.php';
             </div>
 
         </div>
-
+    </div>
 
 </body>
