@@ -1,6 +1,6 @@
 <div class="tab-detay-controls">
     <?php if($DUYURU_YAPABILIR){ ?>
-    <a class="btn btn-info c-header-action duyuru-yap" ders-id="<?php echo $COURSE["id"]; ?>"
+    <a class="btn btn-success c-header-action duyuru-yap" ders-id="<?php echo $COURSE["id"]; ?>"
         ders-name="<?php echo $COURSE["isim"]; ?>">
         <i class="fa fa-bell"></i>&nbsp;Duyuru Yap
     </a>

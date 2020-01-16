@@ -252,7 +252,7 @@ button > * {
 }
 
 .nav-tabs {
-  border-bottom: 1px solid #a99840;
+  border-bottom: 1px solid #eba91d;
 }
 
 .nav-tabs .nav-item.show .nav-link,
@@ -271,7 +271,7 @@ button > * {
 }
 
 a {
-  color: #eba91d;
+  color: #cf7c00;
   text-decoration: none;
   background-color: transparent
 }

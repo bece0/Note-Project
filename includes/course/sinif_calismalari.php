@@ -41,7 +41,7 @@ $DOKUMANLAR = DersDokumanlariniGetir($COURSE["id"]);
 
 <div class="row">
     <div class="col-md-6 col-sm12">
-        <h6>Ödevler</h6>
+        <h6><b>Ödevler</b></h6>
         <?php if($ODEVLER !=NULL && count($ODEVLER) >0) {?>
         <div id="odevListesi" class="odev-liste">
             <?php for ($i = 0; $i < count($ODEVLER); $i++) {
@@ -72,7 +72,7 @@ $DOKUMANLAR = DersDokumanlariniGetir($COURSE["id"]);
         <?php } ?>
     </div>
     <div class="col-md-6 col-sm12">
-        <h6>Dokümanlar</h6>
+    <h6><b>Dokümanlar</b></h6>
         <?php if($DOKUMANLAR !=NULL && count($DOKUMANLAR) >0) {?>
         <div id="dokumanListesi" class="dokuman-liste">
             <div class="accordion" id="accordionExample">

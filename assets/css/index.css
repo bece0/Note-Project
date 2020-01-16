@@ -18,9 +18,9 @@ section {
 }
 
 .card-info {
-  font-size: 20px;
+  font-size: 18px;
   padding: 5px 10px;
-  color: wheat;
+  color: #eba91d;
   background-color: #1b1f1ee6;
   /* margin-bottom: 5px; */
   border-bottom-left-radius: 10px;

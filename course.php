@@ -178,7 +178,7 @@ include 'includes/head.php';
                             ?>
                         </p>
                         <?php if($GIRIS_YAPAN_DERSIN_HOCASI_MI){ ?>
-                        <a class="btn btn-info c-header-action" data-toggle="modal" data-target="#dersGuncelleModal">
+                        <a class="btn btn-warning c-header-action" data-toggle="modal" data-target="#dersGuncelleModal">
                             <i class="fa fa-edit"></i>&nbsp;Düzenle
                         </a>
                         <?php } ?>

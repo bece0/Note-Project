@@ -58,8 +58,8 @@ include 'includes/head.php';
 
    ?>
 
-       <!-- start container -->
-       <div class="container" style="min-height: 500px;">
+    <!-- start container -->
+    <div class="container" style="min-height: 500px;">
         <div class="row">
             <?php 
             $DIV_CLASS = "col-md-8";
@@ -111,44 +111,11 @@ include 'includes/head.php';
             <?php }?>
 
         </div>
-<hr>
-        <div class="row">
-                <div class="col-3">
-                    <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                    <?php if($OGRETMEN){ ?>
-                        <a class="nav-link" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home"
-                            role="tab" aria-controls="v-pills-home" aria-selected="true">
-                             Teslim Eden Öğrenciler
-                        </a>
-                    <?php }?>
-                        <a class="nav-link active" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile"
-                            role="tab" aria-controls="v-pills-profile" aria-selected="false">
-                          Tartışma
-                        </a>
-                    </div>
-                </div>
-                <div class="col-9">
-                    <div class="tab-content" id="v-pills-tabContent">
-
-                        <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel"
-                            aria-labelledby="v-pills-home-tab">
-
-                        </div>
-                        <div class="tab-pane fade" id="v-pills-profile" role="tabpanel"
-                            aria-labelledby="v-pills-profile-tab">
-                           
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-
-
-
-
-
-
-
-
     </div>
+    <!-- end container -->
+
+
+    <div>
+        <?php include 'includes/footer.php'; ?>
+    </div>
+</body>
