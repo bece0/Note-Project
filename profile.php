@@ -34,17 +34,25 @@ include 'includes/head.php';
         die();
     }
 
-    //$yeni_Dersler=KullaniciYeniDersleriniGetir($kullanici_id);
-    //$eski_Dersler=KullaniciEskiDersleriniGetir($kullanici_id);
+    // $yeni_Dersler=KullaniciYeniDersleriniGetir($kullanici_id);
+    // $eski_Dersler=KullaniciEskiDersleriniGetir($kullanici_id);
+        // $eski_Dersler = [];
+    // if ($ayarlar["gecmis_private"] == "no")
+    //     $eski_Dersler = KullaniciEskiDersleriniGetir($kullanici_id);
 
-    $eski_Dersler = [];
-    if ($ayarlar["gecmis_private"] == "no")
-        $eski_Dersler = KullaniciEskiDersleriniGetir($kullanici_id);
+    
+    // if ($ayarlar["gelecek_private"] == "no")
+    //     $dersler = KullaniciYeniDersleriniGetir($kullanici_id);
+   
+ $dersler = [];
+    if($OGRETMEN){
+        $dersler = DuzenledigiAktifDersleriGetir($kullanici_id);
+        $asistan_dersler = AsistanOlunanDersleriGetir($kullanici_id);
+    }
+    else
+        $dersler = OgrencininAktifDersleriniGetir($kullanici_id);
 
-    $gelecek_Dersler = [];
-    if ($ayarlar["gelecek_private"] == "no")
-        $gelecek_Dersler = KullaniciYeniDersleriniGetir($kullanici_id);
-    ?>
+        ?>
 
     <div class="container">
         <div class="profile-detail">
@@ -99,15 +107,25 @@ include 'includes/head.php';
                     <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                         <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home"
                             role="tab" aria-controls="v-pills-home" aria-selected="true">
-                            <?php if($kullanici_detail["admin"]=1) 
+                            <b> <?php if($OGRETMEN) 
                                 echo "Oluşturduğu Dersler" ;
                                else 
                                 echo "Katıldığı Dersler";
                              ?>
+                            </b>
+                        </a>
+                        <a class="nav-link" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab"
+                            aria-controls="v-pills-home" aria-selected="true">
+                            <b> <?php if($OGRETMEN) 
+                                echo "Asistan Olunan Dersler" ;
+                             ?>
+                            </b>
                         </a>
                         <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile"
                             role="tab" aria-controls="v-pills-profile" aria-selected="false">
-                            Arşivlenmiş Dersler
+                            <b>
+                                Arşivlenmiş Dersler
+                            </b>
                         </a>
                     </div>
                 </div>
@@ -117,38 +135,32 @@ include 'includes/head.php';
                         <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel"
                             aria-labelledby="v-pills-home-tab">
                             <?php
-                            $gelecek_Dersler_count = 0;
-                            if ($gelecek_Dersler != NULL)
-                                $gelecek_Dersler_count = count($gelecek_Dersler);
+                            $dersler_count = 0;
+                            if ($dersler != NULL)
+                                $dersler_count = count($dersler);
 
-                            if ($gelecek_Dersler != NULL && $gelecek_Dersler_count > 0) {
-                                for ($i = 0; $i < count($gelecek_Dersler); $i++) {
-                                    $etkinlik = $gelecek_Dersler[$i];
+                            if ($dersler != NULL && $dersler_count > 0) {
+                                for ($i = 0; $i < count($dersler); $i++) {
+                                    $ders = $dersler[$i];
                                     ?>
                             <div class="card row mx-2 mb-3">
                                 <div class="card-body">
                                     <h5 class="card-title">
-                                        <span
-                                            class="badge badge-secondary event-type"><?php echo $etkinlik["tip"] ?></span>
+                                        <!-- <span
+                                            class="badge badge-secondary event-type"><?php echo $ders["tip"] ?></span> -->
                                         <?php
-                                                $isim =  $etkinlik["isim"];
-                                                $id =  $etkinlik["id"];
+                                                $isim =  $ders["isim"];
+                                                $id =  $ders["id"];
                                                 echo "<a href='event.php?event=$id'> $isim </a>"
                                                 ?>
-                                        <p class="card-text"
-                                            style="     float: right; font-size: medium; margin-right: 25px;">
-                                            <i class="fas fa-clock"></i>
-                                            <?php
-                                                    echo turkcetarih_formati("d M Y", $etkinlik["tarih"]);
-                                                    ?></p>
                                     </h5>
-                                    <!-- <p class="card-text"> <?php echo $etkinlik["k_aciklama"] ?></p> -->
+                                    <!-- <p class="card-text"> <?php echo $ders["k_aciklama"] ?></p> -->
                                 </div>
                             </div>
                             <?php }
                         } else { ?>
                             <div class="alert alert-warning" role="alert">
-                                <?php if($kullanici_detail["admin"]=1) 
+                                <?php if($OGRETMEN) 
                                  echo $kullanici_detail["adi"]." herhangi bir ders oluşturmadı.";
                                else echo $kullanici_detail["adi"]." herhangi bir derse kayıtlı değil.";
                              ?>
@@ -156,31 +168,29 @@ include 'includes/head.php';
                             </div>
                             <?php  }  ?>
                         </div>
-                        <div class="tab-pane fade" id="v-pills-profile" role="tabpanel"
-                            aria-labelledby="v-pills-profile-tab">
+                        <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
                             <?php
                             if ($eski_Dersler != NULL  && count($eski_Dersler) > 0) {
                                 for ($i = 0; $i < count($eski_Dersler); $i++) {
-                                    $etkinlik = $eski_Dersler[$i];
+                                    $ders = $eski_Dersler[$i];
                                     ?>
                             <div class="card row mx-2 mb-3">
                                 <div class="card-body" style="">
                                     <h5 class="card-title">
 
-                                        <span
-                                            class="badge badge-secondary event-type"><?php echo $etkinlik["tip"] ?></span>
+                                        <span class="badge badge-secondary event-type"><?php echo $ders["tip"] ?></span>
                                         <?php
-                                                $isim =  $etkinlik["isim"];
-                                                $id =  $etkinlik["id"];
+                                                $isim =  $ders["isim"];
+                                                $id =  $ders["id"];
                                                 echo "<a href='event.php?event=$id'> $isim </a>"
                                                 ?>
                                         <p class="card-text"
                                             style="     float: right; font-size: medium; margin-right: 25px;">
                                             <i class="fas fa-clock"></i>
-                                            <?php echo turkcetarih_formati("d M Y", $etkinlik["tarih"]); ?>
+                                            <?php echo turkcetarih_formati("d M Y", $ders["tarih"]); ?>
                                         </p>
                                     </h5>
-                                    <!-- <p class="card-text"> <?php echo $etkinlik["k_aciklama"] ?></p> -->
+                                    <!-- <p class="card-text"> <?php echo $ders["k_aciklama"] ?></p> -->
                                 </div>
                             </div>
                             <?php }

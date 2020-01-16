@@ -9,11 +9,11 @@
     $asistan_dersler = array();
 
     if($OGRETMEN){
-        $dersler = DuzenledigiDersleriGetir($kullanici_id);
+        $dersler = DuzenledigiAktifDersleriGetir($kullanici_id);
         $asistan_dersler = AsistanOlunanDersleriGetir($kullanici_id);
     }
     else
-        $dersler = OgrenciDersleriniGetir($kullanici_id);
+        $dersler = OgrencininAktifDersleriniGetir($kullanici_id);
       
 ?>
 

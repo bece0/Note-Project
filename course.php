@@ -149,6 +149,7 @@ include 'includes/head.php';
     <?php } ?>
 
 
+
     <?php echo "<title>" . $COURSE["isim"] . "</title>" ?>
     <div class="container">
         <div class="detay">
@@ -181,6 +182,13 @@ include 'includes/head.php';
                         <a class="btn btn-warning c-header-action" data-toggle="modal" data-target="#dersGuncelleModal">
                             <i class="fa fa-edit"></i>&nbsp;Düzenle
                         </a>
+                        <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-cog"></i>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" id="btnDersiKapat">Dersi Kapat</a>
+                        </div>
                         <?php } ?>
                     </div>
                 </div>
@@ -193,20 +201,20 @@ include 'includes/head.php';
         <div>
             <ul class="nav nav-tabs" role="tablist">
                 <li class="nav-item" id="genel_akis">
-                    <a class="nav-link active" data-toggle="tab" href="#genel">Duyurular</a>
+                    <a class="nav-link active" data-toggle="tab" href="#genel"><b>Duyurular</b></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#calismalar">Sınıf Çalışmaları</a>
+                    <a class="nav-link" data-toggle="tab" href="#calismalar"><b>Sınıf Çalışmaları</b></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#yorum">Tartışma</a>
+                    <a class="nav-link" data-toggle="tab" href="#yorum"><b>Tartışma</b></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#katılımcı">Katılımcılar</a>
+                    <a class="nav-link" data-toggle="tab" href="#katılımcı"><b>Katılımcılar</b></a>
                 </li>
                 <?php if($GIRIS_YAPAN_DERSIN_HOCASI_MI){ ?>
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#notlar">Notlar</a>
+                    <a class="nav-link" data-toggle="tab" href="#notlar"><b>Notlar</b></a>
                 </li>
                 <?php } ?>
             </ul>
@@ -256,4 +264,39 @@ include 'includes/head.php';
         <div>
             <?php include 'includes/footer.php'; ?>
         </div>
+    </div>
 </body>
+
+<script>
+$(function() {
+    $("#btnDersiKapat").on("click", function() {
+        var dersId = $("#ders_id").val();
+        if (!dersId)
+            return;
+
+        Swal.fire({
+            title: 'Emin misiniz?',
+            text: "Ders devre dışı bırakılacak",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Evet, Bitir!',
+            cancelButtonText: "Hayır"
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    type: "POST",
+                    url: 'services/course.php?method=finish&ders_id=' + dersId,
+                    success: function(response) {
+                        location.reload();
+                    },
+                    error: ajaxGenelHataCallback
+                })
+
+            }
+        });
+
+    });
+})
+</script>

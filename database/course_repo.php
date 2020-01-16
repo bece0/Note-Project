@@ -303,6 +303,17 @@ function DersKayitTipiGüncelle($ders_id, $ogrenci_id, $tip = 0){
     return SQLUpdateCalistir($sql);
 }
 
+function DersiKapat($ders_id){
+    if(!isset($ders_id)){
+        return false;
+    }
+
+    $sql = "UPDATE dersler SET status = 0
+    WHERE id = $ders_id";
+
+    return SQLUpdateCalistir($sql);
+}
+
 /**
  * Açık Dersleri etkinlik tarihi sırasına göre getirir.
  * @param int $limit sorgu sonucu kayıt limiti
@@ -324,23 +335,22 @@ function AktifDersleriGetir($skip = 0, $limit = 50)
     return SQLCalistir($sql);
 }
 
-function OgrenciDersleriniGetir($kullanici_id)
+function OgrencininAktifDersleriniGetir($kullanici_id)
 {   
-    $sql = "SELECT dersler.* , ogretmenler.adi as ogretmen_adi, ogretmenler.soyadi as ogretmen_soyadi  FROM katilimci 
-    INNER JOIN dersler ON katilimci.ders_id=dersler.id 
+    $sql = "SELECT d.* , ogretmenler.adi as ogretmen_adi, ogretmenler.soyadi as ogretmen_soyadi  FROM katilimci 
+    INNER JOIN dersler d ON katilimci.ders_id=d.id 
     INNER JOIN kullanici ON katilimci.ogrenci_id=kullanici.id
-    INNER JOIN kullanici as ogretmenler ON ogretmenler.id=dersler.duzenleyen_id
-    where katilimci.ogrenci_id='" . $kullanici_id . "'";
+    INNER JOIN kullanici as ogretmenler ON ogretmenler.id=d.duzenleyen_id
+    where katilimci.ogrenci_id = $kullanici_id AND d.status = 1";
 
     return SQLCalistir($sql);
 }
 
-function DuzenledigiDersleriGetir($kullanici_id)
+function DuzenledigiAktifDersleriGetir($kullanici_id)
 {       
      $sql = "SELECT dersler.* FROM dersler
-        WHERE duzenleyen_id = '". $kullanici_id . "'";
+        WHERE duzenleyen_id = $kullanici_id AND status = 1";
 
-  
     return SQLCalistir($sql);
 }
 
