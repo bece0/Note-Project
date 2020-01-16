@@ -2,5 +2,9 @@
 
 /files/images/profile
 
+/files/uploads/odev
+/files/uploads/ogrenci_odev
+/files/uploads/dokuman
+
 .DS_Store
 **/.DS_Store

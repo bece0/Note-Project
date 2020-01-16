@@ -25,6 +25,9 @@ body {
   justify-content: space-between;
 }
 
+.etkinlik {
+  /* min-width : 25wv; */
+}
 
 .card-custom {
   min-width: 360px;
@@ -168,6 +171,41 @@ body {
   color: black;
 }
 
+.yuruyus {
+  background: green !important;
+}
+
+.kosu {
+  background: rgb(126, 72, 151) !important;
+}
+
+.bisiklet {
+  background: rgb(64, 178, 223) !important;
+}
+
+.tirmanis {
+  background: rgb(196, 72, 113) !important;
+}
+
+.yuzme {
+  background: rgb(50, 141, 141) !important;
+}
+
+.futbol {
+  background: rgb(217, 156, 63) !important;
+}
+
+.quidditch {
+  background: rgb(134, 15, 35) !important;
+}
+
+.voleybol {
+  background: rgb(216, 147, 195) !important;
+}
+
+.basketbol {
+  background: rgb(205, 112, 19) !important;
+}
 
 .callout {
   padding: 1.25rem;
@@ -225,4 +263,15 @@ button > * {
 .nav-tabs .nav-link:focus,
 .nav-tabs .nav-link:hover {
   border-color: #a998405b #a998405b #dee2e6;
+}
+
+.nav-pills .nav-link.active,.nav-pills .show>.nav-link {
+  color: #fff;
+  background-color: #eba91d
+}
+
+a {
+  color: #eba91d;
+  text-decoration: none;
+  background-color: transparent
 }

@@ -10,7 +10,7 @@
     line-height: 1.25;
     stroke: transparent;
     fill: rgba(0, 0, 0, .87);
-    color: #e7a418;
+    color:rgba(255, 173, 26, 0.87);
     font-weight: 600;
     letter-spacing: -.02em;
 }
@@ -26,6 +26,4 @@
 .profile-img {
     max-width: 240px;
     max-height: 100%;
-    border-style: groove;
-    border-color: #d3a546;
 }

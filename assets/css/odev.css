@@ -1,15 +1,49 @@
-.odev-detay{
-
+.odev-detay {
 }
 
-.odev-isim{
-
+.odev-isim {
 }
 
-.odev-aciklama{
-    margin: 12px 0px;
+.odev-aciklama {
+  margin: 12px 0px;
 }
 
-.odev-dosya{
+.odev-dosya {
+}
 
+.odev-son-tarih {
+  margin: 5px 0px;
+}
+
+.odev-son-tarih-t {
+  font-style: italic;
+}
+
+.odev-kunye {
+  display: flex;
+}
+
+.odev-isim {
+  margin: 5px 0px;
+}
+
+.odev-isim a:hover {
+  text-decoration: none;
+}
+
+.odev-son-tarih {
+  /* font-size: small; */
+  /* color: gray; */
+}
+
+.odev-tarih {
+  margin-right: 5px;
+  font-size: 0.75rem;
+  font-style: italic;
+}
+
+.odev-yukleyen {
+  font-size: 0.75rem;
+  border-left: 1px solid black;
+  padding-left: 4px;
 }

@@ -27,7 +27,7 @@ if(!isset($_SESSION))
 
     $base_url = getenv('MOVE_BASE_URL');
     if($base_url == FALSE){
-      $base_url = "/classroom/";
+      $base_url = "/note/";
     }
 
 ?>

@@ -44,7 +44,7 @@ $ders_id = NULL;
 $odev_adi = NULL;
 $aciklama = NULL;
 $son_tarih = NULL;
-$dosya_gonderme = FALSE;//dosya gönderme mecburi mi
+$dosya_gonderme = 0;//dosya gönderme mecburi mi
 
 try{
     include '../includes/ortak.php';
@@ -72,7 +72,7 @@ try{
         }
 
         if(isset($_POST["dosya_gonderme"]) && $_POST["dosya_gonderme"] != "ON"){
-            $dosya_gonderme = TRUE;
+            $dosya_gonderme = 1;
         }
 
         $ders_id =  mysqli_real_escape_string($baglanti, $_POST["ders_id"]);
@@ -80,21 +80,41 @@ try{
         $aciklama = mysqli_real_escape_string($baglanti, $_POST["aciklama"]);
         $son_tarih = mysqli_real_escape_string($baglanti, $_POST["son_tarih"])." 23:59:59";
 
+
+        $COURSE = DersBilgileriniGetir($ders_id);
+        $DUZENLEYEN_ID = $COURSE["duzenleyen_id"];
+
+
+        $GIRIS_YAPAN_DERSIN_HOCASI_MI = FALSE;
+        $GIRIS_YAPAN_DERSIN_ASISTANI_MI = FALSE;
+        
+        if($DUZENLEYEN_ID == $KULLANICI_ID)
+            $GIRIS_YAPAN_DERSIN_HOCASI_MI = TRUE;
+
+        if($KULLANICI["admin"] == 1 && $GIRIS_YAPAN_DERSIN_HOCASI_MI == FALSE)
+            $GIRIS_YAPAN_DERSIN_ASISTANI_MI = DersinAsistanıMı($ders_id, $KULLANICI_ID);
+
+        if($GIRIS_YAPAN_DERSIN_HOCASI_MI == FALSE && $GIRIS_YAPAN_DERSIN_ASISTANI_MI == FALSE)
+            throw new Exception("Bu ders için ödev oluşturma yetkiniz bulunmuyor!");
+
         $DOSYA_DETAY = DosyaUpload("../files/uploads/odev/", $ders_id);
 
-        if($DOSYA_DETAY == NULL){
-            $statusCode = 500;
-            throw new Exception("Dosya yüklenemdi (hata-1)!");
-        }
+        $DOSYA_ID = NULL;
 
-      
-        $dosya_kod = GUIDOlustur();
-        // DosyaEkle($kod, $yukleyen_id, $isim, $dosya_adi, $indirme_link)
-        $DOSYA_ID = DosyaEkle($dosya_kod, $KULLANICI_ID, $DOSYA_DETAY["isim"], $DOSYA_DETAY["dosya_adi"], $DOSYA_DETAY["indirme_link"]);
+        if($DOSYA_DETAY != NULL){
+            // $statusCode = 500;
+            // throw new Exception("Dosya yüklenemdi (hata-1)!");
 
-        if($DOSYA_ID  == NULL){
-            $statusCode = 500;
-            throw new Exception("Dosya yüklenemdi (hata-2)!");
+            $dosya_kod = GUIDOlustur();
+            // DosyaEkle($kod, $yukleyen_id, $isim, $dosya_adi, $indirme_link)
+            $DOSYA_ID = DosyaEkle($dosya_kod, $KULLANICI_ID, $DOSYA_DETAY["isim"], $DOSYA_DETAY["dosya_adi"], $DOSYA_DETAY["indirme_link"]);
+    
+            if($DOSYA_ID  == NULL){
+                $statusCode = 500;
+                throw new Exception("Dosya yüklenemdi (hata-2)!");
+            }
+        }else{
+            $DOSYA_ID = 0;
         }
 
         $odev_kod = GUIDOlustur();

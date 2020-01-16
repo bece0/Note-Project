@@ -92,6 +92,24 @@ try{
 
         OgrenciOdevSil($ogrenci_odev_id);
 
+    }else if(isset($_POST) && $METHOD == "teslim"){
+        
+        if(!isset($_POST["odev_id"]) || $_POST["odev_id"] == ""){
+            $statusCode = 400;
+            throw new Exception("odev_id parametresi eksik!");
+        }
+
+        if (!isset($_POST["ders_id"]) && $_POST['ders_id'] == "") {
+            $statusCode = 400;
+            throw new Exception("ders_id parametresi eksik!");
+        }
+
+        $odev_id =  mysqli_real_escape_string($baglanti, $_POST["odev_id"]);
+        $COURSE_ID =  mysqli_real_escape_string($baglanti, $_POST["ders_id"]);
+
+        $ogrenci_odev_kod = GUIDOlustur();
+        OgrenciDersOdevEkle($ogrenci_odev_kod, $KULLANICI_ID, $odev_id, $COURSE_ID, 0);
+
     }else{
         $statusCode = 400;
         throw new Exception("Desteklenmeyen metod : $METHOD");

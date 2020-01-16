@@ -10,6 +10,7 @@ include 'includes/head.php';
 
     <?php
     include 'includes/nav-bar.php';
+    // include 'includes/page-common.php';
 
     if (!isset($_GET["kod"]) && $_GET["kod"] != ""){
         header('Location: dashboard.php');
@@ -64,32 +65,41 @@ include 'includes/head.php';
             $DIV_CLASS = "col-md-8";
             if(!$GIRIS_YAPAN_DERSIN_OGRENCISI_MI)
                 $DIV_CLASS = "col-md-12"
-        ?>
-
-
+            ?>
             <div class="<?php echo $DIV_CLASS; ?>">
                 <div class="detay">
                     <div class="odev-detay">
                         <h3 class="odev-isim">
                             <i class="fa fa-file-alt"></i>
-                            <?php  echo $ODEV["isim"]; ?>
+                            <?php  echo $COURSE["isim"]." - ".$ODEV["isim"]; ?>
                         </h3>
+                        <div>
+                            <div class="odev-kunye">
+                                <div class="odev-tarih"><?php echo zamanOnce($ODEV["olusturma_tarih"]); ?></div>
+                                <div class="odev-yukleyen"><?php echo $ODEV["isim"]." ". $ODEV["soyadi"]; ?></div>
+                            </div>
+                            
+                        </div>
+                        <hr>
                         <div class="odev-aciklama"><?php  echo $ODEV["aciklama"]; ?></div>
                         <?php if($ODEV["dosya_id"]){
                         $DOSYA = GetDosyaById($ODEV["dosya_id"]);
                         if($DOSYA != NULL){
                     ?>
                         <div class="odev-dosya">
-                            <span>Ödev Dosyası : </span>
+                            <span><i class="fa fa-file"></i> Ödev Dosyası : </span>
                             <a target="blank_" href='dosya_indir.php?type=odev&kod=<?php echo $ODEV["kod"]?>'>
                                 <i class="fa fa-download"></i>&nbsp;
                                 <?php echo $DOSYA["isim"]?>
                             </a>
                         </div>
                         <?php } }?>
+                        <div class="odev-son-tarih">
+                            <span><i class="fa fa-clock"></i> Son Gönderim Tarihi : </span>
+                            <span class="odev-son-tarih-t"><?php echo $ODEV["son_tarih"]?></span>
+                        </div>
                     </div>
                 </div>
-
             </div>
 
             <?php if($GIRIS_YAPAN_DERSIN_OGRENCISI_MI) {?>

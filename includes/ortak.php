@@ -13,7 +13,13 @@ function GUIDOlustur()
 
 function DosyaUpload($path = "../files/uploads/", $dosyaIsimOnEk = ""){
     
-    $valid_extensions = array('pdf', 'doc', 'docx'); // geçerli uzantılar
+    if($_FILES['dosya'] == NULL || $_FILES['dosya']['name'] == NULL)
+        return NULL;
+
+    if(!isset($_FILES['dosya']['name']))
+        return NULL;
+ 
+    $valid_extensions = array('pdf', 'doc', 'docx', 'zip', 'txt'); // geçerli uzantılar
     // $path = '../files/uploads/'; // yükleme klasörü
     if(!is_dir($path)){
         mkdir(rtrim($path,"/"), 0777, true);
