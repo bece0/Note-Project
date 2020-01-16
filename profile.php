@@ -48,10 +48,11 @@ include 'includes/head.php';
     if($OGRETMEN){
         $dersler = DuzenledigiAktifDersleriGetir($kullanici_id);
         $asistan_dersler = AsistanOlunanDersleriGetir($kullanici_id);
+        $arsiv_Dersler=DuzenledigiArsivlenmisDersleriGetir($kullanici_id);
     }
     else
         $dersler = OgrencininAktifDersleriniGetir($kullanici_id);
-
+        $arsiv_Dersler=OgrencininArsivlenmisDersleriniGetir($kullanici_id);
         ?>
 
     <div class="container">
@@ -105,8 +106,8 @@ include 'includes/head.php';
             <div class="row">
                 <div class="col-3">
                     <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                        <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home"
-                            role="tab" aria-controls="v-pills-home" aria-selected="true">
+                        <a class="nav-link active" id="v-pills-ders-tab" data-toggle="pill" href="#v-pills-ders"
+                            role="tab" aria-controls="v-pills-ders" aria-selected="true">
                             <b> <?php if($OGRETMEN) 
                                 echo "Oluşturduğu Dersler" ;
                                else 
@@ -114,15 +115,15 @@ include 'includes/head.php';
                              ?>
                             </b>
                         </a>
-                        <a class="nav-link" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab"
-                            aria-controls="v-pills-home" aria-selected="true">
+                        <a class="nav-link" id="v-pills-asistan-tab" data-toggle="pill" href="#v-pills-asistan" role="tab"
+                            aria-controls="v-pills-asistan" aria-selected="false">
                             <b> <?php if($OGRETMEN) 
                                 echo "Asistan Olunan Dersler" ;
                              ?>
                             </b>
                         </a>
-                        <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile"
-                            role="tab" aria-controls="v-pills-profile" aria-selected="false">
+                        <a class="nav-link" id="v-pills-arsiv-tab" data-toggle="pill" href="#v-pills-arsiv"
+                            role="tab" aria-controls="v-pills-arsiv" aria-selected="false">
                             <b>
                                 Arşivlenmiş Dersler
                             </b>
@@ -132,8 +133,8 @@ include 'includes/head.php';
                 <div class="col-9">
                     <div class="tab-content" id="v-pills-tabContent">
 
-                        <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel"
-                            aria-labelledby="v-pills-home-tab">
+                        <div class="tab-pane fade show active" id="v-pills-ders" role="tabpanel"
+                            aria-labelledby="v-pills-ders-tab">
                             <?php
                             $dersler_count = 0;
                             if ($dersler != NULL)
@@ -146,15 +147,14 @@ include 'includes/head.php';
                             <div class="card row mx-2 mb-3">
                                 <div class="card-body">
                                     <h5 class="card-title">
-                                        <!-- <span
-                                            class="badge badge-secondary event-type"><?php echo $ders["tip"] ?></span> -->
+                                      
                                         <?php
                                                 $isim =  $ders["isim"];
                                                 $id =  $ders["id"];
-                                                echo "<a href='event.php?event=$id'> $isim </a>"
+                                                echo "<a href='course.php?course=$id'> $isim </a>"
                                                 ?>
                                     </h5>
-                                    <!-- <p class="card-text"> <?php echo $ders["k_aciklama"] ?></p> -->
+                                 
                                 </div>
                             </div>
                             <?php }
@@ -168,35 +168,70 @@ include 'includes/head.php';
                             </div>
                             <?php  }  ?>
                         </div>
-                        <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
-                            <?php
-                            if ($eski_Dersler != NULL  && count($eski_Dersler) > 0) {
-                                for ($i = 0; $i < count($eski_Dersler); $i++) {
-                                    $ders = $eski_Dersler[$i];
+
+                        <div class="tab-pane fade" id="v-pills-asistan" role="tabpanel" 
+                        aria-labelledby="v-pills-asistan-tab">
+                        <?php
+                            $asistan_dersler_count = 0;
+                            if ($asistan_dersler != NULL)
+                                $asistan_dersler_count = count($asistan_dersler);
+
+                            if ($asistan_dersler != NULL && $asistan_dersler_count > 0) {
+                                for ($i = 0; $i < count($asistan_dersler); $i++) {
+                                    $asistan_ders = $asistan_dersler[$i];
                                     ?>
                             <div class="card row mx-2 mb-3">
-                                <div class="card-body" style="">
+                                <div class="card-body">
                                     <h5 class="card-title">
-
-                                        <span class="badge badge-secondary event-type"><?php echo $ders["tip"] ?></span>
+                                       
                                         <?php
-                                                $isim =  $ders["isim"];
-                                                $id =  $ders["id"];
-                                                echo "<a href='event.php?event=$id'> $isim </a>"
+                                                $isim =  $asistan_ders["isim"];
+                                                $id =  $asistan_ders["id"];
+                                                echo "<a href='course.php?course=$id'> $isim </a>"
                                                 ?>
-                                        <p class="card-text"
-                                            style="     float: right; font-size: medium; margin-right: 25px;">
-                                            <i class="fas fa-clock"></i>
-                                            <?php echo turkcetarih_formati("d M Y", $ders["tarih"]); ?>
-                                        </p>
                                     </h5>
-                                    <!-- <p class="card-text"> <?php echo $ders["k_aciklama"] ?></p> -->
+                                 
                                 </div>
                             </div>
                             <?php }
                         } else { ?>
                             <div class="alert alert-warning" role="alert">
-                                <?php echo $kullanici_detail["adi"] ?> herhangi bir ders arşivlemedi.
+                                <?php if($OGRETMEN) 
+                                 echo $kullanici_detail["adi"]." herhangi bir dersin asistanı değil.";
+                            
+                             ?>
+
+                            </div>
+                            <?php  }  ?>
+
+                        </div>
+
+                        <div class="tab-pane fade" id="v-pills-arsiv" role="tabpanel" 
+                        aria-labelledby="v-pills-arsiv-tab">
+                            <?php
+                            if ($arsiv_Dersler != NULL  && count($arsiv_Dersler) > 0) {
+                                for ($i = 0; $i < count($arsiv_Dersler); $i++) {
+                                    $arsiv_Ders = $arsiv_Dersler[$i];
+                                    ?>
+                            <div class="card row mx-2 mb-3">
+                                <div class="card-body" style="">
+                                    <h5 class="card-title">
+
+                                      
+                                        <?php
+                                                $isim =  $arsiv_Ders["isim"];
+                                                $id =  $arsiv_Ders["id"];
+                                                echo "<a href='course.php?course=$id'> $isim </a>"
+                                                ?>
+                                    
+                                    </h5>
+                                
+                                </div>
+                            </div>
+                            <?php }
+                        } else { ?>
+                            <div class="alert alert-warning" role="alert">
+                                <?php echo $kullanici_detail["adi"] ?> arşivlenmiş dersi yok.
                             </div>
                             <?php  }  ?>
                         </div>

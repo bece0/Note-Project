@@ -346,10 +346,29 @@ function OgrencininAktifDersleriniGetir($kullanici_id)
     return SQLCalistir($sql);
 }
 
+function OgrencininArsivlenmisDersleriniGetir($kullanici_id)
+{   
+    $sql = "SELECT d.* , ogretmenler.adi as ogretmen_adi, ogretmenler.soyadi as ogretmen_soyadi  FROM katilimci 
+    INNER JOIN dersler d ON katilimci.ders_id=d.id 
+    INNER JOIN kullanici ON katilimci.ogrenci_id=kullanici.id
+    INNER JOIN kullanici as ogretmenler ON ogretmenler.id=d.duzenleyen_id
+    where katilimci.ogrenci_id = $kullanici_id AND d.status = 0";
+
+    return SQLCalistir($sql);
+}
+
 function DuzenledigiAktifDersleriGetir($kullanici_id)
 {       
      $sql = "SELECT dersler.* FROM dersler
         WHERE duzenleyen_id = $kullanici_id AND status = 1";
+
+    return SQLCalistir($sql);
+}
+
+function DuzenledigiArsivlenmisDersleriGetir($kullanici_id)
+{       
+     $sql = "SELECT dersler.* FROM dersler
+        WHERE duzenleyen_id = $kullanici_id AND status = 0";
 
     return SQLCalistir($sql);
 }
