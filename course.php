@@ -180,15 +180,17 @@ include 'includes/head.php';
                             ?>
                         </p>
                         <?php if($GIRIS_YAPAN_DERSIN_HOCASI_MI && $Ders_Aktif_Mi["status"]==1){ ?>
-                        <a class="btn btn-warning c-header-action" data-toggle="modal" data-target="#dersGuncelleModal">
+                        <!-- <a class="btn btn-warning c-header-action" data-toggle="modal" data-target="#dersGuncelleModal">
                             <i class="fa fa-edit"></i>&nbsp;Düzenle
-                        </a>
-                        <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown"
+                        </a> -->
+                        <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false">
                             <i class="fa fa-cog"></i>
                         </button>
                         <div class="dropdown-menu">
                             <a class="dropdown-item" id="btnDersiKapat">Dersi Kapat</a>
+                            <a class="dropdown-item c-header-action" id="btnDersiGuncelle" 
+                            data-toggle="modal" data-target="#dersGuncelleModal">Düzenle</a>
                         </div>
                         <?php } ?>
                     </div>
