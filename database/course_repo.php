@@ -365,10 +365,11 @@ function DuzenledigiAktifDersleriGetir($kullanici_id)
     return SQLCalistir($sql);
 }
 
-function DuzenledigiArsivlenmisDersleriGetir($kullanici_id)
+function OgretmeninArsivlenmisDersleriniGetir($kullanici_id)
 {       
-     $sql = "SELECT dersler.* FROM dersler
-        WHERE duzenleyen_id = $kullanici_id AND status = 0";
+    $sql = "SELECT d.* FROM dersler d 
+    INNER JOIN katilimci k ON k.ders_id=d.id 
+    where k.ogrenci_id = $kullanici_id and k.tip=1 AND d.status = 0";
 
     return SQLCalistir($sql);
 }
@@ -413,6 +414,13 @@ function DersDuyurulariGetir($ders_id)
     order by tarih desc ";
 
     return SQLCalistir($sql);
+}
+
+function DersAktifMi($ders_id)
+{
+    $sql = "SELECT status FROM dersler where id=".$ders_id."";
+
+    return SQLTekliKayitGetir($sql);
 }
 
 

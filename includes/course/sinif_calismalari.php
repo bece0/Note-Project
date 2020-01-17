@@ -15,7 +15,7 @@ if($DOKUMAN_EKLEYEBILIR)
 
 
 
-    <?php if($ODEV_EKLEYEBILIR ||$DOKUMAN_EKLEYEBILIR ){ ?>
+    <?php if($Ders_Aktif_Mi==1 && ($ODEV_EKLEYEBILIR || $DOKUMAN_EKLEYEBILIR)){ ?>
     <a class="btn btn-success dropdown-toggle" data-toggle="dropdown">
         <i class="fa fa-plus"></i>&nbsp;Oluştur
     </a>

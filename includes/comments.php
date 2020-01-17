@@ -64,6 +64,7 @@
 <!--Comments-->
 <?php 
     $ders_id = UrlIdFrom("course");
+    $Ders_Aktif_Mi=DersAktifMi($ders_id);
 
     $YORUM_ONAYLAYABILIR = false;
     $YORUM_SILEBILIR = false;
@@ -123,7 +124,7 @@
                                 </button>
                             <?php }?>
 
-                            <?php if($YORUM_SILEBILIR || $YORUM_SAHIBI) { ?>
+                            <?php if($YORUM_SILEBILIR || $YORUM_SAHIBI ) { ?>
                                 <button href="#" class="btn btn-sm comment-action float-right btn-danger delete-comment" 
                                 title="Sil" comment-id="<?php echo $comment_id ?>">
                                     <i class="fa fa-trash"></i>
@@ -179,7 +180,7 @@
     }
 ?>
 
-<?php if($canAddComment == true) { ?>
+<?php if($canAddComment == true && $Ders_Aktif_Mi["status"]==1 ) { ?>
     <div class="card mb-3 wow fadeIn" id="comment_form">
         <div class="card-header font-weight-bold">
             <?php  

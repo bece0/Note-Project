@@ -44,14 +44,14 @@ for ($i = 0; $i < count($KATILIMCILAR); $i++) {
 ?>
 
 <div class="tab-detay-controls">
-    <?php if($DERSE_KULLANICI_EKLEYEBILIR) {?>
+    <?php if($DERSE_KULLANICI_EKLEYEBILIR && $Ders_Aktif_Mi["status"]==1) {?>
     <button class="btn btn-info c-header-action katilimciEkle" ders-id="<?php echo $COURSE["id"]; ?>"
         ders-name="<?php echo $COURSE["isim"]; ?>" type="ogrenci">
         <i class="fa fa-plus"></i>&nbsp;Öğrenci Ekle
     </button>
     <?php } ?>
 
-    <?php if($DERSE_ASISTAN_ATAYABILIR) {?>
+    <?php if($DERSE_ASISTAN_ATAYABILIR && $Ders_Aktif_Mi["status"]==1) {?>
     <button class="btn btn-secondary c-header-action katilimciEkle" ders-id="<?php echo $COURSE["id"]; ?>"
         ders-name="<?php echo $COURSE["isim"]; ?>" type="asistan">
         <i class="fa fa-plus"></i>&nbsp;Asistan Ekle
@@ -79,14 +79,14 @@ for ($i = 0; $i < count($KATILIMCILAR); $i++) {
                     <a href="profile.php?user=<?php echo $KATILIMCI_URL; ?>"><?php echo $KATILIMCI_AD_SOYAD ?></a>
                 </div>
                 <div class="katilimci-controls">
-                    <?php if($DERSTEN_ASISTAN_SILEBILIR && $DERSTEN_KULLANICI_SILEBILIR) { ?>
+                    <?php if($DERSTEN_ASISTAN_SILEBILIR && $DERSTEN_KULLANICI_SILEBILIR && $Ders_Aktif_Mi["status"]==1) { ?>
                     <button href="#" class="btn btn-sm float-right btn-danger remove-user" title="Dersten çıkar"
                         user-id="<?php echo $KATILIMCI['id'] ?>" type="asistan">
                         <i class="fa fa-times"></i>
                     </button>
                     <?php }?>
 
-                    <?php if($DERSTEN_ASISTAN_SILEBILIR) { ?>
+                    <?php if($DERSTEN_ASISTAN_SILEBILIR && $Ders_Aktif_Mi["status"]==1) { ?>
                     <button href="#" class="btn btn-sm float-right btn-warning remove-assistant"
                         title="Derse asistanlığından çıkar" user-id="<?php echo $KATILIMCI['id'] ?>">
                         <i class="fa fa-check-circle"></i>
@@ -122,14 +122,14 @@ for ($i = 0; $i < count($KATILIMCILAR); $i++) {
                     <a href="profile.php?user=<?php echo $KATILIMCI_URL; ?>"><?php echo $KATILIMCI_AD_SOYAD ?></a>
                 </div>
                 <div class="katilimci-controls">
-                    <?php if($DERSTEN_KULLANICI_SILEBILIR) { ?>
+                    <?php if($DERSTEN_KULLANICI_SILEBILIR && $Ders_Aktif_Mi["status"]==1) { ?>
                     <button href="#" class="btn btn-sm float-right btn-danger remove-user" title="Derten çıkar"
                         user-id="<?php echo $KATILIMCI['id'] ?>">
                         <i class="fa fa-times"></i>
                     </button>
                     <?php }?>
 
-                    <?php if($KATILIMCI["admin"] == 1 && $DERSE_ASISTAN_ATAYABILIR) { ?>
+                    <?php if($KATILIMCI["admin"] == 1 && $DERSE_ASISTAN_ATAYABILIR && $Ders_Aktif_Mi["status"]==1)  { ?>
                     <button href="#" class="btn btn-sm float-right btn-info make-assistant"
                         title="Derse asistan olarak ata" user-id="<?php echo $KATILIMCI['id'] ?>">
                         <i class="fa fa-check-circle"></i>

@@ -1,5 +1,7 @@
+
+
 <div class="tab-detay-controls">
-    <?php if($DUYURU_YAPABILIR){ ?>
+    <?php if($DUYURU_YAPABILIR && $Ders_Aktif_Mi["status"]==1){ ?>
     <a class="btn btn-success c-header-action duyuru-yap" ders-id="<?php echo $COURSE["id"]; ?>"
         ders-name="<?php echo $COURSE["isim"]; ?>">
         <i class="fa fa-bell"></i>&nbsp;Duyuru Yap

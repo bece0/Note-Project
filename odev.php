@@ -35,6 +35,8 @@ include 'includes/head.php';
     $COURSE_ID = $ODEV["ders_id"];
     $COURSE = DersBilgileriniGetir($COURSE_ID);
 
+    $Ders_Aktif_Mi=DersAktifMi($ders_id);
+
     echo "<title>".$COURSE["isim"]." - ".$ODEV["isim"]."</title>";
 
     $DUZENLEYEN_ID = $COURSE["duzenleyen_id"];
@@ -105,7 +107,8 @@ include 'includes/head.php';
             <?php if($GIRIS_YAPAN_DERSIN_OGRENCISI_MI) {?>
             <div class="col-md-4 col-sm-12">
                 <div class="detay">
-                    <?php include 'includes/odev/odev_upload.php'?>
+                    <?php 
+                    if ($Ders_Aktif_Mi["status"]==1) include 'includes/odev/odev_upload.php'?>
                 </div>
             </div>
             <?php }?>

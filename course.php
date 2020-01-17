@@ -23,6 +23,8 @@ include 'includes/head.php';
     
     $COURSE = DersBilgileriniGetir($COURSE_ID);
 
+    $Ders_Aktif_Mi=DersAktifMi($COURSE_ID);
+    
     if ($COURSE == NULL){
         header('Location: dashboard.php');
         die();
@@ -149,7 +151,6 @@ include 'includes/head.php';
     <?php } ?>
 
 
-
     <?php echo "<title>" . $COURSE["isim"] . "</title>" ?>
     <div class="container">
         <div class="detay">
@@ -178,7 +179,7 @@ include 'includes/head.php';
                             echo nl2br($aciklama); 
                             ?>
                         </p>
-                        <?php if($GIRIS_YAPAN_DERSIN_HOCASI_MI){ ?>
+                        <?php if($GIRIS_YAPAN_DERSIN_HOCASI_MI && $Ders_Aktif_Mi["status"]==1){ ?>
                         <a class="btn btn-warning c-header-action" data-toggle="modal" data-target="#dersGuncelleModal">
                             <i class="fa fa-edit"></i>&nbsp;Düzenle
                         </a>
@@ -262,7 +263,7 @@ include 'includes/head.php';
         </div>
 
         <div>
-            <?php include 'includes/footer.php'; ?>
+            <?php include 'includes/footer.php';  ?>
         </div>
     </div>
 </body>

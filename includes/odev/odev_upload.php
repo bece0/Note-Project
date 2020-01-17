@@ -6,6 +6,7 @@
     if(strtotime($ODEV["son_tarih"]) < time()){
         $ODEV_TARIHI_GECTI = TRUE;
     }
+  //  $Ders_Aktif_Mi=DersAktifMi($ders_id);
 ?>
 <style>
 .odev-durum {
