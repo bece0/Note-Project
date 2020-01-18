@@ -34,16 +34,16 @@
     </div>
 </div>
 
-
+<?php if($Ders_Aktif_Mi["status"]==1){ ?>
 <div class="odev-upload-btns">
-    <?php if($ODEV["dosya_gonderme"] == 1){?>
+    <?php if($ODEV["dosya_gonderme"] == 1 ){?>
     <button class="btn btn-info" data-toggle="modal" data-target="#odevYukleModal">Ödev Yükle</button>
     <?php }else { ?>
-    <button class="btn btn-info" onclick="odevTeslimEt(<?php echo $ODEV["id"]?>, <?php echo $ODEV["ders_id"]?>)">Ödev
+    <button class="btn btn-info" onclick="odevTeslimEt(<?php echo $ODEV['id']?>, <?php echo $ODEV['ders_id']?>)">Ödev
         Teslim Et</button>
     <?php }?>
 </div>
-
+    <?php } ?>
 
 <?php }  else if($OGRENCI_ODEV == NULL && $ODEV_TARIHI_GECTI == TRUE) {?>
 <div class="odev-durum">
@@ -60,10 +60,10 @@
         Gönderim Tarihi : <span class="odev-gonderim-tarih"><?php echo $OGRENCI_ODEV["gonderim_tarih"]?></span>
     </div>
     <div class="odev-upload-btns">
-        <?php if($ODEV["dosya_gonderme"] == 1){?>
+        <?php if($ODEV["dosya_gonderme"] == 1 &&  $Ders_Aktif_Mi["status"]==1){?>
         <a href='dosya_indir.php?type=ogrenci_odev&kod=<?php echo $OGRENCI_ODEV["kod"]?>' class="btn btn-primary"><i
                 class="fa fa-download"></i> İndir</a>
-        <button class="btn btn-danger" onclick="odevSil(<?php echo $OGRENCI_ODEV["id"]?>)">
+        <button class="btn btn-danger" onclick="odevSil(<?php echo $OGRENCI_ODEV['id']?>)">
             <i class="fa fa-trash-alt"></i> Ödevi Dosyasını Sil
         </button>
         <?php }?>

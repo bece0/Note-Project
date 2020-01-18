@@ -23,6 +23,7 @@ include 'includes/head.php';
 
     $KOD = mysqli_real_escape_string($baglanti, $_GET["kod"]);
     $ODEV = GetOdevDetailsByKod($KOD);
+   
 
     if($ODEV == NULL){
         header('Location: dashboard.php');
@@ -34,9 +35,7 @@ include 'includes/head.php';
     $ODEV_ID = $ODEV["id"];
     $COURSE_ID = $ODEV["ders_id"];
     $COURSE = DersBilgileriniGetir($COURSE_ID);
-
-    $Ders_Aktif_Mi=DersAktifMi($ders_id);
-
+    $Ders_Aktif_Mi=DersAktifMi($COURSE_ID);
     echo "<title>".$COURSE["isim"]." - ".$ODEV["isim"]."</title>";
 
     $DUZENLEYEN_ID = $COURSE["duzenleyen_id"];
@@ -73,7 +72,7 @@ include 'includes/head.php';
                     <div class="odev-detay">
                         <h3 class="odev-isim">
                             <i class="fa fa-file-alt"></i>
-                            <?php  echo $COURSE["isim"]." - ".$ODEV["isim"]; ?>
+                            <?php    echo $COURSE["isim"]." - ".$ODEV["isim"]; ?>
                         </h3>
                         <div>
                             <div class="odev-kunye">
@@ -104,11 +103,11 @@ include 'includes/head.php';
                 </div>
             </div>
 
-            <?php if($GIRIS_YAPAN_DERSIN_OGRENCISI_MI) {?>
+            <?php if($GIRIS_YAPAN_DERSIN_OGRENCISI_MI ) {?>
             <div class="col-md-4 col-sm-12">
                 <div class="detay">
                     <?php 
-                    if ($Ders_Aktif_Mi["status"]==1) include 'includes/odev/odev_upload.php'?>
+                    include 'includes/odev/odev_upload.php'?>
                 </div>
             </div>
             <?php }?>

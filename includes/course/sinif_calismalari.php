@@ -15,7 +15,7 @@ if($DOKUMAN_EKLEYEBILIR)
 
 
 
-    <?php if($Ders_Aktif_Mi==1 && ($ODEV_EKLEYEBILIR || $DOKUMAN_EKLEYEBILIR)){ ?>
+    <?php if($Ders_Aktif_Mi["status"]==1 && ($ODEV_EKLEYEBILIR || $DOKUMAN_EKLEYEBILIR)){ ?>
     <a class="btn btn-success dropdown-toggle" data-toggle="dropdown">
         <i class="fa fa-plus"></i>&nbsp;Oluştur
     </a>
@@ -42,34 +42,34 @@ $DOKUMANLAR = DersDokumanlariniGetir($COURSE["id"]);
 <div class="row">
     <div class="col-md-6 col-sm12">
         <h6><b>Ödevler</b></h6>
-        <?php if($ODEVLER !=NULL && count($ODEVLER) >0) {?>
-        <div id="odevListesi" class="odev-liste">
-            <?php for ($i = 0; $i < count($ODEVLER); $i++) {
-                $ODEV = $ODEVLER[$i];
-                $ODEV_YUKLEYEN =  $ODEV['adi'] . " " . $ODEV['soyadi'];
-            ?>
-            <div class="odev-item">
-                <div>
-                    <div class="odev-isim">
-                        <a target="blank_" href='odev.php?kod=<?php echo $ODEV["kod"]?>'>
-                            <i class="fa fa-link"></i>&nbsp;
-                            <?php echo $ODEV["isim"]?>
-                        </a>
-                        <span class="odev-son-tarih">(Son Gönderim: <i> <?php echo $ODEV["son_tarih"]?></i>)</span>
+            <?php if($ODEVLER !=NULL && count($ODEVLER) >0) {?>
+            <div id="odevListesi" class="odev-liste">
+                <?php for ($i = 0; $i < count($ODEVLER); $i++) {
+                    $ODEV = $ODEVLER[$i];
+                    $ODEV_YUKLEYEN =  $ODEV['adi'] . " " . $ODEV['soyadi'];
+                ?>
+                <div class="odev-item">
+                    <div>
+                        <div class="odev-isim">
+                          <a target="blank_" href='odev.php?kod=<?php echo $ODEV["kod"]?>'>
+                                <i class="fa fa-link"></i>&nbsp; 
+                          <?php echo $ODEV["isim"]; ?>
+                            </a>
+                            <span class="odev-son-tarih">(Son Gönderim: <i> <?php echo $ODEV["son_tarih"]?></i>)</span>
+                        </div>
+                    </div>
+                    <div class="odev-kunye">
+                        <div class="odev-tarih"><?php echo $ODEV["olusturma_tarih"]?></div>
+                        <div class="odev-yukleyen"> <?php echo $ODEV_YUKLEYEN ?></div>
                     </div>
                 </div>
-                <div class="odev-kunye">
-                    <div class="odev-tarih"><?php echo $ODEV["olusturma_tarih"]?></div>
-                    <div class="odev-yukleyen"> <?php echo $ODEV_YUKLEYEN ?></div>
-                </div>
+                <?php } ?>
+            </div>
+            <?php } else { ?>
+            <div class="alert alert-warning" role="alert">
+                Bu derste henüz ödev verilmedi.
             </div>
             <?php } ?>
-        </div>
-        <?php } else { ?>
-        <div class="alert alert-warning" role="alert">
-            Bu derste henüz ödev verilmedi.
-        </div>
-        <?php } ?>
     </div>
     <div class="col-md-6 col-sm12">
     <h6><b>Dokümanlar</b></h6>
