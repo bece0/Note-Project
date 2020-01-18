@@ -367,9 +367,8 @@ function DuzenledigiAktifDersleriGetir($kullanici_id)
 
 function OgretmeninArsivlenmisDersleriniGetir($kullanici_id)
 {       
-    $sql = "SELECT d.* FROM dersler d 
-    INNER JOIN katilimci k ON k.ders_id=d.id 
-    where k.ogrenci_id = $kullanici_id and k.tip=1 AND d.status = 0";
+    $sql = "SELECT DISTINCT d.* FROM dersler d INNER JOIN katilimci k ON k.ders_id=d.id
+     where d.status = 0 and (d.duzenleyen_id=$kullanici_id or (k.ogrenci_id =$kullanici_id and k.tip=1))";
 
     return SQLCalistir($sql);
 }
@@ -379,7 +378,7 @@ function AsistanOlunanDersleriGetir($kullanici_id)
      $sql = "SELECT d.*,k.adi as ogretmen_adi ,k.soyadi as ogretmen_soyadi  
      FROM dersler d,katilimci kt,kullanici k 
      WHERE kt.ders_id = d.id AND d.duzenleyen_id=k.id 
-     AND kt.tip = '1' AND kt.ogrenci_id='".$kullanici_id."'";
+     AND kt.tip = '1' AND d.status='1' AND kt.ogrenci_id='".$kullanici_id."'";
     // echo $sql;
     return SQLCalistir($sql);
 }

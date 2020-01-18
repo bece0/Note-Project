@@ -34,9 +34,7 @@ include 'includes/head.php';
         die();
     }
 
-    // $yeni_Dersler=KullaniciYeniDersleriniGetir($kullanici_id);
-    // $eski_Dersler=KullaniciEskiDersleriniGetir($kullanici_id);
-        // $eski_Dersler = [];
+
     // if ($ayarlar["gecmis_private"] == "no")
     //     $eski_Dersler = KullaniciEskiDersleriniGetir($kullanici_id);
 
@@ -45,17 +43,22 @@ include 'includes/head.php';
     //     $dersler = KullaniciYeniDersleriniGetir($kullanici_id);
    
  $dersler = [];
-    if($OGRETMEN){
+ $asistan_dersler=[];
+ $arsiv_dersler= [];
+
+    if($kullanici_detail["admin"]==1){
         $dersler = DuzenledigiAktifDersleriGetir($kullanici_id);
-        $asistan_dersler = AsistanOlunanDersleriGetir($kullanici_id);
-        $arsiv_Dersler=DuzenledigiArsivlenmisDersleriGetir($kullanici_id);
+        $asistan_dersler = AsistanOlunanDersleriGetir($kullanici_id); 
+        $arsiv_dersler = OgretmeninArsivlenmisDersleriniGetir($kullanici_id);  
     }
-    else
+    else{
         $dersler = OgrencininAktifDersleriniGetir($kullanici_id);
-        $arsiv_Dersler=OgrencininArsivlenmisDersleriniGetir($kullanici_id);
+        $arsiv_dersler = OgrencininArsivlenmisDersleriniGetir($kullanici_id);
+    }
         ?>
 
     <div class="container">
+    
         <div class="profile-detail">
             <div class="row">
                 <div class="col-md-9 col-sm-12">
@@ -102,26 +105,28 @@ include 'includes/head.php';
             </div>
         </div>
         <hr>
+ 
         <div>
             <div class="row">
                 <div class="col-3">
                     <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                         <a class="nav-link active" id="v-pills-ders-tab" data-toggle="pill" href="#v-pills-ders"
                             role="tab" aria-controls="v-pills-ders" aria-selected="true">
-                            <b> <?php if($OGRETMEN) 
+                            <b> <?php if($kullanici_detail["admin"]==1) 
                                 echo "Oluşturduğu Dersler" ;
                                else 
                                 echo "Katıldığı Dersler";
                              ?>
                             </b>
                         </a>
-                        <a class="nav-link" id="v-pills-asistan-tab" data-toggle="pill" href="#v-pills-asistan" role="tab"
+                        <?php if($kullanici_detail["admin"]==1){?>
+                         <a class="nav-link" id="v-pills-asistan-tab" data-toggle="pill" href="#v-pills-asistan" role="tab"
                             aria-controls="v-pills-asistan" aria-selected="false">
-                            <b> <?php if($OGRETMEN) 
-                                echo "Asistan Olunan Dersler" ;
-                             ?>
+                            <b> 
+                            Asistan Olunan Dersler                        
                             </b>
-                        </a>
+                        </a> 
+                        <?php } ?> 
                         <a class="nav-link" id="v-pills-arsiv-tab" data-toggle="pill" href="#v-pills-arsiv"
                             role="tab" aria-controls="v-pills-arsiv" aria-selected="false">
                             <b>
@@ -158,9 +163,9 @@ include 'includes/head.php';
                                 </div>
                             </div>
                             <?php }
-                        } else { ?>
+                            } else { ?>
                             <div class="alert alert-warning" role="alert">
-                                <?php if($OGRETMEN) 
+                                <?php if($kullanici_detail["admin"]==1) 
                                  echo $kullanici_detail["adi"]." herhangi bir ders oluşturmadı.";
                                else echo $kullanici_detail["adi"]." herhangi bir derse kayıtlı değil.";
                              ?>
@@ -170,8 +175,8 @@ include 'includes/head.php';
                         </div>
 
                         <div class="tab-pane fade" id="v-pills-asistan" role="tabpanel" 
-                        aria-labelledby="v-pills-asistan-tab">
-                        <?php
+                            aria-labelledby="v-pills-asistan-tab">
+                            <?php
                             $asistan_dersler_count = 0;
                             if ($asistan_dersler != NULL)
                                 $asistan_dersler_count = count($asistan_dersler);
@@ -194,11 +199,10 @@ include 'includes/head.php';
                                 </div>
                             </div>
                             <?php }
-                        } else { ?>
+                         } else { ?>
                             <div class="alert alert-warning" role="alert">
-                                <?php if($OGRETMEN) 
+                                <?php
                                  echo $kullanici_detail["adi"]." herhangi bir dersin asistanı değil.";
-                            
                              ?>
 
                             </div>
@@ -207,33 +211,39 @@ include 'includes/head.php';
                         </div>
 
                         <div class="tab-pane fade" id="v-pills-arsiv" role="tabpanel" 
-                        aria-labelledby="v-pills-arsiv-tab">
-                            <?php
-                            if ($arsiv_Dersler != NULL  && count($arsiv_Dersler) > 0) {
-                                for ($i = 0; $i < count($arsiv_Dersler); $i++) {
-                                    $arsiv_Ders = $arsiv_Dersler[$i];
-                                    ?>
-                            <div class="card row mx-2 mb-3">
-                                <div class="card-body" style="">
-                                    <h5 class="card-title">
+                         aria-labelledby="v-pills-arsiv-tab">
+                         <?php
+                                $arsiv_dersler_count = 0;
+                                if ($arsiv_dersler != NULL)
+                                    $arsiv_dersler_count = count($arsiv_dersler);
 
-                                      
-                                        <?php
-                                                $isim =  $arsiv_Ders["isim"];
-                                                $id =  $arsiv_Ders["id"];
-                                                echo "<a href='course.php?course=$id'> $isim </a>"
-                                                ?>
+                                if ($arsiv_dersler != NULL && $arsiv_dersler_count > 0) {
+                                    for ($i = 0; $i < count($arsiv_dersler); $i++) {
+                                        $arsiv_ders = $arsiv_dersler[$i];
+                                        ?>
+                                <div class="card row mx-2 mb-3">
+                                    <div class="card-body">
+                                        <h5 class="card-title">
+                                        
+                                            <?php
+                                                    $isim =  $arsiv_ders["isim"];
+                                                    $id =  $arsiv_ders["id"];
+                                                    echo "<a href='course.php?course=$id'> $isim </a>"
+                                                    ?>
+                                        </h5>
                                     
-                                    </h5>
-                                
+                                    </div>
                                 </div>
-                            </div>
-                            <?php }
-                        } else { ?>
-                            <div class="alert alert-warning" role="alert">
-                                <?php echo $kullanici_detail["adi"] ?> arşivlenmiş dersi yok.
-                            </div>
-                            <?php  }  ?>
+                                <?php }
+                                } else { ?>
+                                <div class="alert alert-warning" role="alert">
+                                    <?php if($kullanici_detail["admin"]==1) 
+                                    echo $kullanici_detail["adi"]." herhangi bir ders arşivlemedi.";
+                                    else echo $kullanici_detail["adi"]." herhangi bir arşivlenen dersi yok.";
+                                ?>
+
+                                </div>
+                                <?php  }  ?>                          
                         </div>
                     </div>
                 </div>
