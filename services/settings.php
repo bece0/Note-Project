@@ -48,8 +48,8 @@ $islem_sonucu = true;
 $mesaj = "";
 
  if ($method == "gizlilik") {
-    if ($data->dersler_private != NULL)
-        KullaniciAyarGuncelle($giris_yapan_kullanici, "dersler_private", $data->dersler_private);
+    if ($data->profil_private != NULL)
+        KullaniciAyarGuncelle($giris_yapan_kullanici, "profil_private", $data->profil_private);
 
 } else if ($method == "profil") {
     if ($data->sehir != NULL)

@@ -61,6 +61,7 @@ include 'includes/head.php';
                         </h2>
                     </div>
                     <br />
+                    <?php if ($kullanici_id==$_SESSION["kullanici_id"] || $ayarlar["profil_private"] == "no"){ ?>
                     <ul class="container details" style="list-style: none;">
                         <li>
                             <p>
@@ -87,6 +88,9 @@ include 'includes/head.php';
                             </p>
                         </li>
                     </ul>
+                    <?php }else{ ?>
+                          <div class="alert alert-danger" role="alert">Profil gizli</div>
+                    <?php } ?>
                 </div>
                 <div class="col-md-3 col-sm-12">
                     <div class="profile-pic">
@@ -103,7 +107,7 @@ include 'includes/head.php';
 
       
             <div>
-            <?php if ($kullanici_id==$_SESSION["kullanici_id"] || $ayarlar["dersler_private"] == "no"){ ?>
+            <?php if ($kullanici_id==$_SESSION["kullanici_id"] || $ayarlar["profil_private"] == "no"){ ?>
                 <div class="row">
                     <div class="col-3">
                         <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">

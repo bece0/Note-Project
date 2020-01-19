@@ -41,7 +41,7 @@ if ($AYARLAR == NULL) {
     $AYARLAR = array(
         "id" => 0,
         "kullanici_id" => $kullanici_id,
-        "dersler_private" => "no",
+        "profil_private" => "no",
     );
 }
 
@@ -132,8 +132,8 @@ if ($AYARLAR == NULL) {
                         <form style="margin-top: 10px;" id="gizlilik_form">
                             <div class="form-group">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="<?php echo $AYARLAR["dersler_private"] ?>" name="dersler_private" id="dersler_private" required <?php if ($AYARLAR["dersler_private"] == "yes") echo "checked" ?>>
-                                    <label class="form-check-label" for="dersler_private">
+                                    <input class="form-check-input" type="checkbox" value="<?php echo $AYARLAR["profil_private"] ?>" name="profil_private" id="profil_private" required <?php if ($AYARLAR["profil_private"] == "yes") echo "checked" ?>>
+                                    <label class="form-check-label" for="profil_private">
                                         Derslerimi  gizle
                                     </label>
                                 </div>
@@ -173,7 +173,7 @@ if ($AYARLAR == NULL) {
 
                 $("#btn_gizlilik_kaydet").on("click", function() {
                     var ayarlar = {
-                        dersler_private: $('#dersler_private').is(":checked") ? "yes" : "no"
+                        profil_private: $('#profil_private').is(":checked") ? "yes" : "no"
                     }
                     AyarGonder("gizlilik", ayarlar, $("#btn_gizlilik_kaydet"));
                 });
