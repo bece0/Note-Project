@@ -64,7 +64,19 @@ try{
             throw new Exception("Dersi kapatmaya yetkiniz yok!");
         }
 
-    }else{
+    }
+    if($METHOD == "ayril"){
+        
+        if(!$GIRIS_YAPAN_DERSIN_HOCASI_MI){
+            DerstenKayitSil($COURSE_ID,$KULLANICI_ID);
+        }
+        else{
+            $statusCode = 401;
+            throw new Exception("Dersten ayrılamazsınız!");
+        }
+
+    }
+    else{
         $statusCode = 400;
         throw new Exception("Desteklenmeyen metod : $METHOD");
     }
