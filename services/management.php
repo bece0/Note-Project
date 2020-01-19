@@ -21,7 +21,7 @@
     if($method == "user_logs"){
         $sonuc = LogGetir_Kullanici();
     }
-    if($method == "event_logs"){
+    if($method == "course_logs"){
         $sonuc = LogGetir_Ders();
     }
     if($method == "system_logs"){

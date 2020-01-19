@@ -80,7 +80,7 @@
                             <div class="card border-success shadow text-success p-3 stat-ikon"><span
                                     class="fa fa-calendar-alt" aria-hidden="true"></span></div>
                             <div class="text-success text-center mt-3">
-                                <h5>Geçmiş Dersler</h5>
+                                <h5>Arşivlenen Dersler</h5>
                             </div>
                             <div class="text-success text-center mt-2">
                                 <h1 class="count"><?php echo $GECMIS_DERS_SAYISI["toplam"]  ?></h1>
@@ -142,7 +142,7 @@
                 <p>kim hangi etkinliğe ne zaman katıldı/çıktı vs</p> -->
                 <table class="table-sm"
                     data-toggle="table"
-                    data-url="services/management.php?method=event_logs"
+                    data-url="services/management.php?method=course_logs"
                     data-pagination="true" data-search="true">
                     <thead>
                         <tr>

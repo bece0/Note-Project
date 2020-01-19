@@ -1,7 +1,7 @@
 <?php 
 
 // $LOG_TIP_KULLANICI = "user";
-// $LOG_TIP_ETKINLIK = "event";
+// $LOG_TIP_ETKINLIK = "course";
 // $LOG_TIP_SISTEM = "system";
 
 $USER_LOGIN = "LOGIN";
@@ -20,16 +20,16 @@ function SistemLogYaz($baslik, $mesaj){
 
 
 function GenelLogYaz($tip, $baslik, $mesaj){
-    $sql = "INSERT INTO gunluk (kullanici_id, etkinlik_id, tarih, tip, baslik, mesaj)
+    $sql = "INSERT INTO gunluk (kullanici_id,ders_id, tarih, tip, baslik, mesaj)
     VALUES (0, 0 , CURRENT_TIMESTAMP(), '$tip', '$baslik', '$mesaj')";
 
     return SQLInsertCalistir($sql);
 }
 
 
-function LogYaz($kullanici_id, $etkinlik_id, $tip, $baslik, $mesaj){
-    $sql = "INSERT INTO gunluk (kullanici_id, etkinlik_id, tarih, tip, baslik, mesaj)
-    VALUES ('$kullanici_id', '$etkinlik_id', CURRENT_TIMESTAMP(), '$tip', '$baslik', '$mesaj')";
+function LogYaz($kullanici_id, $ders_id, $tip, $baslik, $mesaj){
+    $sql = "INSERT INTO gunluk (kullanici_id,ders_id, tarih, tip, baslik, mesaj)
+    VALUES ('$kullanici_id', '$ders_id', CURRENT_TIMESTAMP(), '$tip', '$baslik', '$mesaj')";
 
     return SQLInsertCalistir($sql);
 }
@@ -58,44 +58,44 @@ function LogYaz_KullaniciCikisi($kullanici_id, $mesaj = "")
     return LogYaz($kullanici_id, 0, "user", "LOGOUT", $mesaj);
 }
 
-function LogYaz_DersKayit($kullanici_id, $etkinlik_id, $mesaj = "")
+function LogYaz_DersKayit($kullanici_id, $ders_id, $mesaj = "")
 {   
     if($mesaj == NULL || $mesaj == "")
-        $mesaj = $kullanici_id." id nolu kullanıcı $etkinlik_id nolu etkinliğine katıldı.";
+        $mesaj = $kullanici_id." id nolu kullanıcı $ders_id nolu etkinliğine katıldı.";
 
-    return LogYaz($kullanici_id, $etkinlik_id, "event", "COURSE_REGISTER", $mesaj);
+    return LogYaz($kullanici_id, $ders_id, "course", "COURSE_REGISTER", $mesaj);
 }
 
-function LogYaz_DersKayitIptal($kullanici_id, $etkinlik_id, $mesaj = "")
+function LogYaz_DersKayitIptal($kullanici_id, $ders_id, $mesaj = "")
 {   
     if($mesaj == NULL || $mesaj == "")
-        $mesaj = $kullanici_id." id nolu kullanıcı $etkinlik_id nolu dersten çıktı.";
+        $mesaj = $kullanici_id." id nolu kullanıcı $ders_id nolu dersten çıktı.";
 
-    return LogYaz($kullanici_id, $etkinlik_id, "event", "COURSE_REGISTER_CANCEL", $mesaj);
+    return LogYaz($kullanici_id, $ders_id, "course", "COURSE_REGISTER_CANCEL", $mesaj);
 }
 
-function LogYaz_DersOlusturma($kullanici_id, $etkinlik_id, $mesaj = "")
+function LogYaz_DersOlusturma($kullanici_id, $ders_id, $mesaj = "")
 {   
     if($mesaj == NULL || $mesaj == "")
-        $mesaj = $kullanici_id." id nolu kullanıcı $etkinlik_id nolu ders oluşturdu.";
+        $mesaj = $kullanici_id." id nolu kullanıcı $ders_id nolu ders oluşturdu.";
 
-    return LogYaz($kullanici_id, $etkinlik_id, "event", "COURSE_CREATE", $mesaj);
+    return LogYaz($kullanici_id, $ders_id, "course", "COURSE_CREATE", $mesaj);
 }
 
-function LogYaz_DersDuzenleme($kullanici_id, $etkinlik_id, $mesaj = "")
+function LogYaz_DersDuzenleme($kullanici_id, $ders_id, $mesaj = "")
 {   
     if($mesaj == NULL || $mesaj == "")
-        $mesaj = $kullanici_id." id nolu kullanıcı $etkinlik_id nolu dersi düzenledi.";
+        $mesaj = $kullanici_id." id nolu kullanıcı $ders_id nolu dersi düzenledi.";
 
-    return LogYaz($kullanici_id, $etkinlik_id, "event", "COURSE_EDIT", $mesaj);
+    return LogYaz($kullanici_id, $ders_id, "course", "COURSE_EDIT", $mesaj);
 }
 
-function LogYaz_DersSilme($kullanici_id, $etkinlik_id, $mesaj = "")
+function LogYaz_DersSilme($kullanici_id, $ders_id, $mesaj = "")
 {   
     if($mesaj == NULL || $mesaj == "")
-        $mesaj = $kullanici_id." id nolu kullanıcı $etkinlik_id nolu dersi sildi.";
+        $mesaj = $kullanici_id." id nolu kullanıcı $ders_id nolu dersi sildi.";
 
-    return LogYaz($kullanici_id, $etkinlik_id, "event", "COURSE_DELETE", $mesaj);
+    return LogYaz($kullanici_id, $ders_id, "course", "COURSE_DELETE", $mesaj);
 }
 
 /**
@@ -107,10 +107,10 @@ function LogGetir_Kullanici($limit = 500){
 }
 
 /**
- * tipi event olan tüm logları döner
+ * tipi course olan tüm logları döner
  */
 function LogGetir_Ders($limit = 500){
-    $sql = "SELECT * FROM gunluk WHERE tip = 'event' order by id desc LIMIT $limit";
+    $sql = "SELECT * FROM gunluk WHERE tip = 'course' order by id desc LIMIT $limit";
     return SQLCalistir($sql);
 }
 
