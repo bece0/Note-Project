@@ -40,12 +40,13 @@
 
             $kayitli = DerseKayitliOgrenciSayisi($ders_id);
             if($kayitli >= $ders["kontenjan"]){
-                $_SESSION["_alert"]="Ders kontenjanı dolu.";
-                header('Location: ../course.php?course='. $ders_id); 
+                $_SESSION["_error"]="Ders kontenjanı dolu.";
+                //header('Location: ../course.php?course='. $ders_id); 
+                header('Location: ../dashboard.php'); 
             }else{
                 if(DerseKayitOl($kullanici_id,  $ders_id) === TRUE){
                     $_SESSION["_success"]="Kayıt olundu.";
-                    //LogYaz_DersKayit($kullanici_id, $etkinlik_id);
+                    LogYaz_DersKayit($kullanici_id, $ders_id);
                     
                     header('Location: ../course.php?course='. $ders_id); 
                 }else{
