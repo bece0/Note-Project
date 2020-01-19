@@ -89,7 +89,7 @@ include 'includes/head.php';
                         </li>
                     </ul>
                     <?php }else{ ?>
-                          <div class="alert alert-danger" role="alert">Profil gizli</div>
+                          <div class="alert alert-danger" role="alert" style="text-align:center">Profil gizli</div>
                     <?php } ?>
                 </div>
                 <div class="col-md-3 col-sm-12">
