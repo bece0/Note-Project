@@ -16,11 +16,7 @@ CREATE TABLE IF NOT EXISTS `kullanici` (
 CREATE TABLE IF NOT EXISTS `ayarlar` (
  `id` int(11) NOT NULL AUTO_INCREMENT,
  `kullanici_id` int(11) NOT NULL UNIQUE,
- `duyuru_mail` varchar(5) NOT NULL DEFAULT "no",
- `yeni_etkinlik_mail` varchar(5) NOT NULL DEFAULT "no",
- `gecmis_private` varchar(5) NOT NULL DEFAULT "no",
- `gelecek_private` varchar(5) NOT NULL DEFAULT "no",
- `dil` varchar(25) NOT NULL DEFAULT "Türkçe",
+ `dersler_private` varchar(5) NOT NULL DEFAULT "no",
  `sehir` varchar(50) DEFAULT NULL,
  `guncelleme_tarihi` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
  PRIMARY KEY (`id`)
