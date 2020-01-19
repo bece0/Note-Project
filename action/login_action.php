@@ -31,11 +31,14 @@
                 $log_mesaj = $kullanici["adi"]." ".$kullanici["soyadi"]." giriş yaptı";
                 LogYaz_KullaniciGirisi($kullanici["id"], $log_mesaj);
 
-                if(isset($_POST["event"])) {
-                    header('Location: ../event.php?event='.$_POST["event"]);
+                if(isset($_POST["course"])) {
+                    header('Location: ../course.php?course='.$_POST["course"]);
                 }
                 else{
-                    header('Location: ../index.php');   // giriş yapılır ve indexe yönlendiririr
+                    if( $kullanici["admin"] == -1)
+                        header('Location: ../admin/management.php');
+                    else
+                        header('Location: ../index.php');
                 }
             }else{     // kullanıcı parolası yanlış
                 //echo "kullanıcı parolası yanlış";

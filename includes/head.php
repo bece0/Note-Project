@@ -9,28 +9,34 @@ if(!isset($_SESSION))
   session_start();
 }
 
-  $kullanici_id = 0;
-  //isset($REQUIRE_LOGIN) && $REQUIRE_LOGIN == TRUE && !isset($_SESSION["kullanici_id"])
-  if(isset($REQUIRE_LOGIN) && $REQUIRE_LOGIN == TRUE && !isset($_SESSION["kullanici_id"])){
-    echo "logine gider..";
-    header('Location: login.php');
-  }else {
-    if(isset($_SESSION["kullanici_id"]))
-      $kullanici_id = $_SESSION["kullanici_id"];
+$kullanici_id = 0;
+
+if(isset($REQUIRE_LOGIN) && $REQUIRE_LOGIN == TRUE && !isset($_SESSION["kullanici_id"])){
+  echo "logine gider..";
+  header('Location: login.php');
+}else {
+  if(isset($_SESSION["kullanici_id"]))
+    $kullanici_id = $_SESSION["kullanici_id"];
+}
+
+if(isset($REQUIRE_ADMIN) && $REQUIRE_ADMIN == TRUE ){
+    if(!isset($_SESSION["admin"]) || (isset($_SESSION["admin"]) && $_SESSION["admin"] != 1)){
+    //header('Location: dashboard.php');
+    } 
+}else if(isset($REQUIRE_SYSTEM_ADMIN) && $REQUIRE_SYSTEM_ADMIN == TRUE ){
+  if(!isset($_SESSION["admin"]) || (isset($_SESSION["admin"]) && $_SESSION["admin"] != -1)){
+    header('Location: ../index.php');
+  } 
+}
+
+
+  $base_url = getenv('MOVE_BASE_URL');
+  if($base_url == FALSE){
+    $base_url = "/note/";
   }
 
-  if(isset($REQUIRE_ADMIN) && $REQUIRE_ADMIN == TRUE )
-    if(!isset($_SESSION["admin"]) || (isset($_SESSION["admin"]) && $_SESSION["admin"] != 1)){
-      //header('Location: dashboard.php');
-    }
-  
-
-    $base_url = getenv('MOVE_BASE_URL');
-    if($base_url == FALSE){
-      $base_url = "/note/";
-    }
-
 ?>
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -46,7 +52,7 @@ if(!isset($_SESSION))
     <link rel="apple-touch-icon" sizes="144x144" href="files/favicon/apple-icon-144x144.png">
     <link rel="apple-touch-icon" sizes="152x152" href="files/favicon/apple-icon-152x152.png">
     <link rel="apple-touch-icon" sizes="180x180" href="files/favicon/apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192"  href="files/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="files/favicon/android-icon-192x192.png">
     <link rel="icon" type="image/png" sizes="32x32" href="files/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="96x96" href="files/favicon/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="16x16" href="files/favicon/favicon-16x16.png">
@@ -93,7 +99,7 @@ if(!isset($_SESSION))
       window.Swal || document.write('<script src="assets/js/vendor/sweetalert2.min.js"><\/script>')
     </script> -->
 
-  <?php 
+    <?php 
     //echo dirname(__FILE__);
     if(isset($page_title)){
       echo "<title> note - " .$page_title."</title>";

@@ -1,6 +1,6 @@
 <?php
     $REQUIRE_LOGIN = TRUE;
-    $REQUIRE_ADMIN = TRUE;
+    $REQUIRE_SYSTEM_ADMIN = TRUE;
 
     $page_title = "Yönetim";
     
