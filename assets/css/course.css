@@ -19,6 +19,11 @@
   /* width: 100%; */
 }
 
+.ders-resim-edit{
+  position: absolute;
+  right: 0px;
+}
+
 .course-aciklama {
   padding-top: 10px;
 }
