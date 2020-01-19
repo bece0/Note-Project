@@ -229,27 +229,12 @@ function DersDetayGetir_Kod($kodu)
     return SQLTekliKayitGetir($sql);
 }
 
-/**
- * 
- */
-function KullaniciYeniDersleriniGetir($kullanici_id)
-{
-    $sql = "SELECT etkinlik.* FROM etkinlik INNER JOIN katilimci 
-        ON katilimci.etkinlik_id=etkinlik.id where katilimci.kullanici_id='" . $kullanici_id . "' and etkinlik.tarih > CURDATE()";
 
-    return SQLCalistir($sql);
-}
 
 /**
  * 
  */
-function KullaniciEskiDersleriniGetir($kullanici_id)
-{
-    $sql = "SELECT etkinlik.* FROM etkinlik INNER JOIN katilimci 
-        ON katilimci.etkinlik_id=etkinlik.id where katilimci.kullanici_id='" . $kullanici_id . "' and etkinlik.tarih < CURDATE()";
 
-    return SQLCalistir($sql);
-}
 
 //($ders_kodu, $ders_adi, $aciklama, $kontenjan, $bolum_adi, $sinif
 function DersDuzenle($ders_id, $ders_adi, $aciklama, $kontenjan, $bolum_adi, $sinif)

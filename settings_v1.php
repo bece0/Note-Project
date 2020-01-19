@@ -41,10 +41,15 @@ if ($AYARLAR == NULL) {
     $AYARLAR = array(
         "id" => 0,
         "kullanici_id" => $kullanici_id,
-        "dersler_private" => "no",
+        "yeni_etkinlik_mail" => "no",
+        "duyuru_mail" => "no",
+        "gecmis_private" => "no",
+        "gelecek_private" => "no",
+        "dil" => "Türkçe",
     );
 }
 
+$DESTEKLENEN_DILLER = array("Türkçe" => "Türkçe", "English" => "English");
 ?>
 
 <body>
@@ -53,14 +58,46 @@ if ($AYARLAR == NULL) {
         <div class="row">
             <div class="col-md-3">
                 <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                    <a class="nav-link active" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="true">Profil</a>
+                    <!-- <a class="nav-link active" id="v-pills-general-tab" data-toggle="pill" href="#v-pills-general" role="tab" aria-controls="v-pills-general" aria-selected="true">Genel</a> -->
+                    <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">Profil</a>
                     <a class="nav-link" id="v-pills-privacy-tab" data-toggle="pill" href="#v-pills-privacy" role="tab" aria-controls="v-pills-privacy" aria-selected="false">Gizlilik</a>
                     <a class="nav-link" id="v-pills-security-tab" data-toggle="pill" href="#v-pills-security" role="tab" aria-controls="v-pills-security" aria-selected="false">Güvenlik</a>
                 </div>
             </div>
             <div class="col-md-9">
                 <div class="tab-content" id="v-pills-tabContent">
-                    <div class="tab-pane fade show active" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+                    <div class="tab-pane fade show active" id="v-pills-general" role="tabpanel" aria-labelledby="v-pills-general-tab">
+                        <form id="genel_form">
+                            <div class="form-group row">
+                                <label for="dil" class="col-sm-2 col-form-label">Arayüz Dili</label>
+                                <div class="col-sm-10">
+                                    <select class="form-control form-control-sm form-300" name="dil" id="dil">
+                                        <?php
+                                        foreach ($DESTEKLENEN_DILLER as $key => $value) {
+                                            if ($AYARLAR["dil"] == $key)
+                                                echo "<option selected value='$key'>$value</option>";
+                                            else
+                                                echo "<option value='$key'>$value</option>";
+                                        }
+                                        for ($i = 0; $i < count($TURKIYE_ILLER); $i++) { }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="<?php echo $AYARLAR["duyuru_mail"] ?>" name="duyuru_mail" id="duyuru_mail" required <?php if ($AYARLAR["duyuru_mail"] == "yes") echo "checked" ?>>
+                                    <label class="form-check-label" for="duyuru_mail">
+                                        Duyurular hakkında bildirim almak istiyorum.
+                                    </label>
+                                </div>
+                            </div>
+                            <button id="btn_genel_kaydet" class="btn btn-primary btn-sm" type="button" disabled>Ayarları
+                                Kaydet</button>
+                        </form>
+                    </div>
+                    <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
                         <form style="margin-top: 10px;" id="profil_form">
                             <div class="form-group row">
                                 <label for="sehir" class="col-sm-2 col-form-label">Şehir</label>
@@ -132,18 +169,26 @@ if ($AYARLAR == NULL) {
                         <form style="margin-top: 10px;" id="gizlilik_form">
                             <div class="form-group">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="<?php echo $AYARLAR["dersler_private"] ?>" name="dersler_private" id="dersler_private" required <?php if ($AYARLAR["dersler_private"] == "yes") echo "checked" ?>>
-                                    <label class="form-check-label" for="dersler_private">
+                                    <input class="form-check-input" type="checkbox" value="<?php echo $AYARLAR["gecmis_private"] ?>" name="gecmis_private" id="gecmis_private" required <?php if ($AYARLAR["gecmis_private"] == "yes") echo "checked" ?>>
+                                    <label class="form-check-label" for="gecmis_private">
                                         Derslerimi  gizle
                                     </label>
                                 </div>
                             </div>
-                           
-                            <button id="btn_gizlilik_kaydet" class="btn btn-primary btn-sm" type="button" disabled>Güncelle</button>
+                            <div class="form-group">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="<?php echo $AYARLAR["gelecek_private"] ?>" name="gelecek_private" id="gelecek_private" required <?php if ($AYARLAR["gelecek_private"] == "yes") echo "checked" ?>>
+                                    <label class="form-check-label" for="gelecek_private">
+                                        Arşivlenmiş derslerimi gizle
+                                    </label>
+                                </div>
+                            </div>
+                            <button id="btn_gizlilik_kaydet" class="btn btn-primary btn-sm" type="button" disabled>Ayarları
+                                Kaydet</button>
                         </form>
                     </div>
                     <div class="tab-pane fade" id="v-pills-security" role="tabpanel" aria-labelledby="v-pills-security-tab">
-                        <h5>Parola Değiştir</h5><br>
+                        <h4>Parola Değiştir<h4/><br>
                             <div>
                                 <form>
                                     <div class="form-group">
@@ -162,6 +207,10 @@ if ($AYARLAR == NULL) {
             </div>
 
             <script>
+                //genel_form id'li form içinde bulunan inputlar değişirse kaydet butonu aktif edilecek.
+                $("#genel_form :input").on("change", function() {
+                    $("#btn_genel_kaydet").prop("disabled", false);
+                });
 
                 $("#gizlilik_form :input").on("change", function() {
                     $("#btn_gizlilik_kaydet").prop("disabled", false);
@@ -171,9 +220,19 @@ if ($AYARLAR == NULL) {
                     $("#btn_profil_kaydet").prop("disabled", false);
                 });
 
+                $("#btn_genel_kaydet").on("click", function() {
+                    var ayarlar = {
+                        dil: $("#dil").val(),
+                        yeni_etkinlik_mail: $('#yeni_etkinlik_mail').is(":checked") ? "yes" : "no",
+                        duyuru_mail: $('#duyuru_mail').is(":checked") ? "yes" : "no"
+                    }
+                    AyarGonder("genel", ayarlar, $("#btn_genel_kaydet"));
+                });
+
                 $("#btn_gizlilik_kaydet").on("click", function() {
                     var ayarlar = {
-                        dersler_private: $('#dersler_private').is(":checked") ? "yes" : "no"
+                        gecmis_private: $('#gecmis_private').is(":checked") ? "yes" : "no",
+                        gelecek_private: $('#gelecek_private').is(":checked") ? "yes" : "no"
                     }
                     AyarGonder("gizlilik", ayarlar, $("#btn_gizlilik_kaydet"));
                 });

@@ -34,14 +34,6 @@ include 'includes/head.php';
         die();
     }
 
-
-    // if ($ayarlar["gecmis_private"] == "no")
-    //     $eski_Dersler = KullaniciEskiDersleriniGetir($kullanici_id);
-
-    
-    // if ($ayarlar["gelecek_private"] == "no")
-    //     $dersler = KullaniciYeniDersleriniGetir($kullanici_id);
-   
  $dersler = [];
  $asistan_dersler=[];
  $arsiv_dersler= [];
@@ -58,6 +50,7 @@ include 'includes/head.php';
         ?>
 
     <div class="container">
+    
     
         <div class="profile-detail">
             <div class="row">
@@ -104,130 +97,62 @@ include 'includes/head.php';
                 </div>
             </div>
         </div>
+        
         <hr>
  
-        <div>
-            <div class="row">
-                <div class="col-3">
-                    <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                        <a class="nav-link active" id="v-pills-ders-tab" data-toggle="pill" href="#v-pills-ders"
-                            role="tab" aria-controls="v-pills-ders" aria-selected="true">
-                            <b> <?php if($kullanici_detail["admin"]==1) 
-                                echo "Oluşturduğu Dersler" ;
-                               else 
-                                echo "Katıldığı Dersler";
-                             ?>
-                            </b>
-                        </a>
-                        <?php if($kullanici_detail["admin"]==1){?>
-                         <a class="nav-link" id="v-pills-asistan-tab" data-toggle="pill" href="#v-pills-asistan" role="tab"
-                            aria-controls="v-pills-asistan" aria-selected="false">
-                            <b> 
-                            Asistan Olunan Dersler                        
-                            </b>
-                        </a> 
-                        <?php } ?> 
-                        <a class="nav-link" id="v-pills-arsiv-tab" data-toggle="pill" href="#v-pills-arsiv"
-                            role="tab" aria-controls="v-pills-arsiv" aria-selected="false">
-                            <b>
-                                Arşivlenmiş Dersler
-                            </b>
-                        </a>
+
+      
+            <div>
+            <?php if ($kullanici_id==$_SESSION["kullanici_id"] || $ayarlar["dersler_private"] == "no"){ ?>
+                <div class="row">
+                    <div class="col-3">
+                        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                            <a class="nav-link active" id="v-pills-ders-tab" data-toggle="pill" href="#v-pills-ders"
+                                role="tab" aria-controls="v-pills-ders" aria-selected="true">
+                                <b> <?php if($kullanici_detail["admin"]==1) 
+                                    echo "Oluşturduğu Dersler" ;
+                                else 
+                                    echo "Katıldığı Dersler";
+                                ?>
+                                </b>
+                            </a>
+                            <?php if($kullanici_detail["admin"]==1){?>
+                            <a class="nav-link" id="v-pills-asistan-tab" data-toggle="pill" href="#v-pills-asistan" role="tab"
+                                aria-controls="v-pills-asistan" aria-selected="false">
+                                <b> 
+                                Asistan Olunan Dersler                        
+                                </b>
+                            </a> 
+                            <?php } ?> 
+                            <a class="nav-link" id="v-pills-arsiv-tab" data-toggle="pill" href="#v-pills-arsiv"
+                                role="tab" aria-controls="v-pills-arsiv" aria-selected="false">
+                                <b>
+                                    Arşivlenmiş Dersler
+                                </b>
+                            </a>
+                        </div>
                     </div>
-                </div>
-                <div class="col-9">
-                    <div class="tab-content" id="v-pills-tabContent">
+                    <div class="col-9">
+                        <div class="tab-content" id="v-pills-tabContent">
 
-                        <div class="tab-pane fade show active" id="v-pills-ders" role="tabpanel"
-                            aria-labelledby="v-pills-ders-tab">
-                            <?php
-                            $dersler_count = 0;
-                            if ($dersler != NULL)
-                                $dersler_count = count($dersler);
-
-                            if ($dersler != NULL && $dersler_count > 0) {
-                                for ($i = 0; $i < count($dersler); $i++) {
-                                    $ders = $dersler[$i];
-                                    ?>
-                            <div class="card row mx-2 mb-3">
-                                <div class="card-body">
-                                    <h5 class="card-title">
-                                      
-                                        <?php
-                                                $isim =  $ders["isim"];
-                                                $id =  $ders["id"];
-                                                echo "<a href='course.php?course=$id'> $isim </a>"
-                                                ?>
-                                    </h5>
-                                 
-                                </div>
-                            </div>
-                            <?php }
-                            } else { ?>
-                            <div class="alert alert-warning" role="alert">
-                                <?php if($kullanici_detail["admin"]==1) 
-                                 echo $kullanici_detail["adi"]." herhangi bir ders oluşturmadı.";
-                               else echo $kullanici_detail["adi"]." herhangi bir derse kayıtlı değil.";
-                             ?>
-
-                            </div>
-                            <?php  }  ?>
-                        </div>
-
-                        <div class="tab-pane fade" id="v-pills-asistan" role="tabpanel" 
-                            aria-labelledby="v-pills-asistan-tab">
-                            <?php
-                            $asistan_dersler_count = 0;
-                            if ($asistan_dersler != NULL)
-                                $asistan_dersler_count = count($asistan_dersler);
-
-                            if ($asistan_dersler != NULL && $asistan_dersler_count > 0) {
-                                for ($i = 0; $i < count($asistan_dersler); $i++) {
-                                    $asistan_ders = $asistan_dersler[$i];
-                                    ?>
-                            <div class="card row mx-2 mb-3">
-                                <div class="card-body">
-                                    <h5 class="card-title">
-                                       
-                                        <?php
-                                                $isim =  $asistan_ders["isim"];
-                                                $id =  $asistan_ders["id"];
-                                                echo "<a href='course.php?course=$id'> $isim </a>"
-                                                ?>
-                                    </h5>
-                                 
-                                </div>
-                            </div>
-                            <?php }
-                         } else { ?>
-                            <div class="alert alert-warning" role="alert">
+                            <div class="tab-pane fade show active" id="v-pills-ders" role="tabpanel"
+                                aria-labelledby="v-pills-ders-tab">
                                 <?php
-                                 echo $kullanici_detail["adi"]." herhangi bir dersin asistanı değil.";
-                             ?>
+                                $dersler_count = 0;
+                                if ($dersler != NULL)
+                                    $dersler_count = count($dersler);
 
-                            </div>
-                            <?php  }  ?>
-
-                        </div>
-
-                        <div class="tab-pane fade" id="v-pills-arsiv" role="tabpanel" 
-                         aria-labelledby="v-pills-arsiv-tab">
-                         <?php
-                                $arsiv_dersler_count = 0;
-                                if ($arsiv_dersler != NULL)
-                                    $arsiv_dersler_count = count($arsiv_dersler);
-
-                                if ($arsiv_dersler != NULL && $arsiv_dersler_count > 0) {
-                                    for ($i = 0; $i < count($arsiv_dersler); $i++) {
-                                        $arsiv_ders = $arsiv_dersler[$i];
+                                if ($dersler != NULL && $dersler_count > 0) {
+                                    for ($i = 0; $i < count($dersler); $i++) {
+                                        $ders = $dersler[$i];
                                         ?>
                                 <div class="card row mx-2 mb-3">
                                     <div class="card-body">
                                         <h5 class="card-title">
                                         
                                             <?php
-                                                    $isim =  $arsiv_ders["isim"];
-                                                    $id =  $arsiv_ders["id"];
+                                                    $isim =  $ders["isim"];
+                                                    $id =  $ders["id"];
                                                     echo "<a href='course.php?course=$id'> $isim </a>"
                                                     ?>
                                         </h5>
@@ -238,18 +163,98 @@ include 'includes/head.php';
                                 } else { ?>
                                 <div class="alert alert-warning" role="alert">
                                     <?php if($kullanici_detail["admin"]==1) 
-                                    echo $kullanici_detail["adi"]." herhangi bir ders arşivlemedi.";
-                                    else echo $kullanici_detail["adi"]." herhangi bir arşivlenen dersi yok.";
+                                    echo $kullanici_detail["adi"]." herhangi bir ders oluşturmadı.";
+                                else echo $kullanici_detail["adi"]." herhangi bir derse kayıtlı değil.";
                                 ?>
 
                                 </div>
-                                <?php  }  ?>                          
+                                <?php  }  ?>
+                            </div>
+
+                            <div class="tab-pane fade" id="v-pills-asistan" role="tabpanel" 
+                                aria-labelledby="v-pills-asistan-tab">
+                                <?php
+                                $asistan_dersler_count = 0;
+                                if ($asistan_dersler != NULL)
+                                    $asistan_dersler_count = count($asistan_dersler);
+
+                                if ($asistan_dersler != NULL && $asistan_dersler_count > 0) {
+                                    for ($i = 0; $i < count($asistan_dersler); $i++) {
+                                        $asistan_ders = $asistan_dersler[$i];
+                                        ?>
+                                <div class="card row mx-2 mb-3">
+                                    <div class="card-body">
+                                        <h5 class="card-title">
+                                        
+                                            <?php
+                                                    $isim =  $asistan_ders["isim"];
+                                                    $id =  $asistan_ders["id"];
+                                                    echo "<a href='course.php?course=$id'> $isim </a>"
+                                                    ?>
+                                        </h5>
+                                    
+                                    </div>
+                                </div>
+                                <?php }
+                            } else { ?>
+                                <div class="alert alert-warning" role="alert">
+                                    <?php
+                                    echo $kullanici_detail["adi"]." herhangi bir dersin asistanı değil.";
+                                ?>
+
+                                </div>
+                                <?php  }  ?>
+
+                            </div>
+
+                            <div class="tab-pane fade" id="v-pills-arsiv" role="tabpanel" 
+                            aria-labelledby="v-pills-arsiv-tab">
+                            <?php
+                                    $arsiv_dersler_count = 0;
+                                    if ($arsiv_dersler != NULL)
+                                        $arsiv_dersler_count = count($arsiv_dersler);
+
+                                    if ($arsiv_dersler != NULL && $arsiv_dersler_count > 0) {
+                                        for ($i = 0; $i < count($arsiv_dersler); $i++) {
+                                            $arsiv_ders = $arsiv_dersler[$i];
+                                            ?>
+                                    <div class="card row mx-2 mb-3">
+                                        <div class="card-body">
+                                            <h5 class="card-title">
+                                            
+                                                <?php
+                                                        $isim =  $arsiv_ders["isim"];
+                                                        $id =  $arsiv_ders["id"];
+                                                        echo "<a href='course.php?course=$id'> $isim </a>"
+                                                        ?>
+                                            </h5>
+                                        
+                                        </div>
+                                    </div>
+                                    <?php }
+                                    } else { ?>
+                                    <div class="alert alert-warning" role="alert">
+                                        <?php if($kullanici_detail["admin"]==1) 
+                                        echo $kullanici_detail["adi"]." herhangi bir ders arşivlemedi.";
+                                        else echo $kullanici_detail["adi"]." herhangi bir arşivlenen dersi yok.";
+                                    ?>
+
+                                    </div>
+                                    <?php  }  ?>                          
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-        </div>
+            </div>
+        <?php }
+
+        // var_dump($kullanici_id);
+        // echo "<br>";
+        // var_dump($_SESSION["kullanici_id"]);
+
+        ?>
     </div>
+   
 
 </body>

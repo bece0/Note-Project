@@ -47,21 +47,10 @@ $giris_yapan_kullanici = $_SESSION["kullanici_id"];
 $islem_sonucu = true;
 $mesaj = "";
 
-if ($method == "genel") {
-    if ($data->dil != NULL)
-        KullaniciAyarGuncelle($giris_yapan_kullanici, "dil", $data->dil);
+ if ($method == "gizlilik") {
+    if ($data->dersler_private != NULL)
+        KullaniciAyarGuncelle($giris_yapan_kullanici, "dersler_private", $data->dersler_private);
 
-    if ($data->duyuru_mail != NULL)
-        KullaniciAyarGuncelle($giris_yapan_kullanici, "duyuru_mail", $data->duyuru_mail);
-
-    if ($data->yeni_etkinlik_mail != NULL)
-        KullaniciAyarGuncelle($giris_yapan_kullanici, "yeni_etkinlik_mail", $data->yeni_etkinlik_mail);
-} else if ($method == "gizlilik") {
-    if ($data->gecmis_private != NULL)
-        KullaniciAyarGuncelle($giris_yapan_kullanici, "gecmis_private", $data->gecmis_private);
-
-    if ($data->gelecek_private != NULL)
-        KullaniciAyarGuncelle($giris_yapan_kullanici, "gelecek_private", $data->gelecek_private);
 } else if ($method == "profil") {
     if ($data->sehir != NULL)
         KullaniciAyarGuncelle($giris_yapan_kullanici, "sehir", $data->sehir);
