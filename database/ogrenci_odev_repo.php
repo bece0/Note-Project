@@ -30,7 +30,12 @@ function OgrenciOdev_OgrencininOdeviniGetirByKod($odev_kod){
 }
 
 function OgrenciOdev_TumOdevleriGetirByOdevId($odev_id){
-    $sql = "SELECT * FROM ogrenci_odev where odev_id =  $odev_id";
+    $sql = "SELECT oo.*, k.adi as ogrenci_adi, k.soyadi as ogrenci_soyadi 
+    FROM ogrenci_odev oo 
+    INNER JOIN kullanici k ON k.id = oo.ogrenci_id 
+    WHERE oo.odev_id =  $odev_id ";
+
+    // echo $sql;
     return SQLCalistir($sql);
 }
 

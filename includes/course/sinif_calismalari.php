@@ -1,7 +1,5 @@
 <?php 
 
-
-
 if($ODEV_EKLEYEBILIR)
     include 'sinif_calismalari_odev_modal.php';
 
@@ -15,7 +13,7 @@ if($DOKUMAN_EKLEYEBILIR)
 
 
 
-    <?php if($Ders_Aktif_Mi["status"]==1 && ($ODEV_EKLEYEBILIR || $DOKUMAN_EKLEYEBILIR)){ ?>
+    <?php if($Ders_Aktif_Mi && ($ODEV_EKLEYEBILIR || $DOKUMAN_EKLEYEBILIR || $SINAV_EKLEYEBILIR)){ ?>
     <a class="btn btn-success dropdown-toggle" data-toggle="dropdown">
         <i class="fa fa-plus"></i>&nbsp;Oluştur
     </a>

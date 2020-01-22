@@ -23,8 +23,9 @@ include 'includes/head.php';
     
     $COURSE = DersBilgileriniGetir($COURSE_ID);
 
-    $Ders_Aktif_Mi=DersAktifMi($COURSE_ID);
-    
+    $Ders_Aktif_Mi = FALSE;
+    if($COURSE["status"] ==1) 
+        $Ders_Aktif_Mi=TRUE;
    
     
     if ($COURSE == NULL){
@@ -53,12 +54,20 @@ include 'includes/head.php';
     $DOKUMAN_EKLEYEBILIR = FALSE;
     $DUYURU_YAPABILIR = FALSE;
     $DUYURU_SILEBILIR = FALSE;
+
+    $SINAV_EKLEYEBILIR = FALSE;
+    $SINAV_SILEBILIR = FALSE;
+
+    $DERS_RESMI_GUNCELLEYEBILIR = FALSE;
     
     if($GIRIS_YAPAN_DERSIN_HOCASI_MI){
         $ODEV_EKLEYEBILIR = TRUE;
         $DOKUMAN_EKLEYEBILIR = TRUE;
         $DUYURU_YAPABILIR = TRUE;
         $DUYURU_SILEBILIR = TRUE;
+
+        $SINAV_EKLEYEBILIR = TRUE;
+        $DERS_RESMI_GUNCELLEYEBILIR = TRUE;
     }
     
     if($GIRIS_YAPAN_DERSIN_ASISTANI_MI){
@@ -73,6 +82,7 @@ include 'includes/head.php';
     echo "var DOKUMAN_EKLEYEBILIR = ".($DOKUMAN_EKLEYEBILIR ? "true" : "false").";";
     echo "var DUYURU_SILEBILIR = ".($DUYURU_SILEBILIR ? "true" : "false").";";
     echo "var DUYURU_YAPABILIR = ".($DUYURU_YAPABILIR ? "true" : "false").";";
+    echo "var SINAV_EKLEYEBILIR = ".($SINAV_EKLEYEBILIR ? "true" : "false").";";
     echo "</script>";
 
     //ders_id değerini gizli input olarak gömüyoruz, javascript tarafında kullanmak için
@@ -151,6 +161,33 @@ include 'includes/head.php';
             </div>
         </div>
     </div>
+    <div class="modal fade" id="dersResimDegisModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title"><b>Ders Resim Güncelle</b></h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="dersResimForm" class="form" action="action/edit_course_action.php" method="POST"
+                        enctype="multipart/form-data" style="margin-top:25px;">
+                        <input type="hidden" name="ders_id" value="<?php echo $COURSE['id'] ?>">
+                        <div class="form-group">
+                            <label class="col-form-label"><b>Yeni Resim Seçiniz</b></label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-pen-nib"></i></span>
+                                </div>
+                                <input type="file" name="dosya" placeholder="" class="form-control"
+                                accept = "image/*" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success" style="float:right;">Güncelle</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     <?php } ?>
 
     <?php echo "<title>" . $COURSE["isim"] . "</title>" ;
@@ -159,7 +196,7 @@ include 'includes/head.php';
         <div class="detay">
             <div class="row">
                 <div class="col-md-7 col-sm-12 ders-resim-container">
-                    <?php if($GIRIS_YAPAN_DERSIN_HOCASI_MI) {?>
+                    <?php if($DERS_RESMI_GUNCELLEYEBILIR) {?>
                     <button id="dersResimDegis" class="btn btn-info ders-resim-edit"><i class="fa fa-cog"></i></button>
                     <?php } ?>
                     <img class="ders-resim" src="files/images/event/<?php echo $COURSE["kodu"] ?>.png">
@@ -185,7 +222,7 @@ include 'includes/head.php';
                                 echo nl2br($aciklama); 
                                 ?>
                         </p>
-                        <?php if($GIRIS_YAPAN_DERSIN_HOCASI_MI && $Ders_Aktif_Mi["status"]==1){ ?>
+                        <?php if($GIRIS_YAPAN_DERSIN_HOCASI_MI && $Ders_Aktif_Mi){ ?>
                         <!-- <a class="btn btn-warning c-header-action" data-toggle="modal" data-target="#dersGuncelleModal">
                                 <i class="fa fa-edit"></i>&nbsp;Düzenle
                             </a> -->
@@ -200,7 +237,7 @@ include 'includes/head.php';
                                 data-target="#dersGuncelleModal">Düzenle</a>
                         </div>
 
-                        <?php } if($OGRENCI && $Ders_Aktif_Mi["status"]==1){  ?>
+                        <?php } if($OGRENCI && $Ders_Aktif_Mi){  ?>
                         <button type="button" class="btn btn-danger" id="btnDerstenAyril">
                             <i class="fas fa-times"></i> Ayrıl
                         </button>
@@ -214,27 +251,23 @@ include 'includes/head.php';
         </div>
         <!--  nav -->
         <div>
-            <ul class="nav nav-tabs" role="tablist">
-                <li class="nav-item" id="genel_akis">
-                    <a class="nav-link active" data-toggle="tab" href="#genel"><b>Duyurular</b></a>
+            <ul class="nav nav-tabs course-tabs" role="tablist">
+                <li class="nav-item" id="genel_akis" tab-name="genel">
+                    <a class="nav-link active" data-toggle="tab" href="#genel">Duyurular</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#calismalar"><b>Sınıf Çalışmaları</b></a>
+                <li class="nav-item" tab-name="calismalar">
+                    <a class="nav-link" data-toggle="tab" href="#calismalar">Sınıf Çalışmaları</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#yorum"><b>Tartışma</b></a>
+                <li class="nav-item" tab-name="yorum">
+                    <a class="nav-link" data-toggle="tab" href="#yorum">Tartışma</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#katılımcı"><b>Katılımcılar</b></a>
+                <li class="nav-item" tab-name="katılımcı">
+                    <a class="nav-link" data-toggle="tab" href="#katılımcı">Katılımcılar</a>
                 </li>
-                <?php if($GIRIS_YAPAN_DERSIN_HOCASI_MI){ ?>
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#notlar"><b>Notlar</b></a>
-                </li>
-                <?php } ?>
+
             </ul>
             <!-- Tab panes -->
-            <div class="tab-content">
+            <div class="tab-content ">
                 <!-- Genel Akış -->
                 <div id="genel" class="container tab-pane active" style="  margin-top: auto;"><br>
                     <h5><b>Duyurular</b></h5>
@@ -263,15 +296,7 @@ include 'includes/head.php';
                         <?php include 'includes/course/katilimcilar.php' ?>
                     </div>
                 </div>
-                <!-- Notlar -->
-                <?php if($GIRIS_YAPAN_DERSIN_HOCASI_MI){ ?>
-                <div id="notlar" class="container tab-pane fade" style="  margin-top: auto;"><br>
-                    <h5><b>Notlar</b></h5>
-                    <div class="detay">
-                        <?php include 'includes/course/notlar.php' ?>
-                    </div>
-                </div>
-                <?php } ?>
+               
             </div>
             <!-- /nav -->
         </div>
@@ -361,11 +386,45 @@ $(function() {
 
     });
 
-
     $("#dersResimDegis").on("click", function() {
-        
-    })
+        $("#dersResimDegisModal").modal("show");
+    });
 
+    $("#dersResimForm").on('submit', function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: "services/course.php?method=update_image",
+            type: "POST",
+            data: new FormData(this),
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function(data) {
+                location.reload();
+            },
+            error: function(e) {
+                Swal.fire({
+                    text: 'Resim güncellenemedi!',
+                    type: 'error',
+                    confirmButtonText: 'Tamam'
+                })
+            }
+        });
+    });
+
+    $(".course-tabs").on('click','.nav-item',function(e){
+        var tab_name = $(e.target).attr("href");
+  
+        if(tab_name)
+            localStorage.setItem("son-tab", tab_name);
+    });
+
+    var son_tab = localStorage.getItem("son-tab");
+    var son_tab_element = $('a[href="'+ son_tab + '"]');
+    if(son_tab && son_tab_element){
+        //console.log("son tıklanan tab : "+ son_tab);
+        $('a[href="'+ son_tab + '"]').trigger("click")
+    }
 
 })
 </script>

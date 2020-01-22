@@ -2,11 +2,6 @@
     include 'odev_upload_modal.php';
     $OGRENCI_ODEV = OgrenciOdev_OgrencininOdeviniGetir($LOGIN_ID, $ODEV_ID);
     
-    $ODEV_TARIHI_GECTI = FALSE;
-    if(strtotime($ODEV["son_tarih"]) < time()){
-        $ODEV_TARIHI_GECTI = TRUE;
-    }
-  //  $Ders_Aktif_Mi=DersAktifMi($ders_id);
 ?>
 <style>
 .odev-durum {
@@ -34,7 +29,7 @@
     </div>
 </div>
 
-<?php if($Ders_Aktif_Mi["status"]==1){ ?>
+<?php if($Ders_Aktif_Mi){ ?>
 <div class="odev-upload-btns">
     <?php if($ODEV["dosya_gonderme"] == 1 ){?>
     <button class="btn btn-info" data-toggle="modal" data-target="#odevYukleModal">Ödev Yükle</button>
@@ -60,7 +55,7 @@
         Gönderim Tarihi : <span class="odev-gonderim-tarih"><?php echo $OGRENCI_ODEV["gonderim_tarih"]?></span>
     </div>
     <div class="odev-upload-btns">
-        <?php if($ODEV["dosya_gonderme"] == 1 &&  $Ders_Aktif_Mi["status"]==1){?>
+        <?php if($ODEV["dosya_gonderme"] == 1 &&  $Ders_Aktif_Mi){?>
         <a href='dosya_indir.php?type=ogrenci_odev&kod=<?php echo $OGRENCI_ODEV["kod"]?>' class="btn btn-primary"><i
                 class="fa fa-download"></i> İndir</a>
         <button class="btn btn-danger" onclick="odevSil(<?php echo $OGRENCI_ODEV['id']?>)">

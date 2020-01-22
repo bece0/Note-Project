@@ -394,8 +394,11 @@ function KayitliOgrenciSayisiGetir($ders_id)
 
 function DersDuyurulariGetir($ders_id)
 {
-    $sql = "SELECT d.*,k.adi as isim ,k.soyadi as soyisim FROM duyuru d inner join kullanici k on k.id=d.kullanici_id where d.ders_id='". $ders_id ."'
-    order by tarih desc ";
+    $sql = "SELECT d.* ,k.adi as isim , k.soyadi as soyisim 
+        FROM duyuru d 
+        inner join kullanici k on k.id = d.kullanici_id 
+        where d.ders_id = $ders_id
+        order by tarih desc ";
 
     return SQLCalistir($sql);
 }

@@ -53,8 +53,25 @@ Date.prototype.monthNames = [
 Date.prototype.getMonthName = function() {
     return this.monthNames[this.getMonth()];
 };
+
 Date.prototype.getShortMonthName = function () {
+    if( this.getMonthName())
     return this.getMonthName().substr(0, 3);
+    else return ""
+};
+
+Date.prototype.getHourWithZero = function () {
+    var hour = this.getHours();
+    if(hour < 10)
+        return "0" + hour;
+    return hour;
+};
+
+Date.prototype.getMinutesWithZero = function () {
+    var min = this.getMinutes();
+    if(min < 10)
+        return "0" + min;
+    return min;
 };
 
 // usage:

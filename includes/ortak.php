@@ -11,7 +11,7 @@ function GUIDOlustur()
 }
 
 
-function DosyaUpload($path = "../files/uploads/", $dosyaIsimOnEk = ""){
+function DosyaUpload($path = "../files/uploads/", $dosyaIsimOnEk = "", $dosya_adi = NULL, $extensions = NULL){
     
     if($_FILES['dosya'] == NULL || $_FILES['dosya']['name'] == NULL)
         return NULL;
@@ -20,6 +20,10 @@ function DosyaUpload($path = "../files/uploads/", $dosyaIsimOnEk = ""){
         return NULL;
  
     $valid_extensions = array('pdf', 'doc', 'docx', 'zip', 'txt'); // geçerli uzantılar
+    if($extensions != NULL){
+        $valid_extensions = $extensions;
+    }
+
     // $path = '../files/uploads/'; // yükleme klasörü
     if(!is_dir($path)){
         mkdir(rtrim($path,"/"), 0777, true);
@@ -39,7 +43,21 @@ function DosyaUpload($path = "../files/uploads/", $dosyaIsimOnEk = ""){
     if(!in_array($ext, $valid_extensions)) 
         throw new Exception("Desteklenmeyen dosya formatı : ".$ext);
 
-    $path = $path."".strtolower($final_dosya_adi);
+   
+
+    if($dosya_adi != NULL){
+        if($ext == "jpeg" || $ext == "jpg")
+            $ext = "png";
+             
+        $path = $path."".$dosya_adi.".".$ext;
+    }
+    else {
+        $path = $path."".strtolower($final_dosya_adi);
+    }
+
+    if(file_exists($path)){
+        unlink($path);
+    }
     
     if(move_uploaded_file($tmp, $path)){
         return ["indirme_link" => $path , "isim" => $dosya_name, "dosya_adi" => $final_dosya_adi]; 

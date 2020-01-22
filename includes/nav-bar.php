@@ -12,14 +12,14 @@
     .right-nav {
         margin-right: 2vw;
     }
- 
+
     .navbar-right {
-        float: right!important;
+        float: right !important;
         margin-right: -15px;
     }
 }
 
-.logo-1{
+.logo-1 {
     margin-bottom: -5px;
     margin-right: 5px;
     width: 100px;
@@ -28,7 +28,7 @@
     margin-top: -6px;
 }
 </style>
-   <?php 
+<?php 
         if($GirisYapildiMi){
             $KULLANICI = KullaniciBilgileriniGetirById($_SESSION["kullanici_id"]);
 
@@ -46,8 +46,8 @@
             }
         }?>
 <nav class="navbar navbar-expand-md fixed-top navbar-dark bg-dark">
-    
-    <a class="navbar-brand" href="index.php"> 
+
+    <a class="navbar-brand" href="index.php">
         <img class="logo-1" src="files/images/note2.png">
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
@@ -56,74 +56,80 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
-        <?php if($GirisYapildiMi){ ?>
-            <!-- <li class="nav-item">
+            <?php if($GirisYapildiMi){ ?>
+            <?php if($OGRENCI) {?>
+            <li class="nav-item">
                 <a class="nav-link" href="takvim.php">Takvim</a>
-            </li> -->
+            </li>
+            <?php } ?>
             <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="menuDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Ders  <!-- <i class="fas fa-plus"></i> -->
-                    </a>
-                     <div class="dropdown-menu" aria-labelledby="menuDropdown">
-                        <?php if($OGRETMEN) {?>
-                            <a class="dropdown-item" href="create_course.php" data-toggle="modal" data-target="#dersOlusturModal">Ders Oluştur</a>
-                
-                            <a class="dropdown-item" href="attend_course.php" data-toggle="modal" data-target="#derseKaydolModal">Derse Kaydol</a>
-                        <?php } ?>
-                        <?php if($OGRENCI) {?>
-                            <a class="dropdown-item" href="attend_course.php" data-toggle="modal" data-target="#derseKaydolModal">Derse Kaydol</a>
-                        <?php } ?>
-                    </div> 
-                </li>
-           
-        <?php } ?>
+                <a class="nav-link dropdown-toggle" href="#" id="menuDropdown" role="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    Ders
+                    <!-- <i class="fas fa-plus"></i> -->
+                </a>
+                <div class="dropdown-menu" aria-labelledby="menuDropdown">
+                    <?php if($OGRETMEN) {?>
+                    <a class="dropdown-item" href="create_course.php" data-toggle="modal"
+                        data-target="#dersOlusturModal">Ders Oluştur</a>
+
+                    <a class="dropdown-item" href="attend_course.php" data-toggle="modal"
+                        data-target="#derseKaydolModal">Derse Kaydol</a>
+                    <?php } ?>
+                    <?php if($OGRENCI) {?>
+                    <a class="dropdown-item" href="attend_course.php" data-toggle="modal"
+                        data-target="#derseKaydolModal">Derse Kaydol</a>
+                    <?php } ?>
+                </div>
+            </li>
+
+            <?php } ?>
         </ul>
         <ul class="navbar-nav ml-auto right-nav">
             <!-- Giriş yapılmadıysa NavBarda User var-->
             <?php if($GirisYapildiMi){ ?>
-                <?php include 'notifications.php';?>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="menuDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <?php echo $KULLANICI["adi"]?>
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="menuDropdown">
-                        <?php if($KULLANICI['admin'] != "" && $KULLANICI['admin'] == 1) {?>
-                            <!-- öğretmen menusu -->
-                        <a class="dropdown-item" href="profile.php?id=<?php echo $KULLANICI["id"]?>">Profil</a>
-                            <a class="dropdown-item" href="takvim.php">Takvim</a>
-                            <!-- <a class="dropdown-item" href="my_course.php">Dersler</a> -->
-                            <a class="dropdown-item" href="settings.php">Ayarlar</a>
-                        <?php } else {?>
-                            <!-- öğrenci menusu-->
-                            <a class="dropdown-item" href="takvim.php">Takvim</a>
-                            <a class="dropdown-item" href="profile.php?id=<?php echo $KULLANICI["id"]?>">Profil</a>
-                            <!-- <a class="dropdown-item" href="my_course.php">Dersler</a> -->
-                            <a class="dropdown-item" href="settings.php">Ayarlar</a>
-                        <?php } ?>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="action/logout_action.php">Çıkış</a>
-                </li>
+            <?php include 'notifications.php';?>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="menuDropdown" role="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    <?php echo $KULLANICI["adi"]?>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="menuDropdown">
+                    <!-- <a class="dropdown-item" href="takvim.php">Takvim</a> -->
+                    <?php if($KULLANICI['admin'] != "" && $KULLANICI['admin'] == 1) {?>
+                    <!-- öğretmen menusu -->
+                    <a class="dropdown-item" href="profile.php?id=<?php echo $KULLANICI["id"]?>">Profil</a>
+                    <!-- <a class="dropdown-item" href="my_course.php">Dersler</a> -->
+                    <a class="dropdown-item" href="settings.php">Ayarlar</a>
+                    <?php } else {?>
+                    <!-- öğrenci menusu-->
+                    <a class="dropdown-item" href="profile.php?id=<?php echo $KULLANICI["id"]?>">Profil</a>
+                    <!-- <a class="dropdown-item" href="my_course.php">Dersler</a> -->
+                    <a class="dropdown-item" href="settings.php">Ayarlar</a>
+                    <?php } ?>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="action/logout_action.php">Çıkış</a>
+            </li>
             <?php } else { ?>
-                <li class="nav-item">
-                    <!-- <a class="nav-link" href="login.php">Giriş</a> -->
-                </li>
+            <li class="nav-item">
+                <!-- <a class="nav-link" href="login.php">Giriş</a> -->
+            </li>
             <?php } ?>
         </ul>
     </div>
 </nav>
 <script>
-
-$(document).ready(function(){
-    $(".dropdown").hover(            
+$(document).ready(function() {
+    $(".dropdown").hover(
         function() {
-            $('.dropdown-menu', this).not('.in .dropdown-menu').stop( true, true ).slideDown("fast");
-            $(this).toggleClass('open');        
+            $('.dropdown-menu', this).not('.in .dropdown-menu').stop(true, true).slideDown("fast");
+            $(this).toggleClass('open');
         },
         function() {
-            $('.dropdown-menu', this).not('.in .dropdown-menu').stop( true, true ).slideUp("fast");
-            $(this).toggleClass('open');       
+            $('.dropdown-menu', this).not('.in .dropdown-menu').stop(true, true).slideUp("fast");
+            $(this).toggleClass('open');
         }
     );
 });
@@ -164,19 +170,19 @@ $(document).ready(function(){
   ?>
 
 
-  <?php   if($mesaj != ""){ ?>
-  <script>
-    Swal.fire({
-        title: '<?php echo $title?>',
-        text: '<?php echo $mesaj?>',
-        type: '<?php echo $type?>',
-        confirmButtonText: 'Tamam'
-    })
-  </script>
-  <?php } ?>
+<?php   if($mesaj != ""){ ?>
+<script>
+Swal.fire({
+    title: '<?php echo $title?>',
+    text: '<?php echo $mesaj?>',
+    type: '<?php echo $type?>',
+    confirmButtonText: 'Tamam'
+})
+</script>
+<?php } ?>
 
-  <?php   if($log != ""){ ?>
-  <script>
-     console.log('<?php echo $log?>');
-  </script>
-  <?php } ?>
+<?php   if($log != ""){ ?>
+<script>
+console.log('<?php echo $log?>');
+</script>
+<?php } ?>

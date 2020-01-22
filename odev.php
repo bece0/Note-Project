@@ -35,7 +35,11 @@ include 'includes/head.php';
     $ODEV_ID = $ODEV["id"];
     $COURSE_ID = $ODEV["ders_id"];
     $COURSE = DersBilgileriniGetir($COURSE_ID);
-    $Ders_Aktif_Mi=DersAktifMi($COURSE_ID);
+
+    $Ders_Aktif_Mi = FALSE;
+    if($COURSE["status"] ==1) 
+        $Ders_Aktif_Mi=TRUE;
+        
     echo "<title>".$COURSE["isim"]." - ".$ODEV["isim"]."</title>";
 
     $DUZENLEYEN_ID = $COURSE["duzenleyen_id"];
@@ -47,6 +51,7 @@ include 'includes/head.php';
     $GIRIS_YAPAN_DERSIN_HOCASI_MI = FALSE;
     $GIRIS_YAPAN_DERSIN_ASISTANI_MI = FALSE;
     $GIRIS_YAPAN_DERSIN_OGRENCISI_MI = FALSE;
+    $GONDERILEN_ODEVLERI_LISTELEYEBILIR = FALSE;
     
     if($DUZENLEYEN_ID == $LOGIN_ID)
         $GIRIS_YAPAN_DERSIN_HOCASI_MI = TRUE;
@@ -57,10 +62,20 @@ include 'includes/head.php';
     if(!$GIRIS_YAPAN_DERSIN_HOCASI_MI && !$GIRIS_YAPAN_DERSIN_ASISTANI_MI)
         $GIRIS_YAPAN_DERSIN_OGRENCISI_MI = TRUE;
 
+    if($GIRIS_YAPAN_DERSIN_HOCASI_MI || $GIRIS_YAPAN_DERSIN_ASISTANI_MI){
+        $GONDERILEN_ODEVLERI_LISTELEYEBILIR = TRUE;
+    }
+
+    $ODEV_TARIHI_GECTI = FALSE;
+    if(strtotime($ODEV["son_tarih"]) < time()){
+        $ODEV_TARIHI_GECTI = TRUE;
+    }
+
+    $dersUrl = ToMeaningfullUrl($COURSE["isim"], $COURSE["id"])
    ?>
 
-       <!-- start container -->
-       <div class="container" style="min-height: 500px;">
+    <!-- start container -->
+    <div class="container" style="min-height: 500px;">
         <div class="row">
             <?php 
             $DIV_CLASS = "col-md-8";
@@ -71,15 +86,24 @@ include 'includes/head.php';
                 <div class="detay">
                     <div class="odev-detay">
                         <h3 class="odev-isim">
-                            <i class="fa fa-file-alt"></i>
-                            <?php    echo $COURSE["isim"]." - ".$ODEV["isim"]; ?>
+                            <span>
+                                <a href='course.php?course=<?php echo $dersUrl;?>'>
+                                    <i class="fa fa-file-alt"></i>
+                                    <?php echo $COURSE["isim"] ?>
+                                </a> 
+                            </span>
+                            <span style="font-size: 1.45rem;">
+                                <?php echo " | ".$ODEV["isim"]; ?>
+                            <span>
                         </h3>
                         <div>
                             <div class="odev-kunye">
-                                <div class="odev-tarih"><?php echo zamanOnce($ODEV["olusturma_tarih"]); ?></div>
-                                <div class="odev-yukleyen"><?php echo $ODEV["isim"]." ". $ODEV["soyadi"]; ?></div>
+                                <div class="odev-tarih" title='<?php echo $ODEV["olusturma_tarih"];?>'>
+                                    <?php echo zamanOnce($ODEV["olusturma_tarih"]); ?>
+                                </div>
+                                <div class="odev-yukleyen"><?php echo $ODEV["ogretmen_adi"]." ". $ODEV["ogretmen_soyadi"]; ?></div>
                             </div>
-                            
+
                         </div>
                         <hr>
                         <div class="odev-aciklama"><?php  echo $ODEV["aciklama"]; ?></div>
@@ -113,36 +137,39 @@ include 'includes/head.php';
             <?php }?>
 
         </div>
-<hr>
+        <hr>
         <div class="row">
-                <div class="col-3">
-                    <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                    <?php if($OGRETMEN){ ?>
-                        <a class="nav-link" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home"
-                            role="tab" aria-controls="v-pills-home" aria-selected="true">
-                             Teslim Eden Öğrenciler
-                        </a>
+            <div class="col-3">
+                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                    <a class="nav-link active" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile"
+                        role="tab" aria-controls="v-pills-profile" aria-selected="true">
+                        Tartışma
+                    </a>
+                    <?php if($GONDERILEN_ODEVLERI_LISTELEYEBILIR){ ?>
+                    <a class="nav-link" id="v-pills-gonderilen-odevler-tab" data-toggle="pill" href="#v-pills-gonderilen-odevler" role="tab"
+                        aria-controls="v-pills-gonderilen-odevler" aria-selected="false">
+                        Teslim Eden Öğrenciler
+                    </a>
                     <?php }?>
-                        <a class="nav-link active" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile"
-                            role="tab" aria-controls="v-pills-profile" aria-selected="false">
-                          Tartışma
-                        </a>
-                    </div>
-                </div>
-                <div class="col-9">
-                    <div class="tab-content" id="v-pills-tabContent">
-
-                        <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel"
-                            aria-labelledby="v-pills-home-tab">
-
-                        </div>
-                        <div class="tab-pane fade" id="v-pills-profile" role="tabpanel"
-                            aria-labelledby="v-pills-profile-tab">
-                           
-                        </div>
-                    </div>
+                    
                 </div>
             </div>
+            <div class="col-9">
+                <div class="tab-content" id="v-pills-tabContent">
+                    <div class="tab-pane fade show active" id="v-pills-profile" role="tabpanel"
+                        aria-labelledby="v-pills-profile-tab">
+                        <?php include 'includes/odev/odev_tartisma.php'; ?>
+                    </div>
+                    <?php if($GONDERILEN_ODEVLERI_LISTELEYEBILIR){ ?>
+                    <div class="tab-pane fade" id="v-pills-gonderilen-odevler" role="tabpanel"
+                        aria-labelledby="v-pills-gonderilen-odevler-tab">
+                        <?php include 'includes/odev/odev_gonderilen_listesi.php'; ?>
+                    </div>
+                    <?php }?>
+                    
+                </div>
+            </div>
+        </div>
 
 
 

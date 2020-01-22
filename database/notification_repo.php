@@ -17,6 +17,7 @@ function GetUserNotifications($kullanici_id, $count = 5)
 }
 
 
+
 /**
  * Etkinlikteki tüm kullanıcılarına DUYURU tipinden bildirimi gönderir
  * @param $etkinlik_id etkinlik id değeri
@@ -30,7 +31,7 @@ function DersKatilimcilarinaDuyuruBildirimiGonder($ders_id, $mesaj = "", $url = 
     $katilimcilar = SQLCalistir($sql_katilimcilar, FALSE);
     $ders = DersBilgileriniGetir($ders_id);
     if($mesaj == NULL || $mesaj == "")
-        $mesaj =  $ders["isim"]." dersine yeni yorum geldi";
+        $mesaj =  $ders["isim"]." dersinde yeni duyuru yapıldı";
 
     for ($i = 0; $i < count($katilimcilar); $i++) {
         $katilimci = $katilimcilar[$i];
@@ -58,6 +59,25 @@ function DersKatilimcilarinaYeniOdevBildirimiGonder($ders_id, $odev_adi, $mesaj 
             continue;
        
         BildirimYaz($katilimci["ogrenci_id"], $ders_id, $mesaj, $url, "YENI_ODEV");
+    }
+}
+
+function DersKatilimcilarinaYeniSinavBildirimiGonder($ders_id, $sinav_adi, $mesaj = "", $url = "", $haricListesi= [])
+{
+    $sql_katilimcilar = "SELECT * from katilimci where ders_id = $ders_id";
+    $katilimcilar = SQLCalistir($sql_katilimcilar, FALSE);
+
+    $ders = DersBilgileriniGetir($ders_id);
+    if($mesaj == NULL || $mesaj == "")
+        $mesaj =  $ders["isim"]." dersine yeni sınav eklendi : $sinav_adi";
+
+    for ($i = 0; $i < count($katilimcilar); $i++) {
+        $katilimci = $katilimcilar[$i];
+        
+        if(in_array($katilimci["ogrenci_id"], $haricListesi))
+            continue;
+       
+        BildirimYaz($katilimci["ogrenci_id"], $ders_id, $mesaj, $url, "SINAV");
     }
 }
 

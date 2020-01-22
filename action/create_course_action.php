@@ -57,11 +57,18 @@ function random_str(
         return sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
     }
     
+    function ResimYukle($ders_kodu){
+        $varsayılan_resim =  __DIR__ . "/../files/images/event/default.png";
+        $yeni_resim =  __DIR__ . "/../files/images/event/" . $ders_kodu . ".png";
+
+        return copy($varsayılan_resim, $yeni_resim);
+    }
+
     /**
      * 
      */
-    function ResimYukle($ders_kodu){
-            $varsayılan_resim =  __DIR__ . "/../files/images/default.png";
+    function ResimYukle2($ders_kodu){
+        $varsayılan_resim =  __DIR__ . "/../files/images/default.png";
 
              if(!isset($_FILES["ders_resim"]) || $_FILES['ders_resim']['size'] == 0){
       //         echo $ders_kodu. " koduna sahip dersin resmi yüklenmedi. varsayılan resimeklenecektir";         
@@ -111,13 +118,12 @@ function random_str(
         }
     }
 
-
      $ders_kodu =  random_str(6);
 
     if(DersKaydet($ders_kodu, $isim, $aciklama, $kontenjan,$bolum, $sinif, $duzenleyen_id) === TRUE){
-        ResimYukle($ders_kodu);
+        $resim_olustu = ResimYukle($ders_kodu);
 
-        $_SESSION["_success"] = "Ders oluşturuldu";
+        $_SESSION["_success"] = "Ders oluşturuldu ";
 
         $etkinlik = DersDetayGetir_Kod($ders_kodu);
         LogYaz_DersOlusturma($_SESSION["kullanici_id"], $etkinlik["id"]);

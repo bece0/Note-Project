@@ -23,11 +23,23 @@ function GetOdevByKod($kod){
 }
 
 function GetOdevDetailsByKod($kod){
-    $sql = "SELECT o.*, kullanici.adi, kullanici.soyadi FROM odev o
+    $sql = "SELECT o.*, kullanici.adi as ogretmen_adi, kullanici.soyadi as ogretmen_soyadi
+        FROM odev o
         INNER JOIN kullanici ON kullanici.id = o.olusturan_id
         WHERE o.kod='$kod'";
 
     return SQLTekliKayitGetir($sql);
+}
+
+
+function OgrenciOdevleriGetir($ogrenci_id){
+    $sql = "SELECT o.id, o.isim, o.kod, o.son_tarih, dr.isim as ders_adi 
+        from odev o
+        INNER join dersler dr on o.ders_id=dr.id
+        INNER join katilimci k on k.ders_id= o.ders_id
+        where k.ogrenci_id = $ogrenci_id";
+
+    return SQLCalistir($sql, FALSE);
 }
 
 ?>

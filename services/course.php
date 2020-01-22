@@ -29,8 +29,8 @@ $sonucObjesi->mesaj = "";
 
 //isteği yapan kullanıcı
 $KULLANICI = KullaniciBilgileriniGetirById($KULLANICI_ID); 
-$COURSE = null;
-$COURSE_ID = null;
+$COURSE = NULL;
+$COURSE_ID = NULL;
 
 $GIRIS_YAPAN_DERSIN_HOCASI_MI = FALSE;
 $GIRIS_YAPAN_DERSIN_ASISTANI_MI = FALSE;
@@ -39,12 +39,19 @@ $statusCode = 0;
 
 try{
 
-    if(!isset($_GET["ders_id"]) || $_GET["ders_id"] == ""){
+    if(isset($_GET["ders_id"]) && $_GET["ders_id"] != ""){
+        $COURSE_ID = mysqli_real_escape_string($baglanti, $_GET["ders_id"]);
+    }
+
+    if(isset($_POST["ders_id"]) && $_POST["ders_id"] != ""){
+        $COURSE_ID = mysqli_real_escape_string($baglanti, $_POST["ders_id"]);
+    }
+
+    if($COURSE_ID == NULL){
         $statusCode = 400;
         throw new Exception("ders_id parametresi eksik!");
     }
 
-    $COURSE_ID = mysqli_real_escape_string($baglanti, $_GET["ders_id"]);
     $COURSE = DersBilgileriniGetir($COURSE_ID);
 
     if($COURSE == NULL){
@@ -65,7 +72,7 @@ try{
         }
 
     }
-    if($METHOD == "ayril"){
+    else if($METHOD == "ayril"){
         
         if(!$GIRIS_YAPAN_DERSIN_HOCASI_MI){
             DerstenKayitSil($COURSE_ID,$KULLANICI_ID);
@@ -75,6 +82,15 @@ try{
             throw new Exception("Dersten ayrılamazsınız!");
         }
 
+    }else if($METHOD == "update_image"){
+        if(!$GIRIS_YAPAN_DERSIN_HOCASI_MI){
+            $statusCode = 401;
+            throw new Exception("Bu işlem için yetkiniz bulunmuyor!");
+        }
+
+        include '../includes/ortak.php';
+
+        DosyaUpload("../files/images/event/", "", $COURSE["kodu"], ["png", "jpg", "jpeg"]);
     }
     else{
         $statusCode = 400;

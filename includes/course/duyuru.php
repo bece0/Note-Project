@@ -1,10 +1,20 @@
+<?php 
 
+if($SINAV_EKLEYEBILIR)
+    include 'duyuru_sinav_modal.php';
+
+?>
 
 <div class="tab-detay-controls">
-    <?php if($DUYURU_YAPABILIR && $Ders_Aktif_Mi["status"]==1){ ?>
+    <?php if($DUYURU_YAPABILIR && $Ders_Aktif_Mi){ ?>
     <a class="btn btn-success c-header-action duyuru-yap" ders-id="<?php echo $COURSE["id"]; ?>"
         ders-name="<?php echo $COURSE["isim"]; ?>">
         <i class="fa fa-bell"></i>&nbsp;Duyuru Yap
+    </a>
+    <?php } ?>
+    <?php if($SINAV_EKLEYEBILIR && $Ders_Aktif_Mi){ ?>
+    <a class="btn btn-success c-header-action" data-toggle="modal" data-target="#sinavOlusturModal">
+        <i class="fa fa-bell"></i>&nbsp; Sınav Duyuru Yap
     </a>
     <?php } ?>
 </div>
@@ -109,13 +119,28 @@ function DersDuyurulariniYazdir(duyurular) {
     for (let i = 0; i < duyurular.length; i++) {
         var duyuru = duyurular[i];
         var html = "";
-        html += `<div class='media d-block d-md-flex duyuru-container' id='duyuru-${duyuru.id}' >`;
-        html +=
-            `<img class="comment-avatar d-flex mb-3 mx-auto" src="files/profile/${duyuru.kullanici_id}.png">`
+        html += `<div class='media d-block d-md-flex duyuru-container ${duyuru.tip}' id='duyuru-${duyuru.id}' >`;
+        // html +=  `<img class="comment-avatar d-flex mb-3 mx-auto" src="files/profile/${duyuru.kullanici_id}.png">`
         html += '<div class="media-body text-center text-md-left ml-md-3 ml-0 duyuru-block">';
         html += '<h6 class="mt-0 font-weight-bold duyuru-title">';
-        html +=  duyuru.isim + " " + duyuru.soyisim;
-        
+
+        var duyuru_icerik = duyuru.mesaj;
+
+        if(duyuru.tip == "NORMAL"){
+            html += duyuru.isim + " " + duyuru.soyisim;
+        }else if(duyuru.tip == "SINAV"){
+            html += (duyuru.mesaj);
+            
+            let date = new Date(duyuru.takvim_tarih)
+            if(date){
+                let formatted_sinav_date = date.getDate() + " " + (date.getShortMonthName()) + " " + date.getFullYear()
+                formatted_sinav_date = formatted_sinav_date + " " + date.getHourWithZero() + ":" + date.getMinutesWithZero();
+                duyuru_icerik = "Sınav Tarihi : " + formatted_sinav_date;
+            }else{
+                duyuru_icerik = "-"      
+            }
+        }
+    
         if (DUYURU_SILEBILIR) {
             html +=
                 `<button class="btn btn-sm duyuru-action float-right btn-danger delete-duyuru" duyuru-id="${duyuru.id}">`;
@@ -124,10 +149,10 @@ function DersDuyurulariniYazdir(duyurular) {
         html += "</h6>";
 
         let date = new Date(duyuru.tarih)
-        let formatted_date = date.getDate() + " " + (date.getShortMonthName()) + " " + date.getFullYear()
+        let formatted_date = date.getDate() + " " + (date.getShortMonthName()) + " " + date.getFullYear();
 
         html += ("<div class='duyuru-date'> " + formatted_date + "</div>");
-        html += ("<p>" + duyuru.mesaj + "</p>");
+        html += ("<div class='duyuru-icerik'>" + duyuru_icerik + "</div>");
         html += "</div>";
         html += "</div>";
 

@@ -97,9 +97,10 @@ CREATE TABLE IF NOT EXISTS `duyuru`(
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `mesaj` text NOT NULL,
     `tarih` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `takvim_tarih` datetime,
     `kullanici_id` int(11) NOT NULL,
     `ders_id` int(11) NOT NULL DEFAULT 0,
-    `tip` int(11) NOT NULL DEFAULT 0,
+     `tip` varchar(255) NOT NULL DEFAULT "NORMAL",
     PRIMARY KEY (`id`),
     KEY `idx_duyuru_kullanici_id` (`kullanici_id`),
     KEY `idx_bildirim_ders_id` (`ders_id`)

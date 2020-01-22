@@ -64,7 +64,6 @@
 <!--Comments-->
 <?php 
     $ders_id = UrlIdFrom("course");
-    $Ders_Aktif_Mi=DersAktifMi($ders_id);
 
     $YORUM_ONAYLAYABILIR = false;
     $YORUM_SILEBILIR = false;
@@ -180,7 +179,7 @@
     }
 ?>
 
-<?php if($canAddComment == true && $Ders_Aktif_Mi["status"]==1 ) { ?>
+<?php if($canAddComment == true && $Ders_Aktif_Mi ) { ?>
     <div class="card mb-3 wow fadeIn" id="comment_form">
         <div class="card-header font-weight-bold">
             <?php  

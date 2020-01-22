@@ -28,7 +28,7 @@
 #calendar {
     /* 		float: right; */
     margin: 0 auto;
-    width: 900px;
+    /* width: 900px; */
     background-color: #FFFFFF;
     border-radius: 6px;
     box-shadow: 0 1px 2px #C3C3C3;
@@ -70,10 +70,18 @@ td.fc-today {
 .fc-event-inner {
     font-family: 'Roboto', sans-serif;
     background: #03a9f3 !important;
-    color: #FFF !important;
+    color: #201515d6 !important;
     font-size: 12px !important;
     font-weight: 500 !important;
     padding: 5px 0px !important;
+}
+
+.orange .fc-event-inner{
+    background-color: orange !important;;
+}
+
+.odev .fc-event-inner{
+    background-color: rgb(194, 228, 139) !important;;
 }
 
 .fc {

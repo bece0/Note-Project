@@ -265,13 +265,24 @@ button > * {
   border-color: #a998405b #a998405b #dee2e6;
 }
 
-.nav-pills .nav-link.active,.nav-pills .show>.nav-link {
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
   color: #fff;
-  background-color: #eba91d
+  background-color: #eba91d;
 }
 
 a {
   color: #cf7c00;
   text-decoration: none;
-  background-color: transparent
+  background-color: transparent;
+}
+
+.btn-success {
+  color: #fff;
+  background-color:#4DB6AC;
+  border-color:#26A69A;
+}
+
+.btn-success:hover {
+  background-color:#26A69A;
 }

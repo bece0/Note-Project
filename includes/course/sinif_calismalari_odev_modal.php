@@ -106,6 +106,8 @@ $(document).ready(function(e) {
                     text: 'Ödev başarıyla oluşturuldu.',
                     type: 'success',
                     confirmButtonText: 'Tamam'
+                }).then(function(){
+                    location.reload();
                 })
             },
             error: function(e) {
