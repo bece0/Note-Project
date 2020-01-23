@@ -10,6 +10,14 @@ function GUIDOlustur()
     return sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
 }
 
+function ToEnglish2($value)
+{
+    $turkish = array("ı", "ğ", "ü", "ş", "ö", "ç", "İ", "Ğ", "Ü", "Ş", "Ö", "Ç"); //turkish letters
+    $english   = array("i", "g", "u", "s", "o", "c", "I", "G", "U", "S", "O", "C"); //english cooridinators letters
+
+    $value = str_replace($turkish, $english, $value); //replace php function
+    return $value;
+}
 
 function DosyaUpload($path = "../files/uploads/", $dosyaIsimOnEk = "", $dosya_adi = NULL, $extensions = NULL){
     
@@ -37,8 +45,9 @@ function DosyaUpload($path = "../files/uploads/", $dosyaIsimOnEk = "", $dosya_ad
     $ext = strtolower(pathinfo($dosya_name, PATHINFO_EXTENSION));
 
     $dosya_name_temiz = preg_replace('/\s+/', '', $dosya_name);
+    $dosya_name_temiz = ToEnglish2($dosya_name_temiz);
 
-    $final_dosya_adi = $dosyaIsimOnEk."_".rand(1000,1000000).$dosya_name_temiz;
+    $final_dosya_adi = $dosyaIsimOnEk."_".rand(1000,1000000)."_".$dosya_name_temiz;
 
     if(!in_array($ext, $valid_extensions)) 
         throw new Exception("Desteklenmeyen dosya formatı : ".$ext);

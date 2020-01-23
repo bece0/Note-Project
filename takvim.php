@@ -12,16 +12,32 @@ include 'includes/nav-bar.php';
 <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i"
     rel="stylesheet">
 
+<style>
+.takvim-aciklama{
+    margin-bottom: 20px;
+}
+
+.takvim-aciklama button{
+    margin-bottom: 5px;
+}
+</style>
+
 <body>
     <div class="container" id='wrap'>
 
-        <div id="takvim-yukleniyor" class="alert alert-info">Takvim yükleniyor...</div>
-
-        <div id="takvim-aciklama" style="display:none;margin-bottom: 25px;">
-            <button class="btn" style="background-color:orange;">Sınavlar</button>
-            <button class="btn" style="background-color:rgb(194, 228, 139);">Ödevler</button>
+        <div class="row">
+            <div class="col-md-2 col-sm-12">
+                <div id="takvim-aciklama" class="takvim-aciklama" style="display:none;">
+                    <button class="btn" style="background-color:orange;">Sınavlar</button>
+                    <button class="btn" style="background-color:rgb(194, 228, 139);">Ödevler</button>
+                </div>
+            </div>
+            <div class="col-md-10 col-sm-12">
+                <div id="takvim-yukleniyor" class="alert alert-info">Takvim yükleniyor...</div>
+                <div id='calendar'></div>
+            </div>
         </div>
-        <div id='calendar'></div>
+
 
         <div style='clear:both'></div>
     </div>

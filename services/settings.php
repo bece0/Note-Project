@@ -54,6 +54,7 @@ $mesaj = "";
 } else if ($method == "profil") {
     if ($data->sehir != NULL)
         KullaniciAyarGuncelle($giris_yapan_kullanici, "sehir", $data->sehir);
+
 } else if ($method == "profile-pic") {
 
     if (!isset($data->base64) || $data->base64 == "") {
@@ -88,8 +89,7 @@ if ($islem_sonucu == false)
 $sonuc = array(
     "sonuc" => $islem_sonucu,
     "method" => $method,
-    "mesaj" => $mesaj,
-    "whoami" => exec("whoami")
+    "mesaj" => $mesaj
 );
 
 echo json_encode($sonuc);

@@ -25,8 +25,8 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-pen"></i></span>
                             </div>
-                            <textarea rows="3" id="aciklama" name="aciklama" placeholder="Açıklama"
-                                class="form-control"></textarea>
+                            <textarea rows="3" id="odev_aciklama" name="odev_aciklama" placeholder="Açıklama"
+                                class="form-control" required></textarea>
                         </div>
                     </div>
                     <div class="form-group">

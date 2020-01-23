@@ -89,7 +89,7 @@ for ($i = 0; $i < count($KATILIMCILAR); $i++) {
                     <?php if($DERSTEN_ASISTAN_SILEBILIR && $Ders_Aktif_Mi) { ?>
                     <button href="#" class="btn btn-sm float-right btn-warning remove-assistant"
                         title="Derse asistanlığından çıkar" user-id="<?php echo $KATILIMCI['id'] ?>">
-                        <i class="fa fa-check-circle"></i>
+                        <i class="fa fa-chevron-down"></i>
                     </button>
                     <?php }?>
                 </div>
@@ -123,7 +123,7 @@ for ($i = 0; $i < count($KATILIMCILAR); $i++) {
                 </div>
                 <div class="katilimci-controls">
                     <?php if($DERSTEN_KULLANICI_SILEBILIR && $Ders_Aktif_Mi) { ?>
-                    <button href="#" class="btn btn-sm float-right btn-danger remove-user" title="Derten çıkar"
+                    <button href="#" class="btn btn-sm float-right btn-danger remove-user" title="Dersten çıkar"
                         user-id="<?php echo $KATILIMCI['id'] ?>">
                         <i class="fa fa-times"></i>
                     </button>
@@ -132,7 +132,7 @@ for ($i = 0; $i < count($KATILIMCILAR); $i++) {
                     <?php if($KATILIMCI["admin"] == 1 && $DERSE_ASISTAN_ATAYABILIR && $Ders_Aktif_Mi)  { ?>
                     <button href="#" class="btn btn-sm float-right btn-info make-assistant"
                         title="Derse asistan olarak ata" user-id="<?php echo $KATILIMCI['id'] ?>">
-                        <i class="fa fa-check-circle"></i>
+                        <i class="fa fa-chevron-up"></i>
                     </button>
                     <?php }?>
                 </div>
@@ -172,8 +172,9 @@ $(".remove-user").on("click", function(e) {
                     '&course=' + course_id,
                 success: function(response) {
                     type = type || 'katilimci';
-                    $('#katilimci-' + user_id).fadeOut(1200, function() {
+                    $('#' + type + '-' + user_id).fadeOut(1200, function() {
                         $(this).remove();
+                        location.reload();
                     });
                 },
                 error: ajaxGenelHataCallback
@@ -211,9 +212,11 @@ $(".make-assistant").on("click", function(e) {
                     // $klon.remove(".katilimci-controls");
                     $('#katilimci-' + user_id).fadeOut(800, function() {
                         $(this).remove();
+                        location.reload();
                     });
                     // $("#asistan-liste").append($klon);
                     // $("#asistan-yok").remove();
+
                 },
                 error: ajaxGenelHataCallback
             })
@@ -249,6 +252,7 @@ $(".remove-assistant").on("click", function(e) {
                     // $klon.remove(".katilimci-controls");
                     $('#asistan-' + user_id).fadeOut(800, function() {
                         $(this).remove();
+                        location.reload();
                     });
                     // $("#ogrenci-liste").append($klon);
                     // $("#ogrenci-yok").remove();

@@ -1,0 +1,1 @@
+<h2>Sık Sorulan Sorular</h2>

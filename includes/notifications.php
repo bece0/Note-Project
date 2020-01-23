@@ -169,7 +169,7 @@
 </style>
 
 <?php
-$notifications = GetUserNotifications($kullanici_id, 5);
+$notifications = GetUserNotifications($kullanici_id, 10);
 $notification_count = count($notifications);
 $new_notification_count = 0;
 
@@ -229,12 +229,17 @@ foreach ($notifications as $key => $value) {
 //var_dump($notifications);
 ?>
 
-<li class="nav-item dropdown" style="margin-right: 3px;">
+<li class="nav-item dropdown" style="margin-right: 13px;">
     <a href="#" class="nav-link notify-nav-link" count="<?php echo $new_notification_count; ?>" data-toggle="dropdown"
         role="button" aria-haspopup="true" aria-expanded="false">
-        <?php if ($new_notification_count > 0) { ?>
-        <span id="notification_badge" class="badge badge-pill badge-primary notify-cpunt-pill">
-            <?php echo $new_notification_count; ?>
+        <?php if ($new_notification_count > 0) {
+            $new_notification_count_str = "".$new_notification_count;
+            if ($new_notification_count > 9)
+                $new_notification_count_str = "9+";
+            
+        ?>
+        <span id="notification_badge" class="badge badge-pill badge-warning notify-cpunt-pill">
+            <?php echo $new_notification_count_str; ?>
         </span>
         <?php } ?>
         <i class="fas fa-bell"></i>
@@ -243,9 +248,10 @@ foreach ($notifications as $key => $value) {
     <ul class="dropdown-menu dropdown-menu-right notify-drop">
         <?php if ($notification_count > 0) { ?>
         <div class="drop-content">
-            <?php for ($i = 0; $i < $notification_count; $i++) {
+            <?php 
+                for ($i = 0; $i < $notification_count; $i++) {
                     $notification = $notifications[$i];
-                    ?>
+            ?>
             <li>
                 <!-- <div class="col-md-3 col-sm-3 col-xs-3">
                             <div class="notify-img"><img src="http://placehold.it/45x45" alt=""></div>
@@ -268,9 +274,9 @@ foreach ($notifications as $key => $value) {
             </li>
             <?php } ?>
         </div>
-        <div class="notify-drop-footer text-center">
+        <!-- <div class="notify-drop-footer text-center">
             <a href=""><i class="fa fa-eye"></i> Tümünü Göster</a>
-        </div>
+        </div> -->
         <?php } else { ?>
         <div class="drop-content">
         </div>

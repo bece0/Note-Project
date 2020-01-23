@@ -20,10 +20,15 @@ function KullaniciVarsayilanAyarlarKaydet($kullanici_id, $sehir = "Ankara"){
 
 function KullaniciAyarGuncelle($kullanici_id, $kolon_adi, $deger){
     //todo kolon degerine(string, sayi vs) göre sorgu degisebilir
+
+    $ayarlar = KullaniciAyarlariniGetirById($kullanici_id);
+
+    if($ayarlar == NULL)
+        KullaniciVarsayilanAyarlarKaydet($kullanici_id);
+
     $sql = "UPDATE ayarlar SET $kolon_adi = '$deger' where kullanici_id = $kullanici_id";
-    //echo $sql;
+    // echo $sql;
     // $sql2 = escape_string ($sql);
-    SistemLogYaz("SORGU", mysqli_real_escape_string(BAGLANTI_GETIR(), $sql)) ;
 
     return SQLUpdateCalistir($sql);
 }

@@ -134,7 +134,7 @@ if ($AYARLAR == NULL) {
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" value="<?php echo $AYARLAR["profil_private"] ?>" name="profil_private" id="profil_private" required <?php if ($AYARLAR["profil_private"] == "yes") echo "checked" ?>>
                                     <label class="form-check-label" for="profil_private">
-                                        Derslerimi  gizle
+                                        Profilimi  gizle
                                     </label>
                                 </div>
                             </div>

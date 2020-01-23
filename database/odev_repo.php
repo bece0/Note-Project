@@ -22,6 +22,11 @@ function GetOdevByKod($kod){
     return SQLTekliKayitGetir($sql);
 }
 
+function DeleteOdevByKod($kod){
+    $sql = "DELETE FROM odev where kod='$kod'";
+    return SQLDeleteCalistir($sql);
+}
+
 function GetOdevDetailsByKod($kod){
     $sql = "SELECT o.*, kullanici.adi as ogretmen_adi, kullanici.soyadi as ogretmen_soyadi
         FROM odev o

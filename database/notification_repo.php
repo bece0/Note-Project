@@ -5,7 +5,7 @@
  * @param $count son kaç bildirim
  * @return array bildirim kayıtları
  */
-function GetUserNotifications($kullanici_id, $count = 5)
+function GetUserNotifications($kullanici_id, $count = 20)
 {
     
     $sql = "SELECT bildirim.*, dersler.isim as ders FROM bildirim 

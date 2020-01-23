@@ -8,8 +8,8 @@ function OgrenciDersOdevEkle($kod, $ogrenci_id, $odev_id, $ders_id, $dosya_id){
 }
 
 function OgrenciOdevNotGuncelle($ogrenci_odev_id, $not){
-    $sql = "UPDATE ogrenci_odev SET not = '$not', durum = 1 
-        WHERE id=$ogrenci_odev_id";
+    $sql = "UPDATE ogrenci_odev oo SET oo.not = $not,  oo.durum = 1 
+        WHERE  oo.id = $ogrenci_odev_id ";
     return SQLUpdateCalistir($sql);
 }
 
@@ -25,6 +25,12 @@ function OgrenciOdev_OgrencininOdeviniGetir($ogrenci_id, $odev_id){
 
 function OgrenciOdev_OgrencininOdeviniGetirByKod($odev_kod){
     $sql = "SELECT * FROM ogrenci_odev where kod =  '$odev_kod'";
+    // echo $sql;
+    return SQLTekliKayitGetir($sql);
+}
+
+function OgrenciOdev_GetirById($id){
+    $sql = "SELECT * FROM ogrenci_odev where id =  $id";
     // echo $sql;
     return SQLTekliKayitGetir($sql);
 }

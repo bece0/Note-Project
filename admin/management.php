@@ -43,9 +43,9 @@
                 <a class="nav-item nav-link active" id="nav-system-tab" data-toggle="tab" href="#nav-system" role="tab"
                     aria-controls="nav-system" aria-selected="true">Sistem Özeti</a>
                 <a class="nav-item nav-link" id="nav-users-tab" data-toggle="tab" href="#nav-users" role="tab"
-                    aria-controls="nav-users" aria-selected="true">Kullanıcı Günlükleri</a>
+                    aria-controls="nav-users" aria-selected="true">Kullanıcı Hareketleri</a>
                 <a class="nav-item nav-link" id="nav-events-tab" data-toggle="tab" href="#nav-events" role="tab"
-                    aria-controls="nav-events" aria-selected="false">Etkinlik Günlükleri</a>
+                    aria-controls="nav-events" aria-selected="false">Ders Günlükleri</a>
                 <a class="nav-item nav-link" id="nav-systemlog-tab" data-toggle="tab" href="#nav-systemlog" role="tab"
                     aria-controls="nav-systemlog" aria-selected="false">Sistem Günlükleri</a>
                 <a class="nav-item nav-link" id="nav-errors-tab" data-toggle="tab" href="#nav-errors" role="tab"
@@ -135,9 +135,9 @@
                 </table>
             </div>
 
-            <!-- etkinlik hareketleri -->
+            <!-- ders hareketleri -->
             <div class="tab-pane fade" id="nav-events" role="tabpanel" aria-labelledby="nav-events-tab">
-                <!-- Etkinlik hareketleri
+                <!-- Ders hareketleri
                 <p>kim hangi etkinliği ne zaman oluşturdu/iptal etti vs</p>
                 <p>kim hangi etkinliğe ne zaman katıldı/çıktı vs</p> -->
                 <table class="table-sm"
@@ -148,7 +148,7 @@
                         <tr>
                         <th data-sortable="true" data-field="id">ID</th>
                         <th data-sortable="true" data-field="baslik">Başlık</th>
-                        <th data-sortable="true" data-field="etkinlik_id">Etkinlik</th>
+                        <th data-sortable="true" data-field="ders_id">Ders</th>
                         <th data-field="mesaj">Mesaj</th>
                         <th data-sortable="true" data-field="tarih">Tarih</th>
                         </tr>

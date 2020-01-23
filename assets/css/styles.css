@@ -275,6 +275,7 @@ a {
   color: #cf7c00;
   text-decoration: none;
   background-color: transparent;
+  font-weight: bold;
 }
 
 .btn-success {

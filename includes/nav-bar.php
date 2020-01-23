@@ -62,6 +62,7 @@
                 <a class="nav-link" href="takvim.php">Takvim</a>
             </li>
             <?php } ?>
+            <?php if($KULLANICI['admin']!=-1){ ?>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="menuDropdown" role="button" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
@@ -82,13 +83,16 @@
                     <?php } ?>
                 </div>
             </li>
+            <?php } ?>
 
             <?php } ?>
         </ul>
         <ul class="navbar-nav ml-auto right-nav">
             <!-- Giriş yapılmadıysa NavBarda User var-->
             <?php if($GirisYapildiMi){ ?>
-            <?php include 'notifications.php';?>
+                <?php if($KULLANICI['admin']!=-1){ ?>  
+                <?php include 'notifications.php';?>
+        
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="menuDropdown" role="button" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
@@ -109,6 +113,7 @@
                     <?php } ?>
                 </div>
             </li>
+                    <?php }?>
             <li class="nav-item">
                 <a class="nav-link" href="action/logout_action.php">Çıkış</a>
             </li>

@@ -2,10 +2,10 @@
     session_start();
 
     //bu sayfayı sadece yöneticiler istek gönderebilir.
-    if(!isset($_SESSION["admin"]) || $_SESSION["admin"] != 1){
+    if(!isset($_SESSION["admin"]) || $_SESSION["admin"] != -1){
         die();
     }
-
+ 
     if(!isset($_GET["method"]) || $_GET["method"] == ""){
         echo "method parametresi eksik!";
         die();
@@ -33,6 +33,6 @@
 
     if($sonuc == NULL)
         $sonuc = [];
-            
+     
     echo json_encode($sonuc);
 ?>

@@ -61,9 +61,9 @@ try{
             throw new Exception("odev_adi parametresi eksik!");
         }
 
-        if(!isset($_POST["aciklama"]) || $_POST["aciklama"] == ""){
+        if(!isset($_POST["odev_aciklama"]) || $_POST["odev_aciklama"] == ""){
             $statusCode = 400;
-            throw new Exception("aciklama parametresi eksik!");
+            throw new Exception("odev_aciklama parametresi eksik!");
         }
 
         if(!isset($_POST["son_tarih"]) || $_POST["son_tarih"] == ""){
@@ -77,7 +77,7 @@ try{
 
         $ders_id =  mysqli_real_escape_string($baglanti, $_POST["ders_id"]);
         $odev_adi = mysqli_real_escape_string($baglanti, $_POST["odev_adi"]);
-        $aciklama = mysqli_real_escape_string($baglanti, $_POST["aciklama"]);
+        $aciklama = mysqli_real_escape_string($baglanti, $_POST["odev_aciklama"]);
         $son_tarih = mysqli_real_escape_string($baglanti, $_POST["son_tarih"])." 23:59:59";
 
 
@@ -121,7 +121,54 @@ try{
         // DersOdevKaydet($ders_id, $olusturan_id, $dosya_id, $isim, $aciklama, $son_tarih, $dosya_gonderme)
         DersOdevKaydet($odev_kod, $ders_id, $KULLANICI_ID, $DOSYA_ID, $odev_adi, $aciklama, $son_tarih, $dosya_gonderme);
         
-    }else{
+    }else if(isset($_POST) && $METHOD == "notver"){
+        
+        if (!isset($_GET["ogrenci_odev_id"]) && $_GET['ogrenci_odev_id'] == "") {
+            $statusCode = 400;
+            throw new Exception("ogrenci_odev_id parametresi eksik!");
+        }
+
+        if(!isset($_GET["not"]) || $_GET["not"] == ""){
+            $statusCode = 400;
+            throw new Exception("odev_adi parametresi eksik!");
+        }
+
+        $ogrenci_odev_id =  mysqli_real_escape_string($baglanti, $_GET["ogrenci_odev_id"]);
+        $not = mysqli_real_escape_string($baglanti, $_GET["not"]);
+
+        $OGRENCI_ODEV = OgrenciOdev_GetirById($ogrenci_odev_id);
+        if($OGRENCI_ODEV == NULL){
+            $statusCode = 404;
+            throw new Exception("Öğrenci ödevi bulunamadı!");
+        }
+        //TODO - giriş yapan kullanıcı not verme yetkisini kontrol et....
+
+        OgrenciOdevNotGuncelle($ogrenci_odev_id, $not);
+        
+        $sonucObjesi->mesaj = "Ödev notlandırıldı.";
+    }else if(isset($_POST) && $METHOD == "delete"){
+        
+        if (!isset($_GET["odev_kod"]) && $_GET['odev_kod'] == "") {
+            $statusCode = 400;
+            throw new Exception("odev_kod parametresi eksik!");
+        }
+
+        $odev_kod =  mysqli_real_escape_string($baglanti, $_GET["odev_kod"]);
+
+        $ODEV = GetOdevDetailsByKod($odev_kod);
+        if($ODEV == NULL){
+            $statusCode = 404;
+            throw new Exception("Ödev bulunamadı!");
+        }
+
+
+        //TODO - giriş yapan kullanıcı silme yetkisini kontrol et....
+
+        DeleteOdevByKod($odev_kod);
+        
+        $sonucObjesi->mesaj = "Ödev silindi.";
+    }
+    else{
         $statusCode = 400;
         throw new Exception("Desteklenmeyen metod : $METHOD");
     }

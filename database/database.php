@@ -118,6 +118,7 @@
         $con = BAGLANTI_GETIR();
 
         if ($con->query($sql_sorgusu) === TRUE) {
+            _SistemLogYaz("SORGU_INSERT", $sql_sorgusu);
             return TRUE;
         } else {
             echo "Error at insert : " . $sql_sorgusu . "<br>" . $con->error;
@@ -129,6 +130,7 @@
         $con = BAGLANTI_GETIR();
         
         if ($con->query($sql_sorgusu) === TRUE) {
+            _SistemLogYaz("SORGU_UPDATE", $sql_sorgusu);
             return TRUE;
         } else {
             echo "Error at update : " . $sql_sorgusu . "<br>" . $con->error;
@@ -140,6 +142,8 @@
         $con = BAGLANTI_GETIR();
 
         if ($con->query($sql_sorgusu) === TRUE) {
+            // _SistemLogYaz($baslik, $mesaj);
+            _SistemLogYaz("SORGU_DELETE", $sql_sorgusu);
             return TRUE;
         } else {
             echo "Error at delete : " . $sql_sorgusu . "<br>" . $con->error;
@@ -170,4 +174,7 @@
     include 'dosya_repo.php';
     include 'ogrenci_odev_repo.php';
 
+    function _SistemLogYaz($baslik, $mesaj){
+        // return GenelLogYaz("system", $baslik, $mesaj);
+    }
 ?>

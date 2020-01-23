@@ -58,6 +58,8 @@ include 'includes/head.php';
     $SINAV_EKLEYEBILIR = FALSE;
     $SINAV_SILEBILIR = FALSE;
 
+    $YORUMDAN_SONRA_YENILE = FALSE;
+
     $DERS_RESMI_GUNCELLEYEBILIR = FALSE;
     
     if($GIRIS_YAPAN_DERSIN_HOCASI_MI){
@@ -68,6 +70,8 @@ include 'includes/head.php';
 
         $SINAV_EKLEYEBILIR = TRUE;
         $DERS_RESMI_GUNCELLEYEBILIR = TRUE;
+
+        $YORUMDAN_SONRA_YENILE = TRUE;
     }
     
     if($GIRIS_YAPAN_DERSIN_ASISTANI_MI){
@@ -75,6 +79,8 @@ include 'includes/head.php';
         $DOKUMAN_EKLEYEBILIR = TRUE;
         $DUYURU_YAPABILIR = TRUE;
         $DUYURU_SILEBILIR = TRUE;
+
+        $YORUMDAN_SONRA_YENILE = TRUE;
     }
 
     echo "<script>";
@@ -83,6 +89,7 @@ include 'includes/head.php';
     echo "var DUYURU_SILEBILIR = ".($DUYURU_SILEBILIR ? "true" : "false").";";
     echo "var DUYURU_YAPABILIR = ".($DUYURU_YAPABILIR ? "true" : "false").";";
     echo "var SINAV_EKLEYEBILIR = ".($SINAV_EKLEYEBILIR ? "true" : "false").";";
+    echo "var YORUMDAN_SONRA_YENILE = ".($YORUMDAN_SONRA_YENILE ? "true" : "false").";";
     echo "</script>";
 
     //ders_id değerini gizli input olarak gömüyoruz, javascript tarafında kullanmak için
@@ -190,9 +197,14 @@ include 'includes/head.php';
     </div>
     <?php } ?>
 
-    <?php echo "<title>" . $COURSE["isim"] . "</title>" ;
-        if ($KAYITLIMI == TRUE || $GIRIS_YAPAN_DERSIN_HOCASI_MI){ ?>
+    <?php echo "<title>" . $COURSE["isim"] . "</title>" ;   
+    if ($KAYITLIMI == TRUE || $GIRIS_YAPAN_DERSIN_HOCASI_MI){ ?>
     <div class="container">
+      <?php if(!$Ders_Aktif_Mi){ ?>
+          <div class="alert alert-danger" role="alert" style="text-align:center">BU DERS ARŞİVLENDİ.</div>
+          <hr>
+      <?php }   ?>
+
         <div class="detay">
             <div class="row">
                 <div class="col-md-7 col-sm-12 ders-resim-container">
@@ -228,13 +240,13 @@ include 'includes/head.php';
                             </a> -->
                         <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false">
-                            <i class="fa fa-cog"></i>
+                            <i class="fa fa-cog"></i> Düzenle
                         </button>
 
                         <div class="dropdown-menu">
                             <a class="dropdown-item" id="btnDersiKapat">Dersi Kapat</a>
                             <a class="dropdown-item c-header-action" id="btnDersiGuncelle" data-toggle="modal"
-                                data-target="#dersGuncelleModal">Düzenle</a>
+                                data-target="#dersGuncelleModal">Güncelle</a>
                         </div>
 
                         <?php } if($OGRENCI && $Ders_Aktif_Mi){  ?>
@@ -286,7 +298,7 @@ include 'includes/head.php';
                 <div id="yorum" class="container tab-pane fade" style="  margin-top: auto;"><br>
                     <h5><b>Tartışma</b></h5>
                     <div class="detay">
-                        <?php include 'includes/comments.php' ?>
+                        <?php include 'includes/course/comments.php' ?>
                     </div>
                 </div>
                 <!--  Katılımcılar -->
@@ -344,7 +356,6 @@ $(function() {
                     },
                     error: ajaxGenelHataCallback
                 })
-
             }
         });
 
@@ -400,7 +411,8 @@ $(function() {
             cache: false,
             processData: false,
             success: function(data) {
-                location.reload();
+                // location.reload();
+                location.reload(true);
             },
             error: function(e) {
                 Swal.fire({

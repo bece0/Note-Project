@@ -36,7 +36,16 @@ function HataMesajiGoster(mesaj){
 
 function ajaxGenelHataCallback(jqXHR, error, errorThrown){
     var mesaj = "Bir hata oluştu!";
-    var response = jQuery.parseJSON(jqXHR.responseText);
+
+    var response = {};
+    if(jqXHR && jqXHR.responseText){
+        try{
+            response = jQuery.parseJSON(jqXHR.responseText);
+        }catch(err){
+            response.mesaj = jqXHR.responseText;
+        }
+    }
+    
     if (response && response.mesaj)
         mesaj = response.mesaj;
 

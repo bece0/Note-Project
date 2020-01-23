@@ -62,7 +62,7 @@ include 'includes/head.php';
                     </div>
                     <br />
                     <?php if ($kullanici_id==$_SESSION["kullanici_id"] || $ayarlar["profil_private"] == "no"){ ?>
-                    <ul class="container details" style="list-style: none;">
+                    <ul class=" details" style="list-style: none;">
                         <li>
                             <p>
                                 <i class="fas fa-map-marker-alt"></i>

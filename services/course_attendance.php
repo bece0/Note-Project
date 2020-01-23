@@ -55,6 +55,12 @@ try{
             throw new Exception('Bu mail adresine sahip bir kullanıcı yok!');
         }
 
+   
+     if($EKLENECEK_KULLANICI["admin"] == 0 &&  $_GET["type"]=="asistan"){
+        $statusCode = 400;
+        throw new Exception('Öğrenci tipindeki kullanıcılar asistan olamaz!');
+    }
+
         if($EKLENECEK_KULLANICI["id"] == $COURSE["duzenleyen_id"]){
             $statusCode = 400;
             throw new Exception('Dersin öğretmeni derse kaydolamaz!');
@@ -127,18 +133,20 @@ try{
         }
 
         $ASISTAN_OLACAK_USER_ID = $_GET["user"];
+        // $ASISTAN_OLACAK_USER = KullaniciBilgileriniGetir($_GET["user"]);
 
         if($ASISTAN_OLACAK_USER_ID == $COURSE["duzenleyen_id"]){
             $statusCode = 400;
             throw new Exception('Dersin öğretmeni derse asistan olarak eklenemez!');
         }
+   
 
         if(DersKayitTipiGüncelle($COURSE_ID, $ASISTAN_OLACAK_USER_ID, 1) === TRUE){
             $sonucObjesi->mesaj = "Kullanıcı asistan olarak ayarlandı.";
 
             //Bildirim gönder
             $mesaj = $COURSE["isim"]." dersine asistan olarak eklendiniz";
-            BildirimYaz($EKLENECEK_KULLANICI["id"], $COURSE_ID, $mesaj, "", $tip = "ASISTAN_KAYIT");
+            BildirimYaz($ASISTAN_OLACAK_USER_ID, $COURSE_ID, $mesaj, "", $tip = "ASISTAN_KAYIT");
         }else{
             throw new Exception("Kullanıcı asistan olarak ayarlanırken hata oluştu.");
         }

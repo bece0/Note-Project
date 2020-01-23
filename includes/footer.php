@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="assets/lib/cookiealert/cookiealert.css" />
 <div class="alert alert-dismissible text-center cookiealert" role="alert">
     <div class="cookiealert-container">
-        <b>Çerez Kullanımı</b> &#x1F36A; Çerezler (cookie), move.com web sitesini ve hizmetlerimizi daha etkin bir
+        <b>Çerez Kullanımı</b> &#x1F36A; Çerezler (cookie), note.com web sitesini ve hizmetlerimizi daha etkin bir
         şekilde sunmamızı sağlamaktadır.
         Çerezlerle ilgili detaylı bilgi için <a href="cerez-politikasi.php" target="_blank">Gizlilik Politikamızı</a>
         ziyaret edebilirsiniz.
@@ -26,13 +26,15 @@
 					<h5>Hızlı Erişim</h5>
 					<ul class="list-unstyled quick-links">
 								<?php if($KULLANICI['admin'] != "" && $KULLANICI['admin'] == 0) {?>
-									<li><a href="attend_course.php"><i class="fa fa-angle-double-right"></i>Derse Kaydol</a></li>
+									<li><a href="attend_course.php" data-toggle="modal"
+                        data-target="#derseKaydolModal"><i class="fa fa-angle-double-right"></i>Derse Kaydol</a></li>
 								<?php }else{ ?>					
-									<li><a href="create_course.php"><i class="fa fa-angle-double-right"></i>Ders Oluştur</a></li>
+									<li><a href="create_course.php" data-toggle="modal"
+                        data-target="#dersOlusturModal"><i class="fa fa-angle-double-right"></i>Ders Oluştur</a></li>
 								<?php } ?>
 								<li><a href="takvim.php"><i class="fa fa-angle-double-right"></i>Takvim</a></li>
 								<li><a  href="profile.php?id=<?php echo $KULLANICI["id"]?>"><i class="fa fa-angle-double-right"></i>Profil</a></li>
-								<li><a href="my_course.php"><i class="fa fa-angle-double-right"></i>Derslerim</a></li>
+								<!-- <li><a href="my_course.php"><i class="fa fa-angle-double-right"></i>Derslerim</a></li> -->
 						
 					</ul>
 				</div>

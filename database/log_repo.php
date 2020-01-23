@@ -1,7 +1,7 @@
 <?php 
 
 // $LOG_TIP_KULLANICI = "user";
-// $LOG_TIP_ETKINLIK = "course";
+// $LOG_TIP_COURSE = "course";
 // $LOG_TIP_SISTEM = "system";
 
 $USER_LOGIN = "LOGIN";
@@ -14,16 +14,13 @@ $LOG_COURSE_REGISTER = "COURSE_REGISTER";
 $LOG_COURSE_REGISTER_CANCEL = "COURSE_REGISTER_CANCEL";
 
 
-function SistemLogYaz($baslik, $mesaj){
-    return GenelLogYaz("system", $baslik, $mesaj);
-}
-
-
 function GenelLogYaz($tip, $baslik, $mesaj){
-    $sql = "INSERT INTO gunluk (kullanici_id,ders_id, tarih, tip, baslik, mesaj)
+    $sql = "INSERT INTO gunluk (kullanici_id, ders_id, tarih, tip, baslik, mesaj)
     VALUES (0, 0 , CURRENT_TIMESTAMP(), '$tip', '$baslik', '$mesaj')";
 
-    return SQLInsertCalistir($sql);
+    $con = BAGLANTI_GETIR();
+
+    $con->query($sql);
 }
 
 
@@ -61,7 +58,7 @@ function LogYaz_KullaniciCikisi($kullanici_id, $mesaj = "")
 function LogYaz_DersKayit($kullanici_id, $ders_id, $mesaj = "")
 {   
     if($mesaj == NULL || $mesaj == "")
-        $mesaj = $kullanici_id." id nolu kullanıcı $ders_id nolu etkinliğine katıldı.";
+        $mesaj = $kullanici_id." id nolu kullanıcı $ders_id nolu derse katıldı.";
 
     return LogYaz($kullanici_id, $ders_id, "course", "COURSE_REGISTER", $mesaj);
 }
