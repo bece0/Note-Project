@@ -30,7 +30,7 @@
 
 <div class="odev-durum">
     <div class="odev-durum-mesaj">
-        <span class="alert alert-warning" role="alert" style="text-align:center">Ödev henüz göndermediniz</span>
+        <div class="alert alert-warning" role="alert" style="text-align:center">Ödev henüz göndermediniz</div>
     </div>
 </div>
 
@@ -49,14 +49,15 @@
 <?php }  else if($OGRENCI_ODEV == NULL && $ODEV_TARIHI_GECTI == TRUE) {?>
 <div class="odev-durum">
     <div class="odev-durum-mesaj">
-        <span class="alert alert-danger" role="alert" style="text-align:center">
+        <div class="alert alert-danger" role="alert" style="text-align:center">
                 Ödev teslim tarihi geçti
-        </span>
+        </div>
     </div>
     <?php } else {?>
     <div class="odev-durum-mesaj">
-        <span class="alert alert-info" role="alert" style="text-align:center">Ödevi Teslim Ettiniz</span>
+        <div class="alert alert-info" role="alert" style="text-align:center">Ödevi Teslim Ettiniz</div>
     </div>
+    <hr>
     <div>
         Gönderim Tarihi : <span class="odev-gonderim-tarih"><?php echo $OGRENCI_ODEV["gonderim_tarih"]?></span>
     </div>
