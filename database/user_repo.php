@@ -109,6 +109,18 @@
             return FALSE;
         }
     }
+    
+   function KullaniciApiKeyGuncelle($kullanici_id, $API_KEY){
+        $sql = "UPDATE kullanici SET api_key = '$API_KEY' where id = '$kullanici_id'";
+            
+        $con = BAGLANTI_GETIR();
+        if ($con->query($sql) === TRUE) {
+            return TRUE;
+        } else {
+            return FALSE;
+        }
+   }
+     
 
     /**
      * kullanıcının parolasını günceller

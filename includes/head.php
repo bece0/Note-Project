@@ -30,7 +30,7 @@ if(isset($REQUIRE_ADMIN) && $REQUIRE_ADMIN == TRUE ){
 }
 
 
-  $base_url = getenv('MOVE_BASE_URL');
+  $base_url = getenv('BASE_URL');
   if($base_url == FALSE){
     $base_url = "/note/";
   }

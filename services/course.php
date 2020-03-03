@@ -71,8 +71,7 @@ try{
             throw new Exception("Dersi kapatmaya yetkiniz yok!");
         }
 
-    }
-    else if($METHOD == "ayril"){
+    }else if($METHOD == "ayril"){
         
         if(!$GIRIS_YAPAN_DERSIN_HOCASI_MI){
             DerstenKayitSil($COURSE_ID,$KULLANICI_ID);
@@ -91,8 +90,7 @@ try{
         include '../includes/ortak.php';
 
         DosyaUpload("../files/images/event/", "", $COURSE["kodu"], ["png", "jpg", "jpeg"]);
-    }
-    else{
+    }else{
         $statusCode = 400;
         throw new Exception("Desteklenmeyen metod : $METHOD");
     }

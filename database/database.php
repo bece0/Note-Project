@@ -16,12 +16,12 @@
                 $servername = "localhost";
                 $username = "root";
                 $password = "";
-                $dbname = "classroom";
+                $dbname = "classroom_xxx";
 
                 //DATABASE_CONNECTION isimli ortam değişkeni değeri kontrol ediliyor.
                 $database_conn = getenv('DATABASE_CONNECTION');
 
-                /*
+                
                 if($database_conn != FALSE){
                     //bu değer var ise bağlantı bilgileri bu değer üzerinden ayarlanıyor...
                     //localhost;username;password;dbname
@@ -31,7 +31,7 @@
                     $password = $database_arr[2];
                     $dbname = $database_arr[3];
                 }
-                */
+                
             
                 static::$CONNECTION = new mysqli($servername, $username, $password, $dbname);
 

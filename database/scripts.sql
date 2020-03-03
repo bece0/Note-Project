@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS `kullanici` (
  `email` varchar(50) NOT NULL,
  `kayit_tarihi` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
  `son_giris_tarihi` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ `api_key` varchar(255) NOT NULL,
  PRIMARY KEY (`id`)
 );
 
