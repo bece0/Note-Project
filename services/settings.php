@@ -76,6 +76,7 @@ $mesaj = "";
     }
 } else if ($method == "password") {
     if ($data->password == NULL || $data->password == "" || strlen($data->password) < 6) {
+        http_response_code(400);
         $mesaj = "yeni parola hatali";
     } else {
         KullaniciParolaGuncelle($giris_yapan_kullanici, $data->password, TRUE);

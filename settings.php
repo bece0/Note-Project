@@ -230,6 +230,11 @@ if ($AYARLAR == NULL) {
                         },
                         error: function(jqXHR, error, errorThrown) {
                             console.log(error);
+                            Swal.fire({
+                                title: 'Ayarlar güncellenemedi!',
+                                type: 'error',
+                                confirmButtonText: 'Tamam'
+                            })
                         }
                     });
                 }
