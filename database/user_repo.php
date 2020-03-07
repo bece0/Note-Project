@@ -98,6 +98,17 @@
             return NULL;
     }
 
+    function KullaniciBilgileriniGetirByAPI($api_key){
+        $sql = "SELECT * FROM kullanici where api_key = '$api_key'";
+        
+        $con = BAGLANTI_GETIR();
+        $result = $con->query($sql);
+        if ($result->num_rows > 0) 
+            return mysqli_fetch_assoc($result);
+        else
+            return NULL;
+    }
+
     function KullaniciSonGirisGuncelle($kullanici_id){
         $sql = "UPDATE kullanici SET son_giris_tarihi = CURDATE() where id = '$kullanici_id'";
         
