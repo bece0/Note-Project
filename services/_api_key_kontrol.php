@@ -20,7 +20,7 @@ $API_ISTEGI = FALSE;
 
 if(isset($headers['X-Api-Key']) || isset($headers['x-api-key'])){
     $API_KEY = $headers['X-Api-Key'];
-    if($API_KEY == NULL || $API_KEY = "")
+    if($API_KEY == NULL || $API_KEY == "")
         $API_KEY = $headers['x-api-key'];
 
     $API_ISTEGI = TRUE;
