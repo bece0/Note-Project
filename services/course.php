@@ -24,6 +24,8 @@ try{
     if($METHOD == "finish" || $METHOD == "ayril" || $METHOD == "update_image"){
         if(isset($_GET["ders_id"]) && $_GET["ders_id"] != ""){
             $COURSE_ID = mysqli_real_escape_string($baglanti, $_GET["ders_id"]);
+        }else if(isset($_POST["ders_id"]) && $_POST["ders_id"] != ""){
+            $COURSE_ID = mysqli_real_escape_string($baglanti, $_POST["ders_id"]);
         }
 
         if($COURSE_ID == NULL){
