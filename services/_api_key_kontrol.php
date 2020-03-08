@@ -22,7 +22,7 @@ if(isset($headers['X-Api-Key']) || isset($headers['x-api-key'])){
     $API_KEY = $headers['X-Api-Key'];
     if($API_KEY == NULL || $API_KEY = "")
         $API_KEY = $headers['x-api-key'];
-        
+
     $API_ISTEGI = TRUE;
 
     $KULLANICI = KullaniciBilgileriniGetirByAPI($API_KEY);
@@ -30,7 +30,7 @@ if(isset($headers['X-Api-Key']) || isset($headers['x-api-key'])){
         $KULLANICI_ID = $KULLANICI["id"];
     }else{
         $statusCode = 401;
-        throw new HataliAPIKeyException("X-Api-Key değeri geçersiz!");
+        throw new HataliAPIKeyException("X-Api-Key değeri geçersiz :  $API_KEY");
     }
 }else{
     session_start();
