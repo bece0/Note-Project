@@ -9,8 +9,8 @@ try{
     include '_api_key_kontrol.php';
 
     if(!isset($_GET["method"]) || $_GET["method"] == ""){
-        echo "method parametresi eksik!";
-        die();
+        $statusCode = 400;
+        throw new Exception("method parametresi eksik!");
     }
     
     $METHOD = $_GET["method"];
@@ -94,8 +94,11 @@ try{
     $sonucObjesi->hata = $exp->getMessage();
     $sonucObjesi->mesaj = $exp->getMessage();
 
-    if($statusCode != 401)
+    if($statusCode == 401 || $statusCode >= 500){
+        $sonucObjesi->headers = getallheaders();
         $sonucObjesi->detay = $exp->getTraceAsString();
+    }
+
 }
 
         

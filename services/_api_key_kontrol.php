@@ -1,5 +1,8 @@
 <?php
 
+class HataliAPIKeyException extends Exception { }
+class HataliOturumException extends Exception { }
+
 header('Content-type: application/json');
 
 include '../database/database.php';
@@ -24,13 +27,14 @@ if(isset($headers['x-api-key'])){
         $KULLANICI_ID = $KULLANICI["id"];
     }else{
         $statusCode = 401;
-        throw new Exception("x-api-key değeri geçersiz!");
+        throw new HataliAPIKeyException("x-api-key değeri geçersiz!");
     }
 }else{
     session_start();
     //kullanici oturumu açık değil ise bu servise gelen istekeler işlenmez.
     if(!isset($_SESSION["kullanici_id"])){
-        throw new Exception("oturum geçersiz!");
+        $statusCode = 401;
+        throw new HataliOturumException("oturum geçersiz!");
     }
 
     $KULLANICI_ID = $_SESSION["kullanici_id"];
