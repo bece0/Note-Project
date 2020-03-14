@@ -19,7 +19,9 @@ $GIRIS_YAPAN_OGRETMEN_MI = FALSE;
 $API_ISTEGI = FALSE;
 
 if(isset($headers['X-Api-Key']) || isset($headers['x-api-key'])){
-    $API_KEY = $headers['X-Api-Key'];
+    $API_KEY = "";
+    if(isset($headers['X-Api-Key']))
+        $API_KEY = $headers['X-Api-Key'];
     if($API_KEY == NULL || $API_KEY == "")
         $API_KEY = $headers['x-api-key'];
 
