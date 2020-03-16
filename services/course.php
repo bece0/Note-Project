@@ -100,6 +100,5 @@ try{
     }
 
 }
-
         
 echo json_encode($sonucObjesi);

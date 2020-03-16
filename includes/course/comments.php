@@ -75,7 +75,7 @@
         $YORUM_ONAYLAYABILIR = TRUE;
         $YORUM_SILEBILIR = TRUE;
         
-        $comments = GetEventAllComments($ders_id);
+        $comments = GetCourseAllComments($ders_id);
     }else{
         //Sadece onaylanmış yorumları getir
         $comments = GetEventApprovedComments($ders_id);

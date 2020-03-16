@@ -20,7 +20,7 @@ function GetEventApprovedComments($ders_id){
 /**
  * Etkinliğe ait tüm yorumları getirir.
  */
-function GetEventAllComments($ders_id){
+function GetCourseAllComments($ders_id){
     $sql = "SELECT yorum.*, kullanici.adi, kullanici.soyadi FROM yorum 
         INNER JOIN kullanici ON kullanici.id=yorum.kullanici_id
         where yorum.ders_id = $ders_id";
