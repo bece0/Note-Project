@@ -65,8 +65,10 @@ include 'includes/head.php';
                     <ul class=" details" style="list-style: none;">
                         <li>
                             <p>
-                                <i class="fas fa-map-marker-alt"></i>
-                                <?php echo "Konum: " . $ayarlar["sehir"]  ?>
+                                <?php if($ayarlar != NULL){ ?>
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <?php echo "Konum: " .$ayarlar["sehir"];  ?>
+                                <?php } ?>
                             </p>
                         </li>
                         <li>

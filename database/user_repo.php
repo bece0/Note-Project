@@ -173,7 +173,7 @@
         $i = 0;
         $salt = "";
         while ($i < $max) {
-            $salt .= $characterList{mt_rand(0, (strlen($characterList) - 1))};
+            $salt .= $characterList[mt_rand(0, (strlen($characterList) - 1))];
             $i++;
         }
         return $salt;
