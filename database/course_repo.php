@@ -225,7 +225,6 @@ function DersBilgileriniGetir($ders_id)
 function DersDetayGetir_Kod($kodu)
 {
     $sql = "SELECT * FROM dersler where kodu ='" . $kodu . "'";
-    echo $sql;
     return SQLTekliKayitGetir($sql);
 }
 

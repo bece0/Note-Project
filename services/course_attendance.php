@@ -1,47 +1,39 @@
 <?php
 
-session_start();
-//kullanici oturumu açık değil ise bu servise gelen istekeler işlenmez.
-if(!isset($_SESSION["kullanici_id"])){
-    die();
-}
-
-if(!isset($_GET["method"]) || $_GET["method"] == ""){
-    echo "method parametresi eksik!";
-    die();
-}
-
-if(!isset($_GET["course"]) || $_GET["course"] == ""){
-    echo "course parametresi eksik!";
-    die();
-}
-
-$METOD = $_GET["method"];
-$COURSE_ID = $_GET["course"];
-$KULLANICI_ID = $_SESSION["kullanici_id"];
-
-include '../database/database.php';
-
-$baglanti = BAGLANTI_GETIR();
-
-header('Content-type: application/json');
-
-$sonucObjesi = new stdClass();;
+$sonucObjesi = new stdClass();
 $sonucObjesi->sonuc = false;
 $sonucObjesi->mesaj = "";
-
-//isteği yapan kullanıcı
-$KULLANICI = KullaniciBilgileriniGetirById($KULLANICI_ID); 
-
-//üzerinde işlem yapılmak istenen ders
-$COURSE = DersBilgileriniGetir($COURSE_ID);
-
-$GIRIS_YAPAN_DERSIN_HOCASI_MI = ($COURSE["duzenleyen_id"] == $KULLANICI_ID);
-$GIRIS_YAPAN_DERSIN_ASISTANI_MI = DersinAsistanıMı($COURSE_ID, $KULLANICI_ID);
-
-$statusCode = 0;
+$sonucObjesi->data = new stdClass();
 
 try{
+    include '_api_key_kontrol.php';
+
+    $COURSE_ID = NULL;
+    $METOD = NULL;
+
+    if(isset($_GET["method"]) && $_GET["method"] != ""){
+        $METOD = $_GET["method"];
+    }
+    if(isset($_GET["course"]) && $_GET["course"] != ""){
+        $COURSE_ID = mysqli_real_escape_string($baglanti, $_GET["course"]);
+    }
+    if(isset($_GET["ders_id"]) && $_GET["ders_id"] != ""){
+        $COURSE_ID = mysqli_real_escape_string($baglanti, $_GET["ders_id"]);
+    }
+
+    $GIRIS_YAPAN_DERSIN_HOCASI_MI = FALSE;
+    $GIRIS_YAPAN_DERSIN_ASISTANI_MI = FALSE;
+
+    //üzerinde işlem yapılmak istenen ders
+    $COURSE = NULL;
+    if($COURSE_ID != NULL){
+        $COURSE = DersBilgileriniGetir($COURSE_ID);
+        if($COURSE != NULL){
+            $GIRIS_YAPAN_DERSIN_HOCASI_MI = ($COURSE["duzenleyen_id"] == $KULLANICI_ID);
+            $GIRIS_YAPAN_DERSIN_ASISTANI_MI = DersinAsistanıMı($COURSE_ID, $KULLANICI_ID);
+        }
+    }
+
     if($METOD == "adduser"){
         
         if(!isset($_GET["mail"]) || $_GET["mail"] == ""){
@@ -56,10 +48,10 @@ try{
         }
 
    
-     if($EKLENECEK_KULLANICI["admin"] == 0 &&  $_GET["type"]=="asistan"){
-        $statusCode = 400;
-        throw new Exception('Öğrenci tipindeki kullanıcılar asistan olamaz!');
-    }
+        if($EKLENECEK_KULLANICI["admin"] == 0 &&  $_GET["type"]=="asistan"){
+            $statusCode = 400;
+            throw new Exception('Öğrenci tipindeki kullanıcılar asistan olamaz!');
+        }
 
         if($EKLENECEK_KULLANICI["id"] == $COURSE["duzenleyen_id"]){
             $statusCode = 400;
@@ -99,7 +91,7 @@ try{
             //Katilimci tablosuna asistan tipi(1) olarak kayıt ekle
             if(DerseKayitOl($EKLENECEK_KULLANICI["id"],  $COURSE_ID, 1) === TRUE){
                 $sonucObjesi->mesaj = "Asistan kaydı başarıyla yapıldı.";
-
+                $sonucObjesi->sonuc = true;
                 //Bildirim gönder
                 $mesaj = $COURSE["isim"]." dersine asistan olarak eklendiniz";
                 BildirimYaz($EKLENECEK_KULLANICI["id"], $COURSE_ID, $mesaj, "", $tip = "ASISTAN_KAYIT");
@@ -121,6 +113,7 @@ try{
 
         if(DerstenKayitSil($COURSE_ID, $KAYDI_SILINECEK_USER_ID) === TRUE){
             $sonucObjesi->mesaj = "Kullanıcı kaydı başarıyla silindi.";
+            $sonucObjesi->sonuc = true;
         }else{
             throw new Exception("Kullanıcı kaydı silinirken hata oluştu.");
         }
@@ -143,7 +136,7 @@ try{
 
         if(DersKayitTipiGüncelle($COURSE_ID, $ASISTAN_OLACAK_USER_ID, 1) === TRUE){
             $sonucObjesi->mesaj = "Kullanıcı asistan olarak ayarlandı.";
-
+            $sonucObjesi->sonuc = true;
             //Bildirim gönder
             $mesaj = $COURSE["isim"]." dersine asistan olarak eklendiniz";
             BildirimYaz($ASISTAN_OLACAK_USER_ID, $COURSE_ID, $mesaj, "", $tip = "ASISTAN_KAYIT");
@@ -162,11 +155,57 @@ try{
 
         if(DersKayitTipiGüncelle($COURSE_ID, $ASISTANLIKTAN_CIKARILACAK_USER_ID, 0) === TRUE){
             $sonucObjesi->mesaj = "Kullanıcı asistanlığı başarıyla kaldırıldı.";
+            $sonucObjesi->sonuc = true;
         }else{
             throw new Exception("Kullanıcı asistanlığı kaldırılırken hata oluştu.");
         }
 
-    }else{
+    }else if($METOD == "attend"){
+        if(!isset($_GET["code"]) || $_GET["code"] == ""){
+            $statusCode = 400;
+            throw new Exception('code parametresi eksik!');
+        }
+        $ders_kod = mysqli_real_escape_string($baglanti, $_GET["code"]);
+        $ders = DersDetayGetir_Kod($ders_kod);
+
+        $ders_id = $ders["id"];
+
+        if($ders["duzenleyen_id"] == $KULLANICI_ID){
+            throw new Exception("Dersin öğretmeni derse kaydolamaz!");
+        }
+        //derse kayıtlı mı
+        $derse_kayitlimi = DerseKayitliMi($KULLANICI_ID, $ders_id);
+        if($derse_kayitlimi  == TRUE){
+            throw new Exception("Bu derse zaten kayıtlısınız. (" .$ders["isim"].")" );
+        }
+ 
+        $kayitli_sayisi = DerseKayitliOgrenciSayisi($ders_id);
+        if($kayitli_sayisi >= $ders["kontenjan"]){
+            throw new Exception("Ders kontenjanı dolu. (" .$ders["kontenjan"]."" );
+        }
+
+        if(DerseKayitOl($KULLANICI_ID,  $ders_id) === TRUE){
+            LogYaz_DersKayit($KULLANICI_ID, $ders_id);
+            $sonucObjesi->mesaj = "Derse başarıyla kayıt olundu";
+            $sonucObjesi->sonuc = true;
+        }else{
+            throw new Exception("Derse kayıt olunamadı.");
+        }
+    }else if($METOD == "leave"){
+        if($COURSE_ID == NULL){
+            throw new Exception("course parametresi eksik.");
+        }
+
+        $derse_kayitlimi = DerseKayitliMi($KULLANICI_ID, $COURSE_ID);
+        if($derse_kayitlimi  == TRUE){
+            DerstenKayitSil($COURSE_ID, $KULLANICI_ID);
+            $sonucObjesi->mesaj = "Dersten başarıyla çıktınız";
+            $sonucObjesi->sonuc = true;
+        }else{
+            throw new Exception("Bu derse zaten kayıtlı değilisiniz!");
+        }
+    }
+    else{
         $statusCode = 400;
         throw new Exception("Desteklenmeyen metod : $METOD");
     }
