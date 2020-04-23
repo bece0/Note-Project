@@ -28,7 +28,7 @@ if (EtkinlikSil($event_id) === TRUE) {
         $deleted = unlink($resim_path); //etkinlik resmi de siliniyor.
 
     // $icerik =  $event_detail["isim"] . " etkinliği iptal edildi";
-    EtkinlikKatilimcilarinaBildirimGonder($event_id, "", "ETKINLIK_IPTAL");
+    EtkinlikKatilimcilarinaBildirimGonder($event_id, "", "DERS_IPTAL");
     
     LogYaz_DersSilme($_SESSION["kullanici_id"], $event_id);
 

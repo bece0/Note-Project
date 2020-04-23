@@ -21,7 +21,8 @@ try{
         $comment_id = $_GET["comment_id"];
     }
 
-    $COURSE_ID = null;
+    $COURSE = NULL;
+    $COURSE_ID = NULL;
 
     $GIRIS_YAPAN_DERSIN_HOCASI_MI = FALSE;
     $GIRIS_YAPAN_DERSIN_ASISTANI_MI = FALSE;
@@ -88,7 +89,7 @@ try{
         }
         else{
             $sonuc = AddComment($KULLANICI_ID, $COURSE_ID, $comment);
-            DersHocalarinaYorumBildirimiGonder($COURSE_ID, $KULLANICI["adi"]." ".$KULLANICI["soyadi"], );
+            DersHocalarinaYorumBildirimiGonder($COURSE_ID, $KULLANICI["adi"]." ".$KULLANICI["soyadi"], $comment);
         }
 
         $sonucObjesi->sonuc = true;

@@ -61,7 +61,7 @@ include 'includes/head.php';
                         </h2>
                     </div>
                     <br />
-                    <?php if ($kullanici_id==$_SESSION["kullanici_id"] || $ayarlar["profil_private"] == "no"){ ?>
+                    <?php if ($ayarlar != NULL && ($kullanici_id == $_SESSION["kullanici_id"] || $ayarlar["profil_private"] == "no")){ ?>
                     <ul class=" details" style="list-style: none;">
                         <li>
                             <p>

@@ -168,6 +168,10 @@ try{
         $ders_kod = mysqli_real_escape_string($baglanti, $_GET["code"]);
         $ders = DersDetayGetir_Kod($ders_kod);
 
+        if($ders == NULL){
+            throw new Exception("Geçersiz ders kodu!");
+        }
+
         $ders_id = $ders["id"];
 
         if($ders["duzenleyen_id"] == $KULLANICI_ID){
