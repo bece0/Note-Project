@@ -97,10 +97,10 @@ function DersDuyurulariGetir() {
     var dersId = $("#ders_id").val();
     $.ajax({
         type: "GET",
-        url: 'services/duyuru_getir.php?ders=' + dersId,
+        url: 'services/duyuru.php?method=list&courseId=' + dersId,
         success: function(response) {
-            if (response) {
-                DersDuyurulariniYazdir(response);
+            if (response && response.data) {
+                DersDuyurulariniYazdir(response.data);
             }
         },
         error: function(jqXHR, error, errorThrown) {
@@ -167,7 +167,7 @@ function DuyuruGonder(ders_id, mesaj) {
     }
     $.ajax({
         type: "POST",
-        url: 'services/duyuru.php',
+        url: 'services/duyuru.php?method=add',
         // data: {
         //     data: JSON.stringify(data)
         // },

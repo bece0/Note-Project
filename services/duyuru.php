@@ -1,53 +1,61 @@
 <?php
-session_start();
-header('Content-type: application/json');
 
-//kullanici oturumu açık değil ise bu servise gelen istekeler işlenmez.
-if(!isset($_SESSION["kullanici_id"])){
-    die();
-}
-
-$METHOD = "add";
-
-if(isset($_GET["method"]) && $_GET["method"] != ""){
-    $METHOD = $_GET["method"];
-}
-
-$KULLANICI_ID = $_SESSION["kullanici_id"];
-$DUYURU_ID = NULL;
-
-include '../database/database.php';
-$baglanti = BAGLANTI_GETIR();
-
-
-if(isset($_GET["duyuru_id"]) && $_GET["duyuru_id"] != ""){
-    $DUYURU_ID = $_GET["duyuru_id"];
-    $DUYURU_ID =  mysqli_real_escape_string($baglanti, $_GET["duyuru_id"]);
-}
-
-$sonucObjesi = new stdClass();;
+$sonucObjesi = new stdClass();
+$sonucObjesi->sonuc = false;
 $sonucObjesi->mesaj = "";
+$sonucObjesi->data = new stdClass();
 
-//isteği yapan kullanıcı
-$KULLANICI = KullaniciBilgileriniGetirById($KULLANICI_ID); 
-$COURSE = null;
-$COURSE_ID = null;
+try{
 
-$GIRIS_YAPAN_DERSIN_HOCASI_MI = FALSE;
-$GIRIS_YAPAN_DERSIN_ASISTANI_MI = FALSE;
+    include '_api_key_kontrol.php';
 
-$statusCode = 0;
+    if(!isset($_GET["method"]) || $_GET["method"] == ""){
+        $statusCode = 400;
+        throw new Exception("method parametresi eksik!");
+    }
+    $METHOD = $_GET["method"];
 
-try {
-   
-    if($METHOD == "add"){
+    $COURSE = null;
+    $COURSE_ID = null;
+
+    $GIRIS_YAPAN_DERSIN_HOCASI_MI = FALSE;
+    $GIRIS_YAPAN_DERSIN_ASISTANI_MI = FALSE;
+
+    $DUYURU_ID = NULL;
+    if(isset($_GET["duyuru_id"]) && $_GET["duyuru_id"] != ""){
+        $DUYURU_ID = $_GET["duyuru_id"];
+        $DUYURU_ID =  mysqli_real_escape_string($baglanti, $_GET["duyuru_id"]);
+    }
+
+    if(isset($_GET["ders"]) && $_GET["ders"] != ""){
+        $COURSE_ID =  mysqli_real_escape_string($baglanti, $_GET["ders"]);
+    }
+
+    if(isset($_GET["courseId"]) && $_GET["courseId"] != ""){
+        $COURSE_ID =  mysqli_real_escape_string($baglanti, $_GET["courseId"]);
+    }
+
+    if(isset($_POST["ders_id"]) && $_POST["ders_id"] != ""){
+        $COURSE_ID =  mysqli_real_escape_string($baglanti, $_POST["ders_id"]);
+    }
+    
+    if($METHOD == "list"){
+        if ($COURSE_ID  == NULL) {
+            $statusCode = 400;
+            throw new Exception("courseId parametresi eksik!");
+        }
+
+        $duyurular = DersDuyurulariGetir($COURSE_ID);
+
+        $sonucObjesi->data  = $duyurular;
+        $sonucObjesi->sonuc = true;
+    }
+    else if($METHOD == "add"){
         $mesaj = "";
 
-        if (isset($_POST["ders_id"]) && $_POST['ders_id'] != NULL) {
-            $COURSE_ID =  mysqli_real_escape_string($baglanti, $_POST["ders_id"]);
-        }else{
+        if ($COURSE_ID  == NULL) {
             $statusCode = 400;
-            throw new Exception("ders_id parametresi eksik!");
+            throw new Exception("courseId parametresi eksik!");
         }
 
         $COURSE = DersBilgileriniGetir($COURSE_ID);
@@ -71,6 +79,7 @@ try {
         if($GIRIS_YAPAN_DERSIN_HOCASI_MI || $GIRIS_YAPAN_DERSIN_ASISTANI_MI){
             DersDuyuruKaydet($COURSE_ID, $KULLANICI_ID, $mesaj);
             DersKatilimcilarinaDuyuruBildirimiGonder($COURSE_ID, $mesaj, "", [$KULLANICI_ID]);
+            $sonucObjesi->sonuc = true;
         }
         else{
             $statusCode = 401;
@@ -106,6 +115,7 @@ try {
         
         if($GIRIS_YAPAN_DERSIN_HOCASI_MI || $GIRIS_YAPAN_DERSIN_ASISTANI_MI){
             DuyuruSil($DUYURU_ID);
+            $sonucObjesi->sonuc = true;
         }
         else{
             $statusCode = 401;
