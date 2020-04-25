@@ -1,5 +1,5 @@
 <?php
-    $REQUIRE_LOGIN = FALSE;
+    $REQUIRE_LOGIN = TRUE;
     $page_title = " Anasayfa";
     include 'includes/page-common.php';
     include 'includes/head.php';
