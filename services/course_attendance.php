@@ -20,6 +20,9 @@ try{
     if(isset($_GET["ders_id"]) && $_GET["ders_id"] != ""){
         $COURSE_ID = mysqli_real_escape_string($baglanti, $_GET["ders_id"]);
     }
+    if(isset($_GET["courseId"]) && $_GET["courseId"] != ""){
+        $COURSE_ID = mysqli_real_escape_string($baglanti, $_GET["courseId"]);
+    }
 
     $GIRIS_YAPAN_DERSIN_HOCASI_MI = FALSE;
     $GIRIS_YAPAN_DERSIN_ASISTANI_MI = FALSE;
@@ -207,6 +210,19 @@ try{
             $sonucObjesi->sonuc = true;
         }else{
             throw new Exception("Bu derse zaten kayıtlı değilisiniz!");
+        }
+    }else if($METOD == "list"){
+        if($COURSE_ID == NULL){
+            throw new Exception("course parametresi eksik.");
+        }
+
+        $derse_kayitlimi = DerseKayitliMi($KULLANICI_ID, $COURSE_ID);
+
+        if($GIRIS_YAPAN_DERSIN_HOCASI_MI || $GIRIS_YAPAN_DERSIN_ASISTANI_MI || $derse_kayitlimi){
+            $sonucObjesi->data = DersKatilimcilariniGetir($COURSE_ID);
+            $sonucObjesi->sonuc = true;
+        }else{
+            throw new Exception("Bu derse ait katilimcileri görmeye yetkiniz yok!");
         }
     }
     else{
