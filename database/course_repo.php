@@ -376,7 +376,7 @@ function  DuzenledigiGecmisDersleriGetir($kullanici_id)
 
 function DersKatilimcilariniGetir($ders_id)
 {
-    $sql = "SELECT kul.* , k.tip
+    $sql = "SELECT kul.id, kul.admin, kul.adi, kul.soyadi, kul.kodu, kul.email, k.tip
     FROM kullanici kul INNER JOIN katilimci k
     ON k.ogrenci_id=kul.id 
     where k.ders_id=" . $ders_id . "";
