@@ -1,52 +1,38 @@
 <?php
 
-session_start();
-header('Content-type: application/json');
-
-//kullanici oturumu açık değil ise bu servise gelen istekeler işlenmez.
-if(!isset($_SESSION["kullanici_id"])){
-    die();
-}
-
-$METHOD = "add";
-if(!isset($_GET["method"]) || $_GET["method"] == ""){
-    // echo "method parametresi eksik!";
-    // die();
-}else {
-    $METHOD = $_GET["method"];
-}
-
-
-$KULLANICI_ID = $_SESSION["kullanici_id"];
-$comment_id = NULL;
-
-// if(isset($_GET["comment_id"]) && $_GET["comment_id"] != ""){
-//     $comment_id = $_GET["comment_id"];
-// }
-
-include '../database/database.php';
-$baglanti = BAGLANTI_GETIR();
-
-$sonucObjesi = new stdClass();;
+$sonucObjesi = new stdClass();
+$sonucObjesi->sonuc = false;
 $sonucObjesi->mesaj = "";
-
-//isteği yapan kullanıcı
-$KULLANICI = KullaniciBilgileriniGetirById($KULLANICI_ID); 
-$COURSE = null;
-$COURSE_ID = null;
-
-$GIRIS_YAPAN_DERSIN_HOCASI_MI = FALSE;
-$GIRIS_YAPAN_DERSIN_ASISTANI_MI = FALSE;
-
-$statusCode = 0;
-
-$ders_id = NULL;
-$odev_adi = NULL;
-$aciklama = NULL;
-$son_tarih = NULL;
-$dosya_gonderme = 0;//dosya gönderme mecburi mi
+$sonucObjesi->data = new stdClass();
 
 try{
+    
+    include '_api_key_kontrol.php';
+
+    $METHOD = "add";
+    if(!isset($_GET["method"]) || $_GET["method"] == ""){
+        // die();
+    }else {
+        $METHOD = $_GET["method"];
+    }
+
+    $comment_id = NULL;
+ 
+
+    $COURSE = null;
+    $COURSE_ID = null;
+    if(isset($_GET["courseId"]) && $_GET["courseId"] != ""){
+        $COURSE_ID = $_GET["courseId"];
+    }
+    
+    $GIRIS_YAPAN_DERSIN_HOCASI_MI = FALSE;
+    $GIRIS_YAPAN_DERSIN_ASISTANI_MI = FALSE;
+
+    $odev_adi = NULL;
+    $aciklama = NULL;
+    $son_tarih = NULL;
+    $dosya_gonderme = 0;//dosya gönderme mecburi mi
+ 
     include '../includes/ortak.php';
 
     if(isset($_POST) && $METHOD == "add"){
@@ -75,13 +61,13 @@ try{
             $dosya_gonderme = 1;
         }
 
-        $ders_id =  mysqli_real_escape_string($baglanti, $_POST["ders_id"]);
+        $COURSE_ID =  mysqli_real_escape_string($baglanti, $_POST["ders_id"]);
         $odev_adi = mysqli_real_escape_string($baglanti, $_POST["odev_adi"]);
         $aciklama = mysqli_real_escape_string($baglanti, $_POST["odev_aciklama"]);
         $son_tarih = mysqli_real_escape_string($baglanti, $_POST["son_tarih"])." 23:59:59";
 
 
-        $COURSE = DersBilgileriniGetir($ders_id);
+        $COURSE = DersBilgileriniGetir($COURSE_ID);
         $DUZENLEYEN_ID = $COURSE["duzenleyen_id"];
 
 
@@ -92,12 +78,12 @@ try{
             $GIRIS_YAPAN_DERSIN_HOCASI_MI = TRUE;
 
         if($KULLANICI["admin"] == 1 && $GIRIS_YAPAN_DERSIN_HOCASI_MI == FALSE)
-            $GIRIS_YAPAN_DERSIN_ASISTANI_MI = DersinAsistanıMı($ders_id, $KULLANICI_ID);
+            $GIRIS_YAPAN_DERSIN_ASISTANI_MI = DersinAsistanıMı($COURSE_ID, $KULLANICI_ID);
 
         if($GIRIS_YAPAN_DERSIN_HOCASI_MI == FALSE && $GIRIS_YAPAN_DERSIN_ASISTANI_MI == FALSE)
             throw new Exception("Bu ders için ödev oluşturma yetkiniz bulunmuyor!");
 
-        $DOSYA_DETAY = DosyaUpload("../files/uploads/odev/", $ders_id);
+        $DOSYA_DETAY = DosyaUpload("../files/uploads/odev/", $COURSE_ID);
 
         $DOSYA_ID = NULL;
 
@@ -118,9 +104,10 @@ try{
         }
 
         $odev_kod = GUIDOlustur();
-        // DersOdevKaydet($ders_id, $olusturan_id, $dosya_id, $isim, $aciklama, $son_tarih, $dosya_gonderme)
-        DersOdevKaydet($odev_kod, $ders_id, $KULLANICI_ID, $DOSYA_ID, $odev_adi, $aciklama, $son_tarih, $dosya_gonderme);
+        // DersOdevKaydet($COURSE_ID, $olusturan_id, $dosya_id, $isim, $aciklama, $son_tarih, $dosya_gonderme)
+        DersOdevKaydet($odev_kod, $COURSE_ID, $KULLANICI_ID, $DOSYA_ID, $odev_adi, $aciklama, $son_tarih, $dosya_gonderme);
         
+        DersKatilimcilarinaYeniOdevBildirimiGonder($COURSE_ID, $odev_adi, "", "", [$KULLANICI_ID]);
     }else if(isset($_POST) && $METHOD == "notver"){
         
         if (!isset($_GET["ogrenci_odev_id"]) && $_GET['ogrenci_odev_id'] == "") {
@@ -167,13 +154,13 @@ try{
         DeleteOdevByKod($odev_kod);
         
         $sonucObjesi->mesaj = "Ödev silindi.";
-    }
-    else{
+    }else if($METHOD == "list"){
+        $sonucObjesi->data = DersOdevleriniGetir($COURSE_ID);
+        $sonucObjesi->sonuc = true;
+    }else{
         $statusCode = 400;
         throw new Exception("Desteklenmeyen metod : $METHOD");
     }
-
-    // var_dump($_POST);
 
 }catch(Throwable $exp){
     if($statusCode == 0)
@@ -187,15 +174,8 @@ try{
     $sonucObjesi->detay = $exp->getTraceAsString();
 }
 
-try {
-    DersKatilimcilarinaYeniOdevBildirimiGonder($ders_id, $odev_adi, "", "", [$KULLANICI_ID]);
-} catch (\Throwable $th) {
-    
-}
 
         
 echo json_encode($sonucObjesi);
-
-
 
 ?>

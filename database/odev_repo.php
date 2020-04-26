@@ -5,7 +5,7 @@ function DersOdevleriniGetir($ders_id){
         INNER JOIN kullanici ON kullanici.id=o.olusturan_id
         WHERE o.ders_id = $ders_id ORDER BY o.olusturma_tarih DESC";
     
-    return SQLCalistir($sql);
+    return SQLCalistir($sql, FALSE);
 }
 
 function DersOdevKaydet($kod, $ders_id, $olusturan_id, $dosya_id, $isim, $aciklama, $son_tarih, $dosya_gonderme) : bool
