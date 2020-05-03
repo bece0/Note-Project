@@ -93,6 +93,11 @@ try{
         KullaniciApiKeyGuncelle($kullanici["id"], $API_KEY);
         $sonucObjesi->api_key = $API_KEY;
         $sonucObjesi->sonuc = true;
+        $sonucObjesi->code = $kullanici['kodu'];
+        $sonucObjesi->id = $kullanici['id'];
+        $sonucObjesi->type = $kullanici['admin'];
+        $sonucObjesi->name = $kullanici['adi'];
+        $sonucObjesi->surname = $kullanici['soyadi'];
     }else {
         throw new Exception("Bir hata oluştu. Lütfen tekrar deneyin.");
     }
