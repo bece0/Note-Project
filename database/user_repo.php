@@ -9,12 +9,12 @@
      * @param string $password kullanıcının parolası
      * @return bool kaydetme işlemi başarılı ise true değil ise false döner
      */
-    function KullaniciKaydet($kodu, $name, $surname, $email, $password, $salt, $admin){
+    function KullaniciKaydet($kodu, $name, $surname, $email, $password, $salt, $kullaniciTip){
         
         //$password = password_hash($password, PASSWORD_BCRYPT);
 
         $sql = "INSERT INTO kullanici (kodu, adi, soyadi, email, parola, salt, kayit_tarihi, admin)
-        VALUES ('$kodu', '$name', '$surname', '$email', '$password', '$salt', CURDATE(), '$admin' )";
+        VALUES ('$kodu', '$name', '$surname', '$email', '$password', '$salt', CURDATE(), '$kullaniciTip' )";
 
         $con = BAGLANTI_GETIR();
 

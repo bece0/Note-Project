@@ -51,6 +51,7 @@ try{
 
     //var_dump($data);
 
+    $kullaniciTip = 0;
 
     if(isset($data->email)){
         $EMAIL = mysqli_real_escape_string($baglanti, $data->email );
@@ -68,6 +69,14 @@ try{
         $SURNAME = mysqli_real_escape_string($baglanti, $data->surname );
     }
 
+    if(isset($data->surname)){
+        $SURNAME = mysqli_real_escape_string($baglanti, $data->surname );
+    }
+
+    if(isset($data->tip)){
+        $kullaniciTip = (int)$data->tip;
+    }
+
 
     $kullanici = KullaniciBilgileriniGetir($EMAIL);
 
@@ -81,7 +90,7 @@ try{
     $hashlenmis_parola = hash('sha512',$salt_ve_parola); 
     $kodu = GUIDOlustur();
 
-    if(KullaniciKaydet($kodu, $NAME, $SURNAME, $EMAIL, $hashlenmis_parola, $salt, 0) === TRUE){
+    if(KullaniciKaydet($kodu, $NAME, $SURNAME, $EMAIL, $hashlenmis_parola, $salt, $kullaniciTip) === TRUE){
         $sonucObjesi->mesaj = "Hesabınız oluşturuldu. Giriş yapabilirsiniz.";
         
         $kullanici = KullaniciBilgileriniGetir($EMAIL);
