@@ -66,14 +66,11 @@ try{
     }
 
     $json = file_get_contents('php://input');
-    if($json == NULL){
-        $statusCode = 400;
-        throw new Exception("Hatalı istek");
-    }
-
-    $data = json_decode($json);
-    if($data && isset($data->courseId)){
-        $COURSE_ID = mysqli_real_escape_string($baglanti, $data->courseId);
+    if($json != NULL){
+        $data = json_decode($json);
+        if($data && isset($data->courseId)){
+            $COURSE_ID = mysqli_real_escape_string($baglanti, $data->courseId);
+        }
     }
     
     if($METHOD == "list"){
