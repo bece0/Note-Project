@@ -211,7 +211,7 @@ include 'includes/head.php';
                     <?php if($DERS_RESMI_GUNCELLEYEBILIR) {?>
                     <button id="dersResimDegis" class="btn btn-info ders-resim-edit"><i class="fa fa-cog"></i></button>
                     <?php } ?>
-                    <img class="ders-resim" src="files/images/event/<?php echo $COURSE["kodu"] ?>.png">
+                    <img class="ders-resim" src="files/images/course/<?php echo $COURSE["kodu"] ?>.png">
                 </div>
                 <div class="col-md-5 col-sm-12">
                     <h1 class='e-adi'><?php echo $COURSE["isim"]  ?></h1>

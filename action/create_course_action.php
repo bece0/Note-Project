@@ -58,8 +58,8 @@ function random_str(
     }
     
     function ResimYukle($ders_kodu){
-        $varsayılan_resim =  __DIR__ . "/../files/images/event/default.png";
-        $yeni_resim =  __DIR__ . "/../files/images/event/" . $ders_kodu . ".png";
+        $varsayılan_resim =  __DIR__ . "/../files/images/course/default.png";
+        $yeni_resim =  __DIR__ . "/../files/images/course/" . $ders_kodu . ".png";
 
         return copy($varsayılan_resim, $yeni_resim);
     }
@@ -72,7 +72,7 @@ function random_str(
 
              if(!isset($_FILES["ders_resim"]) || $_FILES['ders_resim']['size'] == 0){
       //         echo $ders_kodu. " koduna sahip dersin resmi yüklenmedi. varsayılan resimeklenecektir";         
-     //           $yeni_resim =  __DIR__ . "/../files/images/event/" . $ders_kodu . ".png";
+     //           $yeni_resim =  __DIR__ . "/../files/images/course/" . $ders_kodu . ".png";
             
 
         //       echo "<br> yeni resim : ". $yeni_resim . "<br>";
@@ -96,7 +96,7 @@ function random_str(
             // Rename file
             $newfilename = $ders_kodu . ".png";
             
-            $yeni_resim =  __DIR__ . "/../files/images/event/" . $newfilename;
+            $yeni_resim =  __DIR__ . "/../files/images/course/" . $newfilename;
             move_uploaded_file($_FILES["ders_resim"]["tmp_name"],  $yeni_resim);
             echo "File uploaded successfully.";		
         }

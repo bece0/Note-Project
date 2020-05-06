@@ -44,7 +44,7 @@
                         $meaningFullUrl = ToMeaningfullUrl( $ders["isim"], $id)
                 ?>
                         <div>
-                            <div class="course-card" style="background:url(files/images/event/<?php echo $ders["kodu"] ?>.png) no-repeat 0 0;">
+                            <div class="course-card" style="background:url(files/images/course/<?php echo $ders["kodu"] ?>.png) no-repeat 0 0;">
                                 <div class="course-card-desc">
                                     <div class="course-card-title">
                                         <a href='course.php?course=<?php echo $meaningFullUrl; ?>'>
@@ -89,7 +89,7 @@
                             $meaningFullUrl = ToMeaningfullUrl( $ders["isim"], $id)
                     ?>
                             <div>
-                                <div class="course-card" style="background:url(files/images/event/<?php echo $ders["kodu"] ?>.png) no-repeat 0 0;">
+                                <div class="course-card" style="background:url(files/images/course/<?php echo $ders["kodu"] ?>.png) no-repeat 0 0;">
                                     <div class="course-card-desc">
                                         <div class="course-card-title">
                                             <a href='course.php?course=<?php echo $meaningFullUrl; ?>'>

@@ -70,7 +70,7 @@ try{
 
         include '../includes/ortak.php';
 
-        DosyaUpload("../files/images/event/", "", $COURSE["kodu"], ["png", "jpg", "jpeg"]);
+        DosyaUpload("../files/images/course/", "", $COURSE["kodu"], ["png", "jpg", "jpeg"]);
     }else if($METHOD == "get_active_courses"){
         if($GIRIS_YAPAN_OGRETMEN_MI){
             $sonucObjesi->data->dersler = DuzenledigiAktifDersleriGetir($KULLANICI_ID);

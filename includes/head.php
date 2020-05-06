@@ -117,6 +117,8 @@ if(isset($REQUIRE_ADMIN) && $REQUIRE_ADMIN == TRUE ){
 
       return $value;
     }
+
+    include 'includes/ortak.php';
   ?>
 
 </head>

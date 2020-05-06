@@ -133,7 +133,7 @@
                 </h6>
                 <div class="comment-date"><?php echo turkcetarih_formati('d M Y', $current_comment["tarih"]) ?></div>
                 <p class="comment-content">
-                    <?php echo $current_comment["icerik"]  ?>
+                    <?php echo make_links_clickable($current_comment["icerik"])  ?>
                 </p>
             </div>
         </div>

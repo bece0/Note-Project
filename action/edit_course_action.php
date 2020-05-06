@@ -48,10 +48,10 @@
         if((!isset($_FILES["ders_resim"]) || $_FILES['ders_resim']['size'] == 0) && $usedefault == "1" ){
             echo $ders_kodu. " koduna sahip dersin resmi yüklenmedi. varsayılan resim eklenecektir";
             
-            // $yeni_resim =  __DIR__ . "\\..\\files\\images\\event\\" . $ders_kodu . ".png";
+            // $yeni_resim =  __DIR__ . "\\..\\files\\images\\course\\" . $ders_kodu . ".png";
             // $varsayılan_resim =  __DIR__ . "\\..\\files\\images\\" . ToEnglish($_POST["tip"]) . ".png";
            
-            $yeni_resim =  __DIR__ . "/../files/images/event/" .   $ders_kodu . ".png";
+            $yeni_resim =  __DIR__ . "/../files/images/course/" .   $ders_kodu . ".png";
             $varsayılan_resim =  __DIR__ . "/../files/images/default.png";
 
             echo "<br> yeni resim : ". $yeni_resim . "<br>";
@@ -79,7 +79,7 @@
                 $deleted= unlink($newfilename);
 
             // $yeni_resim =  __DIR__ . "\\..\\files\\images\\event\\" . $newfilename;
-            $yeni_resim =  __DIR__ . "/../files/images/event/" . $newfilename;
+            $yeni_resim =  __DIR__ . "/../files/images/course/" . $newfilename;
             move_uploaded_file($_FILES["ders_resim"]["tmp_name"],  $yeni_resim);
             echo "File uploaded successfully.";	
             

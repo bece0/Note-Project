@@ -109,7 +109,7 @@ function DersKatilimcilarinaYeniDokumanBildirimiGonder($ders_id, $dokuman_adi, $
 function DersHocalarinaYorumBildirimiGonder($ders_id, $yorum_yapan_adi_soyadi, $mesaj = "", $url = "", $haricListesi= [])
 {
     $sql_asistanlar = "SELECT * from katilimci where ders_id = '$ders_id' AND tip = 1";
-    $asistan_katilimcilar = SQLCalistir($sql_asistanlar, FALSE);
+    $katilimcilar = SQLCalistir($sql_asistanlar, FALSE);
 
     $ders = DersBilgileriniGetir($ders_id);
 

@@ -19,6 +19,14 @@ function ToEnglish2($value)
     return $value;
 }
 
+function make_links_clickable($text) {
+    // The Regular Expression filter
+    $pattern = "/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/";
+    $text = preg_replace($pattern, "<a href=\"\\0\" rel=\"nofollow\">\\0</a>", $text);
+
+    return $text;
+}
+
 function DosyaUpload($path = "../files/uploads/", $dosyaIsimOnEk = "", $dosya_adi = NULL, $extensions = NULL){
     
     if($_FILES['dosya'] == NULL || $_FILES['dosya']['name'] == NULL)
