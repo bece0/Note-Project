@@ -64,6 +64,17 @@ try{
         $GIRIS_YAPAN_DERSIN_HOCASI_MI = ($COURSE["duzenleyen_id"] == $KULLANICI_ID);
         $GIRIS_YAPAN_DERSIN_ASISTANI_MI = DersinAsistanıMı($COURSE_ID, $KULLANICI_ID);
     }
+
+    $json = file_get_contents('php://input');
+    if($json == NULL){
+        $statusCode = 400;
+        throw new Exception("Hatalı istek");
+    }
+
+    $data = json_decode($json);
+    if($data && isset($data->courseId)){
+        $COURSE_ID = mysqli_real_escape_string($baglanti, $data->courseId);
+    }
     
     if($METHOD == "list"){
         $comments = [];
@@ -82,7 +93,7 @@ try{
         $sonucObjesi->sonuc = true;
 
     }else if($METHOD == "add"){
-        $comment =  mysqli_real_escape_string($baglanti, $_POST["comment"]);
+        $comment =  mysqli_real_escape_string($baglanti, $data->comment);
         
         if($GIRIS_YAPAN_DERSIN_HOCASI_MI || $GIRIS_YAPAN_DERSIN_ASISTANI_MI){
             $sonuc = AddComment($KULLANICI_ID, $COURSE_ID, $comment, 1);
@@ -93,8 +104,7 @@ try{
         }
 
         $sonucObjesi->sonuc = true;
-    }
-    else if($METHOD == "delete"){
+    }else if($METHOD == "delete"){
         if($comment_id != NULL){
 
             $COMMENT = GetSingleCommentById($comment_id);
@@ -130,8 +140,7 @@ try{
             $statusCode = 400;
             throw new Exception("comment_id parametresi eksik!");
         }
-    }
-    else if($METHOD == "approve"){
+    }else if($METHOD == "approve"){
         if($comment_id != NULL){
             //TODO - check if current user can delete
             

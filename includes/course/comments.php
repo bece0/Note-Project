@@ -223,21 +223,32 @@ $(function() {
 
     $("#btn-comment-send").on("click", function() {
         var comment = $("#txt_comment").val();
+        var courseId = $("#ders_id").val();
         if (isEmptyOrSpaces(comment) || comment.length < 15) {
             return alert("Yorum içeriği girin!");
         }
+
+        if (!courseId) {
+            return alert("Ders id hatalı!");
+        }
+
+        var comment_data = {
+            comment: comment,
+            courseId : courseId
+        };
 
         $("#btn-comment-send").prop("disabled", true);
         $.ajax({
             type: "POST",
             url: 'services/comment.php?method=add',
-            // data: JSON.stringify(comment_data),
-            data: $("#comment-form").serialize(),
+            data: JSON.stringify(comment_data),
+            // data: $("#comment-form").serialize(),
             success: function(response) {
                 if (response && response.sonuc) {
                     $("#txt_comment").val("");
 
-                    if (typeof YORUMDAN_SONRA_YENILE !== 'undefined' && YORUMDAN_SONRA_YENILE)
+                    if (typeof YORUMDAN_SONRA_YENILE !== 'undefined' &&
+                        YORUMDAN_SONRA_YENILE)
                         location.reload();
                     else {
                         Swal.fire({
