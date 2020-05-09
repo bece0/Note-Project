@@ -15,7 +15,7 @@ $all =  TumKullaniciBilgileriniGetir();
 $count = count($all);
 for ($i = 0; $i < $count; $i++) {
     $user = $all[$i];
-    KullaniciParolaGuncelle($user["id"], "123", TRUE){
+    KullaniciParolaGuncelle($user["id"], "123", TRUE);
 }
 
 echo "parolalar değiştirildi <br>";
