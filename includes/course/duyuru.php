@@ -162,16 +162,14 @@ function DersDuyurulariniYazdir(duyurular) {
 
 function DuyuruGonder(ders_id, mesaj) {
     var data = {
-        ders_id: ders_id,
+        courseId: ders_id,
         mesaj: mesaj
     }
     $.ajax({
         type: "POST",
         url: 'services/duyuru.php?method=add',
-        // data: {
-        //     data: JSON.stringify(data)
-        // },
-        data: data,
+        data:  JSON.stringify(data),
+        // data: data,
         success: function(response) {
             Swal.fire({
                 type: 'success',

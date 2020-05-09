@@ -15,10 +15,10 @@ try{
     }
     $METHOD = $_GET["method"];
 
-    $comment_id = NULL;
+    $COMMENT_ID = NULL;
 
-    if(isset($_GET["comment_id"]) && $_GET["comment_id"] != ""){
-        $comment_id = $_GET["comment_id"];
+    if(isset($_GET["commentId"]) && $_GET["commentId"] != ""){
+        $COMMENT_ID = mysqli_real_escape_string($baglanti,$_GET["commentId"]);
     }
 
     $COURSE = NULL;
@@ -35,12 +35,12 @@ try{
         $COURSE_ID = $_GET["courseId"];
     }
     
-    if($comment_id != NULL && $COURSE_ID == NULL){
+    if($COMMENT_ID != NULL && $COURSE_ID == NULL){
         //Comment id üzerinde course_id bulmaca
-        $COMMENT = GetSingleCommentById($comment_id);
+        $COMMENT = GetSingleCommentById($COMMENT_ID);
         if($COMMENT == NULL){
             $statusCode = 404;
-            throw new Exception("Yorumu bulunamadi!");
+            throw new Exception("Yorum bulunamadi! $COMMENT_ID");
         }
 
         $COURSE_ID = $COMMENT["ders_id"];
@@ -102,12 +102,12 @@ try{
 
         $sonucObjesi->sonuc = true;
     }else if($METHOD == "delete"){
-        if($comment_id != NULL){
+        if($COMMENT_ID != NULL){
 
-            $COMMENT = GetSingleCommentById($comment_id);
+            $COMMENT = GetSingleCommentById($COMMENT_ID);
             if($COMMENT == NULL){
                 $statusCode = 404;
-                throw new Exception("Yorumu bulunamadi!");
+                throw new Exception("Yorum bulunamadi! $COMMENT_ID");
             }
             
             $COURSE_ID  =$COMMENT["ders_id"];
@@ -126,7 +126,7 @@ try{
             }
 
             if($GIRIS_YAPAN_YORUM_SAHIBI || $GIRIS_YAPAN_DERSIN_HOCASI_MI || $GIRIS_YAPAN_DERSIN_ASISTANI_MI){
-                $sonuc = DeleteComment($comment_id);
+                $sonuc = DeleteComment($COMMENT_ID);
                 $sonucObjesi->sonuc = $sonuc;
                 $sonucObjesi->mesaj = "Yorum başarıyla silindi";
             }else{
@@ -138,11 +138,11 @@ try{
             throw new Exception("comment_id parametresi eksik!");
         }
     }else if($METHOD == "approve"){
-        if($comment_id != NULL){
+        if($COMMENT_ID != NULL){
             //TODO - check if current user can delete
             
             if($GIRIS_YAPAN_DERSIN_HOCASI_MI || $GIRIS_YAPAN_DERSIN_ASISTANI_MI){
-                $sonucObjesi->sonuc = ApproveComment($comment_id, $KULLANICI_ID);
+                $sonucObjesi->sonuc = ApproveComment($COMMENT_ID, $KULLANICI_ID);
                 $sonucObjesi->mesaj = "Yorum başarıyla onaylandı";
             }else{
                 $statusCode = 401;

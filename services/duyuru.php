@@ -38,7 +38,7 @@ try{
     if(isset($_POST["ders_id"]) && $_POST["ders_id"] != ""){
         $COURSE_ID =  mysqli_real_escape_string($baglanti, $_POST["ders_id"]);
     }
-    
+
     if($METHOD == "list"){
         if ($COURSE_ID  == NULL) {
             $statusCode = 400;
@@ -49,13 +49,28 @@ try{
 
         $sonucObjesi->data  = $duyurular;
         $sonucObjesi->sonuc = true;
-    }
-    else if($METHOD == "add"){
+    }else if($METHOD == "add"){
         $mesaj = "";
+
+        $json = file_get_contents('php://input');
+        if($json != NULL){
+            $data = json_decode($json);
+            if($data && isset($data->courseId)){
+                $COURSE_ID = mysqli_real_escape_string($baglanti, $data->courseId);
+            }
+            if($data && isset($data->mesaj)){
+                $mesaj = mysqli_real_escape_string($baglanti, $data->mesaj);
+            }
+        }
 
         if ($COURSE_ID  == NULL) {
             $statusCode = 400;
             throw new Exception("courseId parametresi eksik!");
+        }
+
+        if ($mesaj == "" || $mesaj == NULL){  
+            $statusCode = 400;
+            throw new Exception("mesaj parametresi eksik!");
         }
 
         $COURSE = DersBilgileriniGetir($COURSE_ID);
@@ -64,12 +79,6 @@ try{
             throw new Exception("Ders bulunamadi!");
         }
 
-        if (isset($_POST["mesaj"]) && $_POST['mesaj'] != NULL) {
-            $mesaj =  mysqli_real_escape_string($baglanti, $_POST["mesaj"]);
-        }else{
-            $statusCode = 400;
-            throw new Exception("mesaj parametresi eksik!");
-        }
 
         if(isset($COURSE_ID) && $COURSE_ID != NULL){
             $GIRIS_YAPAN_DERSIN_HOCASI_MI = ($COURSE["duzenleyen_id"] == $KULLANICI_ID);

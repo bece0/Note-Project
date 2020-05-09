@@ -285,7 +285,7 @@ $(function() {
 
         $.ajax({
             type: "POST",
-            url: 'services/comment.php?method=approve&comment_id=' + comment_id,
+            url: 'services/comment.php?method=approve&commentId=' + comment_id,
             success: function(response) {
                 $(e.target).remove();
                 $('#comment-' + comment_id).removeClass('onaysiz');
@@ -306,7 +306,7 @@ $(function() {
 
         $.ajax({
             type: "POST",
-            url: 'services/comment.php?method=delete&comment_id=' + comment_id,
+            url: 'services/comment.php?method=delete&commentId=' + comment_id,
             success: function(response) {
                 $('#comment-' + comment_id).text("Yorum silindi...")
                 $('#comment-' + comment_id).addClass("comment-deleted");
