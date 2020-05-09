@@ -81,7 +81,7 @@
             return NULL;
     }
 
-    function TumKullaniciBilgileriniGetir($email){
+    function TumKullaniciBilgileriniGetir(){
         $sql = "SELECT * FROM kullanici";
         
         return SQLCalistir($sql, FALSE);
