@@ -81,6 +81,12 @@
             return NULL;
     }
 
+    function TumKullaniciBilgileriniGetir($email){
+        $sql = "SELECT * FROM kullanici";
+        
+        return SQLCalistir($sql, FALSE);
+    }
+
 
     /**
      * Id parametre olarak verilen kullanıcının bilgilerini getirir

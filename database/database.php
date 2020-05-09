@@ -16,7 +16,7 @@
                 $servername = "localhost";
                 $username = "root";
                 $password = "";
-                $dbname = "classroom_xxx";
+                $dbname = "note";
 
                 //DATABASE_CONNECTION isimli ortam değişkeni değeri kontrol ediliyor.
                 $database_conn = getenv('DATABASE_CONNECTION');
@@ -111,7 +111,9 @@
         $con = BAGLANTI_GETIR();
         $result = $con->query($sql_sorgusu);
         
-        return $result->num_rows;   
+        if($result != NULL)
+            return $result->num_rows;
+        return 0;
     }
 
     function SQLInsertCalistir($sql_sorgusu) : bool{
