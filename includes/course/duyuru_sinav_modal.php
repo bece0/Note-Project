@@ -33,7 +33,8 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-calendar-times"></i></span>
                             </div>
-                            <input type="time" id="sinav_saat" name="sinav_saat" class="form-control" value="08:00" required>
+                            <input type="time" id="sinav_saat" name="sinav_saat" class="form-control" value="08:00"
+                                required>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-success" style="float:right;"
@@ -45,17 +46,24 @@
 </div>
 
 <script>
-
 $(document).ready(function(e) {
     $("#sinavForm").on('submit', (function(e) {
         e.preventDefault();
+
+        var data = {
+            courseId: $("#ders_id").val(),
+            examName: $("#sinav_adi").val(),
+            examDay: $("#sinav_gun").val(),
+            examTime: $("#sinav_saat").val()
+        }
+
         $.ajax({
             url: "services/sinav.php",
             type: "POST",
-            data: new FormData(this),
-            contentType: false,
-            cache: false,
-            processData: false,
+            data: JSON.stringify(data),
+            // contentType: false,
+            // cache: false,
+            // processData: false,
             success: function(data) {
                 $("#sinavOlusturModal").modal("hide");
                 Swal.fire({
