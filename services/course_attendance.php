@@ -83,7 +83,8 @@ try{
             //Katilimci tablosuna öğrenci tipi(1) olarak kayıt ekle
             if(DerseKayitOl($EKLENECEK_KULLANICI["id"],  $COURSE_ID, 0) === TRUE){
                 $sonucObjesi->mesaj = "Öğrenci kaydı başarıyla yapıldı.";
-                
+                $sonucObjesi->sonuc = true;
+
                 //Bildirim gönder
                 $mesaj = $COURSE["isim"]." dersine öğrenci olarak eklendiniz";
                 BildirimYaz($EKLENECEK_KULLANICI["id"], $COURSE_ID, $mesaj, "", $tip = "OGRENCI_KAYIT");
@@ -95,6 +96,7 @@ try{
             if(DerseKayitOl($EKLENECEK_KULLANICI["id"],  $COURSE_ID, 1) === TRUE){
                 $sonucObjesi->mesaj = "Asistan kaydı başarıyla yapıldı.";
                 $sonucObjesi->sonuc = true;
+                
                 //Bildirim gönder
                 $mesaj = $COURSE["isim"]." dersine asistan olarak eklendiniz";
                 BildirimYaz($EKLENECEK_KULLANICI["id"], $COURSE_ID, $mesaj, "", $tip = "ASISTAN_KAYIT");
@@ -104,7 +106,7 @@ try{
         }else{
             throw new Exception("Desteklenmeyen kayıt tipi : $type"); 
         }
-    
+        $sonucObjesi->sonuc = true;
     }else if($METOD == "removeuser"){
         
         if(!isset($_GET["user"]) || $_GET["user"] == ""){
