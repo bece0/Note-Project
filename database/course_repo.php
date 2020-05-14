@@ -343,7 +343,9 @@ function OgrencininArsivlenmisDersleriniGetir($kullanici_id)
 
 function DuzenledigiAktifDersleriGetir($kullanici_id)
 {       
-     $sql = "SELECT d.*, k.adi as ogretmen_adi, k.soyadi as ogretmen_soyadi FROM dersler d
+     $sql = "SELECT d.*, k.adi as ogretmen_adi, k.soyadi as ogretmen_soyadi , 
+        (SELECT COUNT(*) FROM katilimci  WHERE ders_id = d.id AND tip = 0) as toplam
+        FROM dersler d
         INNER JOIN kullanici k on k.id = d.duzenleyen_id 
         WHERE duzenleyen_id = $kullanici_id AND status = 1";
 
