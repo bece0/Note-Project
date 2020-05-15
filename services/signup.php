@@ -1,15 +1,13 @@
 <?php
 
 header('Content-type: application/json');
-
-
 include '../database/database.php';
+
 $baglanti = BAGLANTI_GETIR();
 
 $sonucObjesi = new stdClass();;
 $sonucObjesi->sonuc = false;
 $sonucObjesi->mesaj = "";
-
 $statusCode = 0;
 
 function GUIDOlustur()
@@ -18,7 +16,6 @@ function GUIDOlustur()
     {
         return trim(com_create_guid(), '{}');
     }
-
     return sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
 }
 
@@ -33,9 +30,7 @@ function generateSalt($max = 64) {
     return $salt;
 }
 
-
 try{
-
     $EMAIL = "";
     $PASSWORD = "";
     $NAME = "";
@@ -49,10 +44,7 @@ try{
 
     $data = json_decode($json);
 
-    //var_dump($data);
-
     $kullaniciTip = 0;
-
     if(isset($data->email)){
         $EMAIL = mysqli_real_escape_string($baglanti, $data->email );
     }
@@ -77,9 +69,7 @@ try{
         $kullaniciTip = (int)$data->tip;
     }
 
-
     $kullanici = KullaniciBilgileriniGetir($EMAIL);
-
     if ($kullanici != NULL) {
         $statusCode = 400;
         throw new Exception("Bu email adresi başka hesaba ait.");
@@ -122,9 +112,7 @@ try{
     $sonucObjesi->mesaj = $exp->getMessage();
     $sonucObjesi->detay = $exp->getTraceAsString();
 }
-
         
 echo json_encode($sonucObjesi);
-
 
 ?>
