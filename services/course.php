@@ -179,6 +179,13 @@ try{
             $sonucObjesi->data->dersler = OgrencininAktifDersleriniGetir($KULLANICI_ID);
         }
         $sonucObjesi->sonuc = true;
+    }else if($METHOD == "get_archived_courses"){
+        if($GIRIS_YAPAN_OGRETMEN_MI){
+            $sonucObjesi->data->dersler = OgretmeninArsivlenmisDersleriniGetir($KULLANICI_ID);
+        }else if($GIRIS_YAPAN_OGRENCI_MI){
+            $sonucObjesi->data->dersler = OgrencininArsivlenmisDersleriniGetir($KULLANICI_ID);
+        }
+        $sonucObjesi->sonuc = true;
     }else{
         $statusCode = 400;
         throw new Exception("Desteklenmeyen metod : $METHOD");
