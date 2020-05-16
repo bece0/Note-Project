@@ -1,52 +1,32 @@
 <?php
-session_start();
-header('Content-type: application/json');
 
-//kullanici oturumu açık değil ise bu servise gelen istekeler işlenmez.
-if(!isset($_SESSION["kullanici_id"])){
-    die();
-}
-
-$TIP = "hepsi";
-
-if(isset($_GET["tip"]) && $_GET["tip"] != ""){
-    $TIP = $_GET["tip"];
-}
-
-$KULLANICI_ID = $_SESSION["kullanici_id"];
-
-include '../database/database.php';
-$baglanti = BAGLANTI_GETIR();
-
-$sonucObjesi = new stdClass();;
+$sonucObjesi = new stdClass();
+$sonucObjesi->sonuc = false;
 $sonucObjesi->mesaj = "";
+$sonucObjesi->data = new stdClass();
 
-//isteği yapan kullanıcı
-$KULLANICI = KullaniciBilgileriniGetirById($KULLANICI_ID); 
+try{
+    
+    include '_api_key_kontrol.php';
 
-$statusCode = 0;
+    $TIP = "hepsi";
 
-$DUYURULAR = [];
-$ODEVLER = [];
+    if(isset($_GET["tip"]) && $_GET["tip"] != ""){
+        $TIP = $_GET["tip"];
+    }
 
-try {
-   
+    $DUYURULAR = [];
+    $ODEVLER = [];
+
     if($TIP == "hepsi"){
-        $mesaj = "";
-        
         if($KULLANICI["admin"] == 0){
-
             $DUYURULAR =  OgrenciSinavDuyurulariniGetir($KULLANICI_ID);
             $ODEVLER =  OgrenciOdevleriGetir($KULLANICI_ID);
-
-        }else if($KULLANICI["admin"] == 0){
-
-            $DUYURULAR =  OgrenciSinavDuyurulariniGetir($KULLANICI_ID);
-            $ODEVLER =  OgrenciOdevleriGetir($KULLANICI_ID);
-            
+        }else if($KULLANICI["admin"] == 1){
+            // $DUYURULAR =  OgretmenSinavDuyurulariniGetir($KULLANICI_ID);
+            // $ODEVLER =  OgretmenOdevleriGetir($KULLANICI_ID);
         }
-       
-
+        $sonucObjesi->sonuc = true;
     }else{
         $statusCode = 400;
         throw new Exception("Desteklenmeyen metod : $METHOD");
