@@ -26,7 +26,7 @@ function KatilimciVarMi($ders_id, $kullanici_id)
 
 function DersKaydet($ders_kodu, $isim, $aciklama, $kontenjan,$bolum, $sinif, $duzenleyen_id)
 {
-    $sql = "INSERT INTO dersler (kodu, isim, aciklama, kontenjan,bolum_adi, sinif, duzenleyen_id)
+    $sql = "INSERT INTO dersler (kodu, isim, aciklama, kontenjan, bolum_adi, sinif, duzenleyen_id)
     VALUES ('$ders_kodu','$isim','$aciklama', '$kontenjan','$bolum','$sinif','$duzenleyen_id')";
 
     return SQLInsertCalistir($sql);

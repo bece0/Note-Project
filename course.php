@@ -226,6 +226,10 @@ include 'includes/head.php';
                         <i class="fas fa-key"></i>
                         <b>Ders Kodu:</b><?php echo " ".$COURSE["kodu"] ?>
                     </div>
+                    <div class="course-code">
+                        <i class="fas fa-building"></i>
+                        <b>Bölüm/Sınıf:</b><?php echo " ".$COURSE["bolum_adi"]." / ".$COURSE["sinif"] ?>
+                    </div>
                     <div class="course-aciklama">
                         <p>
                             <?php 

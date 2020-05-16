@@ -29,24 +29,23 @@
 }
 </style>
 <?php 
-        if($GirisYapildiMi){
-            $KULLANICI = KullaniciBilgileriniGetirById($_SESSION["kullanici_id"]);
+    if($GirisYapildiMi){
+        $KULLANICI = KullaniciBilgileriniGetirById($_SESSION["kullanici_id"]);
 
-            $OGRETMEN = FALSE;
-            $OGRENCI = FALSE;
+        $OGRETMEN = FALSE;
+        $OGRENCI = FALSE;
 
-            if($KULLANICI['admin'] != "" && $KULLANICI['admin'] == 0){
-                $OGRENCI = TRUE;
-                include 'course_attend_modal.php';
-            }  
-            else if ($KULLANICI['admin'] != "" && $KULLANICI['admin'] == 1){
-                $OGRETMEN = TRUE;
-                include 'course_modals.php';
-                include 'course_attend_modal.php';
-            }
-        }?>
+        if($KULLANICI['admin'] != "" && $KULLANICI['admin'] == 0){
+            $OGRENCI = TRUE;
+            include 'course_attend_modal.php';
+        }  
+        else if ($KULLANICI['admin'] != "" && $KULLANICI['admin'] == 1){
+            $OGRETMEN = TRUE;
+            include 'course_modals.php';
+            include 'course_attend_modal.php';
+        }
+    }?>
 <nav class="navbar navbar-expand-md fixed-top navbar-dark bg-dark">
-
     <a class="navbar-brand" href="index.php">
         <img class="logo-1" src="files/images/note2.png">
     </a>
@@ -90,9 +89,9 @@
         <ul class="navbar-nav ml-auto right-nav">
             <!-- Giriş yapılmadıysa NavBarda User var-->
             <?php if($GirisYapildiMi){ ?>
-                <?php if($KULLANICI['admin']!=-1){ ?>  
-                <?php include 'notifications.php';?>
-        
+            <?php if($KULLANICI['admin']!=-1){ ?>
+            <?php include 'notifications.php';?>
+
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="menuDropdown" role="button" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
@@ -113,7 +112,7 @@
                     <?php } ?>
                 </div>
             </li>
-                    <?php }?>
+            <?php }?>
             <li class="nav-item">
                 <a class="nav-link" href="action/logout_action.php">Çıkış</a>
             </li>

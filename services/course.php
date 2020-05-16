@@ -5,6 +5,20 @@ $sonucObjesi->sonuc = false;
 $sonucObjesi->mesaj = "";
 $sonucObjesi->data = new stdClass();
 
+
+function random_str(int $length = 64){
+    $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    if ($length < 1) {
+        throw new \RangeException("Length must be a positive integer");
+    }
+    $pieces = [];
+    $max = mb_strlen($keyspace, '8bit') - 1;
+    for ($i = 0; $i < $length; ++$i) {
+        $pieces []= $keyspace[random_int(0, $max)];
+    }
+    return implode('', $pieces);
+}
+
 try{
     include '_api_key_kontrol.php';
 
@@ -42,10 +56,62 @@ try{
         $GIRIS_YAPAN_DERSIN_HOCASI_MI = ($COURSE["duzenleyen_id"] == $KULLANICI_ID);
     }
 
-    if($METHOD == "finish"){
+    if($METHOD == "add"){
+        if(!$GIRIS_YAPAN_OGRETMEN_MI){
+            $statusCode = 401;
+            throw new Exception("Ders açmaya yetkiniz yok!");
+        }
+
+        $name = "";
+        $desc = "";
+        $class = "";
+        $department = "";
+        $qouta = 0;
+
+        $json = file_get_contents('php://input');
+        if($json != NULL){
+            $data = json_decode($json);
+
+            if(!$data){
+                $statusCode = 400;
+                throw new Exception("Ders oluşturulamadı, hatalı istek!");
+            }
+
+            if(isset($data->name)){
+                $name = mysqli_real_escape_string($baglanti, $data->name);
+            }
+
+            if(isset($data->desc)){
+                $desc = mysqli_real_escape_string($baglanti, $data->desc);
+            }
+
+            if(isset($data->class)){
+                $class = mysqli_real_escape_string($baglanti, $data->class);
+            }
+
+            if(isset($data->department)){
+                $department = mysqli_real_escape_string($baglanti, $data->department);
+            }
+
+            if(isset($data->qouta)){
+                $qouta = mysqli_real_escape_string($baglanti, $data->qouta);
+            }
+        }
+
+        $course_code =  random_str(6);
+
+        if(DersKaydet($course_code, $name, $desc, $qouta, $department, $class, $KULLANICI_ID) === TRUE){
+            $sonucObjesi->mesaj = "Ders oluşturuldu";
+            $sonucObjesi->sonuc = true;
+        }else{
+            throw new Exception("Ders oluşturulamadı!");
+        }
+    }
+    else if($METHOD == "finish"){
         
         if($GIRIS_YAPAN_DERSIN_HOCASI_MI){
             DersiKapat($COURSE_ID);
+            $sonucObjesi->sonuc = true;
         }
         else{
             $statusCode = 401;
@@ -56,6 +122,7 @@ try{
         
         if(!$GIRIS_YAPAN_DERSIN_HOCASI_MI){
             DerstenKayitSil($COURSE_ID,$KULLANICI_ID);
+            $sonucObjesi->sonuc = true;
         }
         else{
             $statusCode = 401;
@@ -71,6 +138,7 @@ try{
         include '../includes/ortak.php';
 
         DosyaUpload("../files/images/course/", "", $COURSE["kodu"], ["png", "jpg", "jpeg"]);
+        $sonucObjesi->sonuc = true;
     }else if($METHOD == "get_active_courses"){
         if($GIRIS_YAPAN_OGRETMEN_MI){
             $sonucObjesi->data->dersler = DuzenledigiAktifDersleriGetir($KULLANICI_ID);
@@ -78,6 +146,7 @@ try{
         }else if($GIRIS_YAPAN_OGRENCI_MI){
             $sonucObjesi->data->dersler = OgrencininAktifDersleriniGetir($KULLANICI_ID);
         }
+        $sonucObjesi->sonuc = true;
     }else{
         $statusCode = 400;
         throw new Exception("Desteklenmeyen metod : $METHOD");
@@ -98,7 +167,6 @@ try{
         $sonucObjesi->headers = getallheaders();
         $sonucObjesi->detay = $exp->getTraceAsString();
     }
-
 }
         
 echo json_encode($sonucObjesi);
