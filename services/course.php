@@ -35,9 +35,13 @@ try{
     $GIRIS_YAPAN_DERSIN_HOCASI_MI = FALSE;
     $GIRIS_YAPAN_DERSIN_ASISTANI_MI = FALSE;
 
+    if(isset($_GET["courseId"]) && $_GET["courseId"] != ""){
+        $COURSE_ID = mysqli_real_escape_string($baglanti, $_GET["courseId"]);
+    }
+
     if($METHOD == "finish" || $METHOD == "ayril" || $METHOD == "update_image"){
-        if(isset($_GET["ders_id"]) && $_GET["ders_id"] != ""){
-            $COURSE_ID = mysqli_real_escape_string($baglanti, $_GET["ders_id"]);
+        if(isset($_GET["courseId"]) && $_GET["courseId"] != ""){
+            $COURSE_ID = mysqli_real_escape_string($baglanti, $_GET["courseId"]);
         }else if(isset($_POST["ders_id"]) && $_POST["ders_id"] != ""){
             $COURSE_ID = mysqli_real_escape_string($baglanti, $_POST["ders_id"]);
         }
@@ -56,7 +60,7 @@ try{
         $GIRIS_YAPAN_DERSIN_HOCASI_MI = ($COURSE["duzenleyen_id"] == $KULLANICI_ID);
     }
 
-    if($METHOD == "add"){
+    if($METHOD == "add" || $METHOD == "edit"){
         if(!$GIRIS_YAPAN_OGRETMEN_MI){
             $statusCode = 401;
             throw new Exception("Ders açmaya yetkiniz yok!");
@@ -110,11 +114,32 @@ try{
 
         $course_code =  random_str(6);
 
-        if(DersKaydet($course_code, $name, $desc, $quota, $department, $class, $KULLANICI_ID) === TRUE){
-            $sonucObjesi->mesaj = "Ders oluşturuldu";
-            $sonucObjesi->sonuc = true;
-        }else{
-            throw new Exception("Ders oluşturulamadı!");
+        if($METHOD == "add"){
+            if(DersKaydet($course_code, $name, $desc, $quota, $department, $class, $KULLANICI_ID) === TRUE){
+                $sonucObjesi->mesaj = "Ders oluşturuldu";
+                $sonucObjesi->sonuc = true;
+            }else{
+                throw new Exception("Ders oluşturulamadı!");
+            }
+        }
+
+        if($METHOD == "edit"){
+            $COURSE = DersBilgileriniGetir($COURSE_ID);
+            if($COURSE == NULL){
+                $statusCode = 404;
+                throw new Exception("Ders bulunamadı!");
+            }
+            if($COURSE["duzenleyen_id"] !=  $KULLANICI_ID){
+                $statusCode = 401;
+                throw new Exception("Dersi düzenlemeye yetkiniz bulunmamaktadir!");
+            }
+
+            if(DersDuzenle($COURSE_ID, $name, $desc, $quota, $department, $class)=== TRUE){
+                $sonucObjesi->mesaj = "Ders düzenlendi";
+                $sonucObjesi->sonuc = true;
+            }else{
+                throw new Exception("Ders düzenlenemedi!");
+            }
         }
     }
     else if($METHOD == "finish"){

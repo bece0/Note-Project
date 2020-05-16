@@ -354,7 +354,7 @@ $(function() {
             if (result.value) {
                 $.ajax({
                     type: "POST",
-                    url: 'services/course.php?method=finish&ders_id=' + dersId,
+                    url: 'services/course.php?method=finish&courseId=' + dersId,
                     success: function(response) {
                         location.reload();
                     },
