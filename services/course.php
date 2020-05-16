@@ -66,7 +66,7 @@ try{
         $desc = "";
         $class = "";
         $department = "";
-        $qouta = 0;
+        $quota = 0;
 
         $json = file_get_contents('php://input');
         if($json != NULL){
@@ -77,30 +77,40 @@ try{
                 throw new Exception("Ders oluşturulamadı, hatalı istek!");
             }
 
-            if(isset($data->name)){
+            if(isset($data->name) && $data->name != ""){
                 $name = mysqli_real_escape_string($baglanti, $data->name);
+            }else{
+                throw new Exception("Ders adı boş olamaz");
             }
 
-            if(isset($data->desc)){
+            if(isset($data->desc) && $data->desc != ""){
                 $desc = mysqli_real_escape_string($baglanti, $data->desc);
+            }else{
+                throw new Exception("Ders açıklaması boş olamaz");
             }
 
-            if(isset($data->class)){
+            if(isset($data->class) && $data->class != ""){
                 $class = mysqli_real_escape_string($baglanti, $data->class);
+            }else{
+                throw new Exception("Ders sınıf adı boş olamaz");
             }
 
-            if(isset($data->department)){
+            if(isset($data->department) && $data->department != ""){
                 $department = mysqli_real_escape_string($baglanti, $data->department);
+            }else{
+                throw new Exception("Ders bölüm adı boş olamaz");
             }
 
-            if(isset($data->qouta)){
-                $qouta = mysqli_real_escape_string($baglanti, $data->qouta);
+            if(isset($data->quota) && $data->quota != ""){
+                $quota = mysqli_real_escape_string($baglanti, $data->quota);
+            }else{
+                throw new Exception("Ders kotası boş olamaz");
             }
         }
 
         $course_code =  random_str(6);
 
-        if(DersKaydet($course_code, $name, $desc, $qouta, $department, $class, $KULLANICI_ID) === TRUE){
+        if(DersKaydet($course_code, $name, $desc, $quota, $department, $class, $KULLANICI_ID) === TRUE){
             $sonucObjesi->mesaj = "Ders oluşturuldu";
             $sonucObjesi->sonuc = true;
         }else{
