@@ -1,5 +1,7 @@
 <?php
 
+include 'firebase_notification_service.php';
+
 /**
  * Kullanıcıya ait son bildirimleri getirir
  * @param $count son kaç bildirim
@@ -172,10 +174,34 @@ function EtkinlikKatilimcilarinaBildirimGonder($ders_id, string $mesaj, string $
  * @param $url bildirim tıklaması sonucu açılacak adres
  * @return bool işlem başarılı ise TRUE, değil ise FALSE döner.
  */
-function BildirimYaz($kullanici_id, $ders_id, $mesaj, $url = "", $tip = "NORMAL") : bool
+function BildirimYaz($kullanici_id, $ders_id, $mesaj, $url = "", $tip = "NORMAL", string $user_firebase_token = null) : bool
 {
     $sql = "INSERT INTO bildirim (kullanici_id, ders_id, mesaj, url, tip)
     VALUES ('$kullanici_id', '$ders_id', '$mesaj', '$url', '$tip')";
+
+    $kullanici = KullaniciBilgileriniGetirById($kullanici_id);
+    if($kullanici != null && isset($kullanici["firebase_token"])){
+        $user_firebase_token =  $kullanici["firebase_token"];
+        if ($user_firebase_token != null) {
+            $firebase = new FirebaseSender();
+            $push = new Push();
+    
+            $payload = array();
+            $payload['ders_id'] = $ders_id;
+            $payload['url'] = $url;
+            $payload['tip'] = $tip;
+    
+            $title = 'Note Bildirim - ' . $tip;
+            $push->setTitle($title);
+            $push->setMessage($mesaj);
+            $push->setImage('');
+            $push->setIsBackground(FALSE);
+            $push->setPayload($payload);
+    
+            $json = $push->getPush();
+            $response = $firebase->send($user_firebase_token, $json);
+        }
+    }
 
     return SQLInsertCalistir($sql);
 }
