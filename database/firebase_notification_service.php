@@ -98,23 +98,23 @@ class Push
         return $res;
     }
 
-    public function getNotification(string $tip = "")
+    public function getNotification($tip)
     {
         $title = "Note";
 
-        if ($tip = "NORMAL")
+        if ($tip == "NORMAL")
             $title = "Note Bildirim";
-        else if ($tip = "DUYURU")
+        else if ($tip == "DUYURU")
             $title = "Duyuru";
-        else if ($tip = "SINAV")
+        else if ($tip ==  "SINAV")
             $title = "Yeni Sınav Duyurusu";
-        else if ($tip = "YENI_ODEV")
+        else if ($tip ==  "YENI_ODEV")
             $title = "Yeni Ödev Eklendi";
-        else if ($tip = "YENI_DOKUMAN")
+        else if ($tip ==  "YENI_DOKUMAN")
             $title = "Yeni Döküman Eklendi";
-        else if ($tip = "YENI_YORUM")
+        else if ($tip ==  "YENI_YORUM")
             $title = "Yeni Yorum Yapıldı";
-        else if ($tip = "YENI_YORUM")
+        else if ($tip ==  "YENI_YORUM")
             $title = "Yeni Yorum Yapıldı";
         else
             $title = "Note Bildirim";
