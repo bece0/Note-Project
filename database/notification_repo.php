@@ -191,15 +191,16 @@ function BildirimYaz($kullanici_id, $ders_id, $mesaj, $url = "", $tip = "NORMAL"
             $payload['url'] = $url;
             $payload['tip'] = $tip;
     
-            $title = 'Note Bildirim - ' . $tip;
+            $title = $tip;
             $push->setTitle($title);
             $push->setMessage($mesaj);
             $push->setImage('');
             $push->setIsBackground(FALSE);
             $push->setPayload($payload);
     
-            $json = $push->getPush();
-            $response = $firebase->send($user_firebase_token, $json);
+            $data = $push->getPush();
+            $notification = $push->getNotification($tip);
+            $response = $firebase->send($user_firebase_token, $data, $notification);
         }
     }
 

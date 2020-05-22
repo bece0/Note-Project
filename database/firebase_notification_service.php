@@ -16,7 +16,7 @@ final class FirebaseService
             if ($firebase_token != FALSE) {
                 static::$FIREBASE_SERVER_TOKEN = $firebase_token;
             } else {
-                static::$FIREBASE_SERVER_TOKEN = "<custom>";
+                static::$FIREBASE_SERVER_TOKEN = "AAAApXRRlS0:APA91bFfUqnCsafPpJ_7HzlIDXND-fi7sFapaZSwuPYcVBch3WJgEtxtTwuU9bhwmPqHBcDcDsCqLKnNzmsKNovnZ-gZnzAwme6bu9dFKazmsKnsVPVpMfMu-Mcvvg-eOZPJKXp4sebY";
             }
         }
 
@@ -56,6 +56,11 @@ class Push
     {
     }
 
+    public function setTip($tip)
+    {
+        $this->tip = $tip;
+    }
+
     public function setTitle($title)
     {
         $this->title = $title;
@@ -92,15 +97,43 @@ class Push
         $res['data']['timestamp'] = date('Y-m-d G:i:s');
         return $res;
     }
+
+    public function getNotification(string $tip = "")
+    {
+        $title = "Note";
+
+        if ($tip = "NORMAL")
+            $title = "Note Bildirim";
+        else if ($tip = "DUYURU")
+            $title = "Duyuru";
+        else if ($tip = "SINAV")
+            $title = "Yeni Sınav Duyurusu";
+        else if ($tip = "YENI_ODEV")
+            $title = "Yeni Ödev Eklendi";
+        else if ($tip = "YENI_DOKUMAN")
+            $title = "Yeni Döküman Eklendi";
+        else if ($tip = "YENI_YORUM")
+            $title = "Yeni Yorum Yapıldı";
+        else if ($tip = "YENI_YORUM")
+            $title = "Yeni Yorum Yapıldı";
+        else
+            $title = "Note Bildirim";
+
+        $res = array();
+        $res['title'] = $title ;
+        $res['body'] = $this->message;
+        return $res;
+    }
 }
 
 class FirebaseSender
 {
-    public function send($to, $message)
+    public function send($to, $data, $notification)
     {
         $fields = array(
             'to' => $to,
-            'data' => $message,
+            'data' => $data,
+            'notification' => $notification,
         );
         return $this->sendPushNotification($fields);
     }
@@ -130,8 +163,8 @@ class FirebaseSender
     {
         $firebase_service = FirebaseService::getInstance();
         $firebase_token = $firebase_service->getServerToken();
-        
-        if(!isset( $firebase_token))
+
+        if (!isset($firebase_token))
             return;
 
         // Set POST variables
@@ -168,6 +201,3 @@ class FirebaseSender
         return $result;
     }
 }
-
-
-?>

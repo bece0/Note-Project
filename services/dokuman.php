@@ -1,48 +1,29 @@
 <?php
 
-session_start();
-header('Content-type: application/json');
-
-//kullanici oturumu açık değil ise bu servise gelen istekeler işlenmez.
-if(!isset($_SESSION["kullanici_id"])){
-    die();
-}
-
-$METHOD = "add";
-if(!isset($_GET["method"]) || $_GET["method"] == ""){
-    // echo "method parametresi eksik!";
-    // die();
-}else {
-    $METHOD = $_GET["method"];
-}
-
-
-$KULLANICI_ID = $_SESSION["kullanici_id"];
-$comment_id = NULL;
-
-// if(isset($_GET["comment_id"]) && $_GET["comment_id"] != ""){
-//     $comment_id = $_GET["comment_id"];
-// }
-
-include '../database/database.php';
-$baglanti = BAGLANTI_GETIR();
-
-$sonucObjesi = new stdClass();;
+$sonucObjesi = new stdClass();
+$sonucObjesi->sonuc = false;
 $sonucObjesi->mesaj = "";
+$sonucObjesi->data = new stdClass();
 
-//isteği yapan kullanıcı
-$KULLANICI = KullaniciBilgileriniGetirById($KULLANICI_ID); 
-$COURSE = null;
-$COURSE_ID = null;
+try{
+    
+    include '_api_key_kontrol.php';
 
-$GIRIS_YAPAN_DERSIN_HOCASI_MI = FALSE;
-$GIRIS_YAPAN_DERSIN_ASISTANI_MI = FALSE;
+    $METHOD = "add";
+    if(isset($_GET["method"]) && $_GET["method"] != ""){
+        $METHOD = $_GET["method"];
+    }
 
-$statusCode = 0;
+    $comment_id = NULL;
 
-$COURSE_ID = NULL;
-$dokuman_adi = NULL;
-$dokuman_aciklama = NULL;
+    $COURSE = null;
+    $COURSE_ID = null;
+
+    $GIRIS_YAPAN_DERSIN_HOCASI_MI = FALSE;
+    $GIRIS_YAPAN_DERSIN_ASISTANI_MI = FALSE;
+
+    $dokuman_adi = NULL;
+    $dokuman_aciklama = NULL;
 
 try{
     include '../includes/ortak.php';
@@ -88,6 +69,13 @@ try{
         //DersDokumanKaydet($kod, $COURSE_ID, $olusturan_id, $dosya_id, $isim, $aciklama)
         DersDokumanKaydet($dokuman_kod, $COURSE_ID, $KULLANICI_ID, $DOSYA_ID, $dokuman_adi, $dokuman_aciklama);
 
+        $sonucObjesi->sonuc = true;
+        try {
+            DersKatilimcilarinaYeniDokumanBildirimiGonder($COURSE_ID, $dokuman_adi, "", "", [$KULLANICI_ID]);
+        } catch (\Throwable $th) {
+            
+        }
+        
     }else{
         $statusCode = 400;
         throw new Exception("Desteklenmeyen metod : $METHOD");
@@ -106,16 +94,7 @@ try{
     $sonucObjesi->mesaj = $exp->getMessage();
     $sonucObjesi->detay = $exp->getTraceAsString();
 }
-
-try {
-    DersKatilimcilarinaYeniDokumanBildirimiGonder($COURSE_ID, $dokuman_adi, "", "", [$KULLANICI_ID]);
-} catch (\Throwable $th) {
-    
-}
-
         
 echo json_encode($sonucObjesi);
-
-
 
 ?>

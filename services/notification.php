@@ -63,8 +63,7 @@ try {
 
         $token  = mysqli_real_escape_string($baglanti,  $_GET["token"]);
 
-        KullaniciFirebaseTokenGuncelle($KULLANICI_ID, $token);
-        $sonucObjesi->sonuc = true;
+        $sonucObjesi->sonuc = KullaniciFirebaseTokenGuncelle($KULLANICI_ID, $token);;
     } else {
         $statusCode = 400;
         throw new Exception("Desteklenmeyen metod " . $metod);

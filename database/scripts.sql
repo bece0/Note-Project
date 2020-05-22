@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS `kullanici` (
  `kayit_tarihi` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
  `son_giris_tarihi` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
  `api_key` varchar(255),
+ `firebase_token` text,
  PRIMARY KEY (`id`)
 );
 
