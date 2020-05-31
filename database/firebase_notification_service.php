@@ -101,7 +101,7 @@ class Push
     public function getNotification($tip)
     {
         $title = "Note";
-
+        // echo "tip : ".$tip."<br>";
         if ($tip == "NORMAL")
             $title = "Note Bildirim";
         else if ($tip == "DUYURU")
