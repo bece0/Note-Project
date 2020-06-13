@@ -166,7 +166,7 @@ include 'includes/head.php';
                     <?php }?>
                 </div>
             </div>
-            <div class="col-9">
+            <div class="col-9"> 
                 <div class="tab-content" id="v-pills-tabContent">
 
                     <?php if($GONDERILEN_ODEVLERI_LISTELEYEBILIR){ ?>

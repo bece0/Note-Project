@@ -47,7 +47,7 @@
         }?>
 <nav class="navbar navbar-expand-md fixed-top navbar-dark bg-dark">
 
-    <a class="navbar-brand" href="index.php">
+    <a class="navbar-brand" href="index.php"> 
         <!-- <img class="logo-1" src="files/images/note2.png"> -->
         <i class="fa fa-reply"></i>
     </a>
