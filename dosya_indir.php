@@ -3,10 +3,10 @@
 session_start();
 
 //kullanici oturumu açık değil ise bu servise gelen istekeler işlenmez.
-if(!isset($_SESSION["kullanici_id"])){
-    echo "bu dosyayı indirebilmek için giriş yapmanız gerekiyor!";
-    die();
-}
+// if(!isset($_SESSION["kullanici_id"])){
+//     echo "bu dosyayı indirebilmek için giriş yapmanız gerekiyor!";
+//     die();
+// }
 
 
 if(!isset($_GET["type"]) || $_GET["type"] == ""){

@@ -9,7 +9,7 @@ try{
     
     include '_api_key_kontrol.php';
 
-    $METHOD = "add";
+    $METHOD = "list";
     if(isset($_GET["method"]) && $_GET["method"] != ""){
         $METHOD = $_GET["method"];
     }
@@ -25,10 +25,28 @@ try{
     $dokuman_adi = NULL;
     $dokuman_aciklama = NULL;
 
-try{
     include '../includes/ortak.php';
 
-    if(isset($_POST) && $METHOD == "add"){
+    if(isset($_GET) && $METHOD == "list"){
+        if (isset($_GET["ders_id"]) && $_GET['ders_id'] != "") {
+            $COURSE_ID = mysqli_real_escape_string($baglanti, $_GET["ders_id"]);
+        }
+        if (isset($_GET["courseId"]) && $_GET['courseId'] != "") {
+            $COURSE_ID = mysqli_real_escape_string($baglanti, $_GET["courseId"]);
+        }
+
+        if($COURSE_ID == NULL){
+            $statusCode = 400;
+            throw new Exception("courseId parametresi eksik!");
+        }
+
+        $DOKUMANLAR = DersDokumanlariniGetir($COURSE_ID);
+        $sonucObjesi->sonuc = true;
+        if($DOKUMANLAR != NULL)
+            $sonucObjesi->data = $DOKUMANLAR;
+        else
+            $sonucObjesi->data = [];
+    }else if(isset($_POST) && $METHOD == "add"){
 
         if (!isset($_POST["ders_id"]) && $_POST['ders_id'] == "") {
             $statusCode = 400;
@@ -96,5 +114,3 @@ try{
 }
         
 echo json_encode($sonucObjesi);
-
-?>
