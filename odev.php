@@ -155,18 +155,8 @@ include 'includes/head.php';
 
         </hr>
         <div class="row" style="margin-top: 20px;">
-            <div class="col-3">
-                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                    <?php if($GONDERILEN_ODEVLERI_LISTELEYEBILIR){ ?>
-                    <a class="nav-link active" id="v-pills-gonderilen-odevler-tab" data-toggle="pill"
-                        href="#v-pills-gonderilen-odevler" role="tab" aria-controls="v-pills-gonderilen-odevler"
-                        aria-selected="true">
-                        Teslim Eden Öğrenciler
-                    </a>
-                    <?php }?>
-                </div>
-            </div>
-            <div class="col-9"> 
+           
+            <div class="col-12"> 
                 <div class="tab-content" id="v-pills-tabContent">
 
                     <?php if($GONDERILEN_ODEVLERI_LISTELEYEBILIR){ ?>
