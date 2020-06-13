@@ -9,7 +9,7 @@ include 'includes/head.php';
 
 
     <?php
-    include 'includes/nav-bar.php';
+    include 'includes/nav-bar2.php';
     // include 'includes/page-common.php';
 
     if (!isset($_GET["kod"]) && $_GET["kod"] != ""){
