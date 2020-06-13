@@ -122,7 +122,6 @@
         if ($con->query($sql) === TRUE) {
             return TRUE;
         } else {
-            echo "Error: " . $sql . "<br>" . $con->error;
             return FALSE;
         }
     }
@@ -137,6 +136,18 @@
             return FALSE;
         }
    }
+
+    function KullaniciFirebaseTokenGuncelle($kullanici_id, $token)
+    {
+        $sql = "UPDATE kullanici SET firebase_token = '$token' where id = '$kullanici_id'";
+
+        $con = BAGLANTI_GETIR();
+        if ($con->query($sql) === TRUE) {
+            return TRUE;
+        } else {
+            return FALSE;
+        }
+    }
      
 
     /**

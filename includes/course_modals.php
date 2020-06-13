@@ -10,7 +10,7 @@
 
             <!-- Modal body -->
             <div class="modal-body">
-                <form class="form" action="action/create_course_action.php" method="POST" enctype="multipart/form-data"
+                <form id="courseAddForm" class="form" action="action/create_course_action.php" method="POST" enctype="multipart/form-data"
                     style="margin-top:15px;">
                     <div class="form-group">
                         <div class="input-group">
@@ -27,7 +27,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-pen-nib"></i></span>
                             </div>
-                            <input id="bolum_adi" name="bolum_adi" placeholder="Bölüm Adı" class="form-control" required
+                            <input id="ders_bolum_adi" name="ders_bolum_adi" placeholder="Bölüm Adı" class="form-control" required
                                 type="text">
                         </div>
                     </div>
@@ -38,7 +38,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-user"></i></span>
                             </div>
-                            <input id="kontenjan" name="kontenjan" placeholder="Kontenjan" class="form-control"
+                            <input id="ders_kontenjan" name="ders_kontenjan" placeholder="Kontenjan" class="form-control"
                                 required="true" value="" type="number">
                         </div>
                     </div>
@@ -49,7 +49,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-thumbtack"></i></span>
                             </div>
-                            <input id="sinif" name="sinif" placeholder="Sınıf" class="form-control" required="true"
+                            <input id="ders_sinif" name="ders_sinif" placeholder="Sınıf" class="form-control" required="true"
                                 value="" type="text">
                         </div>
                     </div>
@@ -60,7 +60,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-pen"></i></span>
                             </div>
-                            <textarea rows="2" id="aciklama" name="aciklama" placeholder="Açıklama" class="form-control"
+                            <textarea rows="2" id="ders_aciklama" name="ders_aciklama" placeholder="Açıklama" class="form-control"
                                 required="true"></textarea>
                         </div>
                     </div>
@@ -73,7 +73,35 @@
         </div>
     </div>
 </div>
+<script>
 
+$("#courseAddForm").on('submit', function(e) {
+    e.preventDefault();
+    var data = {
+        name : $("#ders_adi").val(),
+        desc : $("#ders_aciklama").val(),
+        department : $("#ders_bolum_adi").val(),
+        quota : $("#ders_kontenjan").val(),
+        class : $("#ders_sinif").val(),
+    }
+    $.ajax({
+        url: "services/course.php?method=add",
+        type: "POST",
+        data: JSON.stringify(data),
+        success: function(data) {
+            // location.reload();
+            location.reload(true);
+        },
+        error: function(e) {
+            Swal.fire({
+                text: 'Ders eklenemedi!',
+                type: 'error',
+                confirmButtonText: 'Tamam'
+            })
+        }
+    });
+});
+</script>
 <?php   
     // $ders_id = $_GET["course"];
     // $ders_detail = DersBilgileriniGetir($ders_id);

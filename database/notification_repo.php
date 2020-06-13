@@ -1,5 +1,7 @@
 <?php
 
+include 'firebase_notification_service.php';
+
 /**
  * Kullanıcıya ait son bildirimleri getirir
  * @param $count son kaç bildirim
@@ -16,7 +18,7 @@ function GetUserNotifications($kullanici_id, $count = 20)
     return SQLCalistir($sql, FALSE);
 }
 
-function BildirimListesineGonder($tip="DUYURU", $katilimcilar, $ders_id, $mesaj = "", $url="", $haricListesi= []){
+function BildirimListesineGonder($katilimcilar, $ders_id, $tip="DUYURU", $mesaj = "", $url="", $haricListesi= []){
     for ($i = 0; $i < count($katilimcilar); $i++) {
         $katilimci = $katilimcilar[$i];
         
@@ -43,7 +45,7 @@ function DersKatilimcilarinaDuyuruBildirimiGonder($ders_id, $mesaj = "", $url = 
     if($mesaj == NULL || $mesaj == "")
         $mesaj =  $ders["isim"]." dersinde yeni duyuru yapıldı";
 
-    BildirimListesineGonder("DUYURU", $katilimcilar, $ders_id, $mesaj, $url, $haricListesi);
+    BildirimListesineGonder($katilimcilar, $ders_id, "DUYURU",  $mesaj, $url, $haricListesi);
     // for ($i = 0; $i < count($katilimcilar); $i++) {
     //     $katilimci = $katilimcilar[$i];
     //     if(in_array($katilimci["ogrenci_id"], $haricListesi))
@@ -61,7 +63,7 @@ function DersKatilimcilarinaYeniOdevBildirimiGonder($ders_id, $odev_adi, $mesaj 
     if($mesaj == NULL || $mesaj == "")
         $mesaj =  $ders["isim"]." dersine yeni ödev eklendi : $odev_adi";
 
-    BildirimListesineGonder("YENI_ODEV", $katilimcilar, $ders_id, $mesaj, $url, $haricListesi);
+    BildirimListesineGonder($katilimcilar, $ders_id, "YENI_ODEV", $mesaj, $url, $haricListesi);
     // for ($i = 0; $i < count($katilimcilar); $i++) {
     //     $katilimci = $katilimcilar[$i];
     //     if(in_array($katilimci["ogrenci_id"], $haricListesi))
@@ -79,7 +81,7 @@ function DersKatilimcilarinaYeniSinavBildirimiGonder($ders_id, $sinav_adi, $mesa
     if($mesaj == NULL || $mesaj == "")
         $mesaj =  $ders["isim"]." dersine yeni sınav eklendi : $sinav_adi";
 
-    BildirimListesineGonder("SINAV", $katilimcilar, $ders_id, $mesaj, $url, $haricListesi);
+    BildirimListesineGonder($katilimcilar, $ders_id, "SINAV", $mesaj, $url, $haricListesi);
     // for ($i = 0; $i < count($katilimcilar); $i++) {
     //     $katilimci = $katilimcilar[$i];
     //     if(in_array($katilimci["ogrenci_id"], $haricListesi))
@@ -97,7 +99,7 @@ function DersKatilimcilarinaYeniDokumanBildirimiGonder($ders_id, $dokuman_adi, $
     if($mesaj == NULL || $mesaj == "")
         $mesaj =  $ders["isim"]." dersine yeni doküman eklendi : $dokuman_adi";
 
-    BildirimListesineGonder("YENI_DOKUMAN", $katilimcilar, $ders_id, $mesaj, $url, $haricListesi);
+    BildirimListesineGonder($katilimcilar, $ders_id, "YENI_DOKUMAN", $mesaj, $url, $haricListesi);
     // for ($i = 0; $i < count($katilimcilar); $i++) {
     //     $katilimci = $katilimcilar[$i];
     //     if(in_array($katilimci["ogrenci_id"], $haricListesi))
@@ -120,7 +122,7 @@ function DersHocalarinaYorumBildirimiGonder($ders_id, $yorum_yapan_adi_soyadi, $
         $mesaj =  $ders["isim"]." dersine $yorum_yapan_adi_soyadi tarafından yeni yorum eklendi. $mesaj_preview";
     }
 
-    BildirimListesineGonder("YENI_YORUM", $katilimcilar, $ders_id, $mesaj, $url, $haricListesi);
+    BildirimListesineGonder( $katilimcilar, $ders_id, "YENI_YORUM",$mesaj, $url, $haricListesi);
     // for ($i = 0; $i < count($asistan_katilimcilar); $i++) {
     //     $asistan = $asistan_katilimcilar[$i];
     //     if(in_array($asistan["ogrenci_id"], $haricListesi))
@@ -137,7 +139,7 @@ function DersDuyuruGonder($ders_id, $mesaj, $url = "")
     $sql_katilimcilar = "SELECT * from katilimci where ders_id = $ders_id";
     $katilimcilar = SQLCalistir($sql_katilimcilar, FALSE);
 
-    BildirimListesineGonder("DUYURU", $katilimcilar, $ders_id, $mesaj, $url);
+    BildirimListesineGonder($katilimcilar, $ders_id, "DUYURU", $mesaj, $url);
     // for ($i = 0; $i < count($katilimcilar); $i++) {
     //     $katilimci = $katilimcilar[$i];
     //     BildirimYaz($katilimci["kullanici_id"], $ders_id, $mesaj, $url, "DUYURU");
@@ -172,10 +174,35 @@ function EtkinlikKatilimcilarinaBildirimGonder($ders_id, string $mesaj, string $
  * @param $url bildirim tıklaması sonucu açılacak adres
  * @return bool işlem başarılı ise TRUE, değil ise FALSE döner.
  */
-function BildirimYaz($kullanici_id, $ders_id, $mesaj, $url = "", $tip = "NORMAL") : bool
+function BildirimYaz($kullanici_id, $ders_id, $mesaj, $url = "", $tip = "NORMAL", string $user_firebase_token = null) : bool
 {
     $sql = "INSERT INTO bildirim (kullanici_id, ders_id, mesaj, url, tip)
     VALUES ('$kullanici_id', '$ders_id', '$mesaj', '$url', '$tip')";
+
+    $kullanici = KullaniciBilgileriniGetirById($kullanici_id);
+    if($kullanici != null && isset($kullanici["firebase_token"])){
+        $user_firebase_token =  $kullanici["firebase_token"];
+        if ($user_firebase_token != null) {
+            $firebase = new FirebaseSender();
+            $push = new Push();
+    
+            $payload = array();
+            $payload['ders_id'] = $ders_id;
+            $payload['url'] = $url;
+            $payload['tip'] = $tip;
+    
+            $title = $tip;
+            $push->setTitle($title);
+            $push->setMessage($mesaj);
+            $push->setImage('');
+            $push->setIsBackground(FALSE);
+            $push->setPayload($payload);
+    
+            $data = $push->getPush();
+            $notification = $push->getNotification($tip);
+            $response = $firebase->send($user_firebase_token, $data, $notification);
+        }
+    }
 
     return SQLInsertCalistir($sql);
 }

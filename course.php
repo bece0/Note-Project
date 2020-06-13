@@ -226,6 +226,10 @@ include 'includes/head.php';
                         <i class="fas fa-key"></i>
                         <b>Ders Kodu:</b><?php echo " ".$COURSE["kodu"] ?>
                     </div>
+                    <div class="course-code">
+                        <i class="fas fa-building"></i>
+                        <b>Bölüm/Sınıf:</b><?php echo " ".$COURSE["bolum_adi"]." / ".$COURSE["sinif"] ?>
+                    </div>
                     <div class="course-aciklama">
                         <p>
                             <?php 
@@ -350,7 +354,7 @@ $(function() {
             if (result.value) {
                 $.ajax({
                     type: "POST",
-                    url: 'services/course.php?method=finish&ders_id=' + dersId,
+                    url: 'services/course.php?method=finish&courseId=' + dersId,
                     success: function(response) {
                         location.reload();
                     },

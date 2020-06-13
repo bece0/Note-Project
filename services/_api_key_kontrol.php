@@ -18,6 +18,9 @@ $GIRIS_YAPAN_OGRENCI_MI = FALSE;
 $GIRIS_YAPAN_OGRETMEN_MI = FALSE;
 $API_ISTEGI = FALSE;
 
+//test amaçlı istekleri 5 saniye bekletiyor
+// sleep(5);
+
 if(isset($headers['X-Api-Key']) || isset($headers['x-api-key'])){
     $API_KEY = "";
     if(isset($headers['X-Api-Key']))
