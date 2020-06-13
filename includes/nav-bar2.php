@@ -51,11 +51,8 @@
         <!-- <img class="logo-1" src="files/images/note2.png"> -->
         <i class="fa fa-reply"></i>
     </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-  
+
+   
 </nav>
 <script>
 $(document).ready(function() {

@@ -74,7 +74,7 @@ include 'includes/head.php';
     }
 
     $dersUrl = ToMeaningfullUrl($COURSE["isim"], $COURSE["id"])
-   ?>
+   ?> 
 
     <!-- start container -->
     <div class="container" style="min-height: 500px;">
