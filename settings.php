@@ -4,7 +4,13 @@ $page_title = "Ayarlar";
 
 include 'includes/page-common.php';
 include 'includes/head.php';
-include 'includes/nav-bar.php';
+
+if(isset($HIDE_NAVBAR) && $HIDE_NAVBAR == TRUE){
+    echo "<link rel='stylesheet' href='assets/css/mobile-web-view.css'>";
+}else{
+    include 'includes/nav-bar.php';
+}
+    
 ?>
 
 <link rel="stylesheet" href="assets/css/settings.css">
