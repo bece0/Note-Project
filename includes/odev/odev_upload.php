@@ -151,6 +151,12 @@ function odevTeslimEt(odevId, dersId) {
         cancelButtonText: "Hayır"
     }).then((result) => {
         if (result.value) {
+
+            var url = "services/odev_upload.php?method=teslim";
+            if (API_ISTEGIMI && API_KEY) {
+                url = url + "&X-Api-Key=" + API_KEY;
+            }
+
             $.ajax({
                 url: "services/odev_upload.php?method=teslim",
                 type: "POST",

@@ -1,49 +1,31 @@
 <?php
 
-session_start();
-header('Content-type: application/json');
-
-//kullanici oturumu açık değil ise bu servise gelen istekeler işlenmez.
-if(!isset($_SESSION["kullanici_id"])){
-    die();
-}
-
-$METHOD = "add";
-if(!isset($_GET["method"]) || $_GET["method"] == ""){
-    // echo "method parametresi eksik!";
-    // die();
-}else {
-    $METHOD = $_GET["method"];
-}
-
-
-$KULLANICI_ID = $_SESSION["kullanici_id"];
-$comment_id = NULL;
-
-// if(isset($_GET["comment_id"]) && $_GET["comment_id"] != ""){
-//     $comment_id = $_GET["comment_id"];
-// }
-
-include '../database/database.php';
-$baglanti = BAGLANTI_GETIR();
-
-$sonucObjesi = new stdClass();;
+$sonucObjesi = new stdClass();
+$sonucObjesi->sonuc = false;
 $sonucObjesi->mesaj = "";
-
-//isteği yapan kullanıcı
-$KULLANICI = KullaniciBilgileriniGetirById($KULLANICI_ID); 
-$COURSE = null;
-$COURSE_ID = null;
-
-$GIRIS_YAPAN_DERSIN_HOCASI_MI = FALSE;
-$GIRIS_YAPAN_DERSIN_ASISTANI_MI = FALSE;
-
-$statusCode = 0;
-
-$COURSE_ID = NULL;
-$odev_id = NULL;
+$sonucObjesi->data = new stdClass();
 
 try{
+    include '_api_key_kontrol.php';
+
+    $METHOD = "add";
+    if(!isset($_GET["method"]) || $_GET["method"] == ""){
+        // echo "method parametresi eksik!";
+        // die();
+    }else {
+        $METHOD = $_GET["method"];
+    }
+    $comment_id = NULL;
+
+    $COURSE = null;
+    $COURSE_ID = null;
+
+    $GIRIS_YAPAN_DERSIN_HOCASI_MI = FALSE;
+    $GIRIS_YAPAN_DERSIN_ASISTANI_MI = FALSE;
+
+    $COURSE_ID = NULL;
+    $odev_id = NULL;
+
     include '../includes/ortak.php';
 
     if(isset($_POST) && $METHOD == "add"){
@@ -80,7 +62,7 @@ try{
         $ogrenci_odev_kod = GUIDOlustur();
         // OgrenciDersOdevEkle($kod, $ogrenci_id, $odev_id, $ders_id, $dosya_id)
         OgrenciDersOdevEkle($ogrenci_odev_kod, $KULLANICI_ID, $odev_id, $COURSE_ID, $DOSYA_ID);
-
+        $sonucObjesi->sonuc = true;
     }else if(isset($_POST) && $METHOD == "delete"){
         
         if(!isset($_POST["ogrenci_odev_id"]) || $_POST["ogrenci_odev_id"] == ""){
@@ -91,7 +73,7 @@ try{
         $ogrenci_odev_id =  mysqli_real_escape_string($baglanti, $_POST["ogrenci_odev_id"]);
 
         OgrenciOdevSil($ogrenci_odev_id);
-
+        $sonucObjesi->sonuc = true;
     }else if(isset($_POST) && $METHOD == "teslim"){
         
         if(!isset($_POST["odev_id"]) || $_POST["odev_id"] == ""){
@@ -109,14 +91,11 @@ try{
 
         $ogrenci_odev_kod = GUIDOlustur();
         OgrenciDersOdevEkle($ogrenci_odev_kod, $KULLANICI_ID, $odev_id, $COURSE_ID, 0);
-
+        $sonucObjesi->sonuc = true;
     }else{
         $statusCode = 400;
         throw new Exception("Desteklenmeyen metod : $METHOD");
     }
-
-    // var_dump($_POST);
-
 }catch(Throwable $exp){
     if($statusCode == 0)
         $statusCode = 500;
@@ -128,16 +107,7 @@ try{
     $sonucObjesi->mesaj = $exp->getMessage();
     $sonucObjesi->detay = $exp->getTraceAsString();
 }
-
-try {
-    // DersHocalarinaYeniOdevYuklendiBildirimiGonder(....);
-} catch (\Throwable $th) {
-    
-}
-
-        
+       
 echo json_encode($sonucObjesi);
-
-
 
 ?>
