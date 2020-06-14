@@ -12,8 +12,8 @@ $OGRENCI_ODEVLERI = OgrenciOdev_TumOdevleriGetirByOdevId($ODEV_ID);
 </style>
 
 
-<?php if ($OGRENCI_ODEVLERI != NULL && count($OGRENCI_ODEVLERI) > 0) {
-
+<?php 
+    if ($OGRENCI_ODEVLERI != NULL && count($OGRENCI_ODEVLERI) > 0) {
 ?>
     <table class="table table-bordered table-sm table-hover">
         <thead>
@@ -70,8 +70,6 @@ $OGRENCI_ODEVLERI = OgrenciOdev_TumOdevleriGetirByOdevId($ODEV_ID);
         var ogrenci_odev_id = $(e.target).attr("ogr-odev-id");
         var ogrenci_ad_soyad = $(e.target).attr("ogr-adi-soyad");
 
-        // var not = prompt("Lütfen 0-100 arasında bir not giriniz : ");
-
         Swal.fire({
             title: ogrenci_ad_soyad + ' - Notlandırma',
             text: "Lütfen 0-100 arasında bir not giriniz",
@@ -83,58 +81,30 @@ $OGRENCI_ODEVLERI = OgrenciOdev_TumOdevleriGetirByOdevId($ODEV_ID);
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
             inputValidator: (value) => {
-                if (!value) {
-                    return 'Not girmelisiniz!'
-                }
-
-
-                if (isNaN(value)) {
-                    return "Girilen değer sayı olmalıdır!"
-                }
-
+                if (!value) return 'Not girmelisiniz!'
+                if (isNaN(value)) return "Girilen değer sayı olmalıdır!"
                 var not = Number(value);
                 if (not < 0 || not > 200) {
                     return 'Girilen değer 0-100 arasında olmalıdır!'
                 }
-
-                // var regex = new RegExp("^[a-zA-Z0-9]+$");
-                // var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
-                // if (!regex.test(value.length)) {
-                //     return 'Sadece alfanumeric değerler kabul edilmektedir.'
-                // }
             }
         }).then((result) => {
             if (!result.value)
                 return;
 
             var not = Number(result.value);
+            var url = 'services/odev.php?method=notver&ogrenci_odev_id=' + ogrenci_odev_id + '&not=' + not;
+            if (API_ISTEGIMI && API_KEY) {
+                url = url + "&X-Api-Key=" + API_KEY;
+            }
             $.ajax({
                 type: "POST",
-                url: 'services/odev.php?method=notver&ogrenci_odev_id=' + ogrenci_odev_id +
-                    '&not=' + not,
+                url: url,
                 success: function(response) {
                     $("#not-" + ogrenci_odev_id).html(not);
                 },
                 error: ajaxGenelHataCallback
             })
         });
-
-        // if (isNaN(not)) {
-        //     return alert("Girilen değer sayı olmalıdır!")
-        // }
-        // not = Number(not);
-        // if (not < 0 || not > 100) {
-        //     return alert("Girilen değer 0-100 arasında olmalıdır!")
-        // }
-
-        // $.ajax({
-        //     type: "POST",
-        //     url: 'services/odev.php?method=notver&ogrenci_odev_id=' + ogrenci_odev_id +
-        //         '&not=' + not,
-        //     success: function(response) {
-        //         $("#not-" + ogrenci_odev_id).html(not);
-        //     },
-        //     error: ajaxGenelHataCallback
-        // })
     });
 </script>

@@ -10,6 +10,9 @@ if (!isset($_SESSION)) {
 
 $kullanici_id = 0;
 $HIDE_NAVBAR = FALSE;
+$API_KEY = "";
+$API_ISTEGI = FALSE;
+
 if (isset($REQUIRE_LOGIN) && $REQUIRE_LOGIN == TRUE && !isset($_SESSION["kullanici_id"])) {
 	if (isset($_GET['X-Api-Key']) || isset($_GET['x-api-key'])) {
 		$API_KEY = "";
@@ -18,12 +21,13 @@ if (isset($REQUIRE_LOGIN) && $REQUIRE_LOGIN == TRUE && !isset($_SESSION["kullani
 		if ($API_KEY == NULL || $API_KEY == "")
 			$API_KEY = $_GET['x-api-key'];
 
-		$API_ISTEGI = TRUE;
+		
 		$HIDE_NAVBAR = TRUE;
 		include_once dirname(__FILE__) .'/../database/database.php';
 		$KULLANICI = KullaniciBilgileriniGetirByAPI($API_KEY);
 		if ($KULLANICI != NULL) {
 			$kullanici_id = $KULLANICI["id"];
+			$API_ISTEGI = TRUE;
 		} else {
 			echo "X-Api-Key değeri geçersiz, logine gider..";
 			die();
@@ -82,7 +86,6 @@ if ($base_url == FALSE) {
 	<meta name="msapplication-TileImage" content="files/favicon/ms-icon-144x144.png">
 	<meta name="theme-color" content="#ffffff">
 
-
 	<script src="assets/js/vendor/jquery-3.4.1.min.js"></script>
 	<script src="assets/js/vendor/popper.min.js"></script>
 	<script src="assets/js/vendor/bootstrap.min.js"></script>
@@ -98,45 +101,18 @@ if ($base_url == FALSE) {
 
 	<link rel="stylesheet" href="assets/css/styles.css">
 
-	<!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"> -->
-
-	<!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
-    <link rel="stylesheet" href="assets/css/styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
-
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script>
-      window.jQuery || document.write('<script src="assets/js/vendor/jquery-3.4.1.min.js"><\/script>')
-    </script> 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <script src="assets/lib/momentjs/moment.js"></script>
-    <script src="assets/lib/momentjs/tr.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js">
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
-    <script>
-      window.Swal || document.write('<script src="assets/js/vendor/sweetalert2.min.js"><\/script>')
-    </script> -->
 
 	<?php
-	//echo dirname(__FILE__);
 	if (isset($page_title)) {
 		echo "<title> note - " . $page_title . "</title>";
 	}
 
 	function ToLowerandEnglish($value)
 	{
-
-		//echo $value;
-
 		$turkish = array("ı", "ğ", "ü", "ş", "ö", "ç", "İ", "Ğ", "Ü", "Ş", "Ö", "Ç"); //turkish letters
 		$english   = array("i", "g", "u", "s", "o", "c", "I", "G", "U", "S", "O", "C"); //english cooridinators letters
-
 		$value = str_replace($turkish, $english, $value); //replace php function
 		$value = strtolower($value);
-
 		return $value;
 	}
 
@@ -144,3 +120,8 @@ if ($base_url == FALSE) {
 	?>
 
 </head>
+
+<script>
+	var API_ISTEGIMI = <?php echo $API_ISTEGI == TRUE ? 'true;': 'false;'; echo "\n"; ?>
+	var API_KEY =  <?php echo $API_KEY == "" ? '"";': '"'.$API_KEY.'";'; echo "\n"; ?>
+</script>

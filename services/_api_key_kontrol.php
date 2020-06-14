@@ -37,6 +37,22 @@ if(isset($headers['X-Api-Key']) || isset($headers['x-api-key'])){
         $statusCode = 401;
         throw new HataliAPIKeyException("X-Api-Key değeri geçersiz :  $API_KEY");
     }
+}else if(isset($_GET['X-Api-Key']) || isset($_GET['x-api-key'])){
+    $API_KEY = "";
+    if(isset($_GET['X-Api-Key']))
+        $API_KEY = $_GET['X-Api-Key'];
+    if($API_KEY == NULL || $API_KEY == "")
+        $API_KEY = $_GET['x-api-key'];
+
+    $API_ISTEGI = TRUE;
+
+    $KULLANICI = KullaniciBilgileriniGetirByAPI($API_KEY);
+    if($KULLANICI != NULL){
+        $KULLANICI_ID = $KULLANICI["id"];
+    }else{
+        $statusCode = 401;
+        throw new HataliAPIKeyException("X-Api-Key değeri geçersiz :  $API_KEY");
+    }
 }else{
     session_start();
     //kullanici oturumu açık değil ise bu servise gelen istekeler işlenmez.

@@ -7,7 +7,6 @@ include 'includes/head.php';
 
 <body>
 
-
     <?php
     if (isset($HIDE_NAVBAR) && $HIDE_NAVBAR == TRUE) {
         echo "<link rel='stylesheet' href='assets/css/mobile-web-view.css'>";
@@ -35,7 +34,6 @@ include 'includes/head.php';
         header('Location: dashboard.php');
         die();
     }
-
 
     $ODEV_ID = $ODEV["id"];
     $COURSE_ID = $ODEV["ders_id"];
@@ -118,7 +116,7 @@ include 'includes/head.php';
                         ?>
                                 <div class="odev-dosya">
                                     <span><i class="fa fa-file"></i> Ödev Dosyası : </span>
-                                    <a target="blank_" href='dosya_indir.php?type=odev&kod=<?php echo $ODEV["kod"] ?>'>
+                                    <a target="_blank" href='dosya_indir.php?type=odev&kod=<?php echo $ODEV["kod"] ?>'>
                                         <i class="fa fa-download"></i>&nbsp;
                                         <?php echo $DOSYA["isim"] ?>
                                     </a>
@@ -142,9 +140,7 @@ include 'includes/head.php';
                 <?php } ?>
 
             </div>
-
             <!-- COL-MD-8 SONU -->
-
 
             <?php if ($GIRIS_YAPAN_DERSIN_OGRENCISI_MI) { ?>
                 <div class="col-md-4 col-sm-12">
@@ -153,8 +149,6 @@ include 'includes/head.php';
                     </div>
                 </div>
             <?php } ?>
-
-
 
         </div>
 
@@ -173,18 +167,20 @@ include 'includes/head.php';
                 </div>
             </div>
         </div>
-
     </div>
 
     <script>
         $(function() {
-
             $("#odevIptalEt").on("click", function(e) {
                 var odev_kod = $(e.target).attr("odev_kod");
 
                 if (!odev_kod)
                     return;
 
+                var url = 'services/odev.php?method=delete&odev_kod=' + odev_kod;
+                if (API_ISTEGIMI && API_KEY) {
+                    url = url + "&X-Api-Key=" + API_KEY;
+                }
                 Swal.fire({
                     title: 'Emin misiniz?',
                     text: "Ödev sistemden tamamen silinecektir",
@@ -198,21 +194,21 @@ include 'includes/head.php';
                     if (result.value) {
                         $.ajax({
                             type: "POST",
-                            url: 'services/odev.php?method=delete&odev_kod=' + odev_kod,
+                            url: url,
                             success: function(response) {
                                 // location.reload();
                                 // window.location.replace("/");
-                                document.location.href = document.getElementsByTagName('base')[0].href
+                                // document.location.href = document.getElementsByTagName('base')[0].href
+                                Swal.fire({
+                                    text: 'Ödev silindi!',
+                                    type: 'success'
+                                })
                             },
                             error: ajaxGenelHataCallback
                         })
                     }
                 });
-
             });
-
-
-
         })
     </script>
 
