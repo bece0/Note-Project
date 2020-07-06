@@ -32,7 +32,7 @@ function KullaniciOlustur($count, $name_mail_prefix, $type = 0){
     for ($i=0; $i < $count; $i++) { 
         $name=$name_mail_prefix."".$i;
         $surname="".$i;
-        $email=$name_mail_prefix."-".$i."@gmail.com";
+        $email=$name_mail_prefix."".$i."@gmail.com";
         $password="123";
         $admin=$type;
 
